@@ -5,33 +5,51 @@ import AddSong from "./views/AddSong/AddSong";
 import Home from "./views/Home/Home";
 import SongsList from "./views/SongsList/SongsList";
 import SingleSong from "./views/SingleSong/SingleSong";
+import Login from "./views/Login/Login";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import Registration from "./views/Registration/Registration";
 
 function App() {
   const routes = useRoutes([
     {
       path: "/",
-      element: <Home />,
+      // @ts-ignore-next-line
+      element: <ProtectedRoute />, 
+      children: [
+        {
+          path: "*",
+          element: <Home />,
+        },
+        {
+          path: "mySongs",
+          element: <SongsList />,
+        },
+        {
+          path: "mySongs/:songId",
+          element: <SingleSong />,
+        },
+        {
+          path: "mySongs/add",
+          element: <AddSong />,
+        },
+        {
+          path: "mySongs/edit/:id",
+          element: <Lists />,
+        },
+        {
+          path: "myLists",
+          element: <Lists />,
+        }
+      ]
     },
     {
-      path: "mySongs",
-      element: <SongsList />,
+      path: "/login",
+      element: <Login />,
     },
     {
-      path: "mySongs/:songId",
-      element: <SingleSong />,
+      path: "/register",
+      element: <Registration />,
     },
-    {
-      path: "mySongs/add",
-      element: <AddSong />,
-    },
-    {
-      path: "mySongs/edit/:id",
-      element: <Lists />,
-    },
-    {
-      path: "myLists",
-      element: <Lists />,
-    }
   ]);
 
   return routes;

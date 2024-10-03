@@ -8,19 +8,27 @@ import "./components/MagicInput/MagicInput.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import QuickNavbar from "./components/QuickNavbar/QuickNavbar";
+import QuickNavbar from "./components/Header/Header";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import NotificationsCenter from "./components/NotificationsCenter/NotificationsCenter";
+import NavigationProvider from "./components/Navigation/NavigationProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <div className="container mx-auto p-4">
-        <QuickNavbar />
-        <App />
-      </div>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <NavigationProvider>
+          <div className="container mx-auto p-4">
+            <App />
+            <NotificationsCenter />
+          </div>
+        </NavigationProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
