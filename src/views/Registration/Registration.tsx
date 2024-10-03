@@ -60,6 +60,7 @@ export default function Registration() {
         localStorage.setItem("authToken", data.jwt);
         dispatch(setUser(data.user));
         navigate("/");
+        //
         dispatch(
           // @ts-ignore
           addNotificationWithTimeout({
