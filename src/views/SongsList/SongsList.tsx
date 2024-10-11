@@ -24,15 +24,13 @@ export default function SongsList() {
           <AddIcon />
         </Link>
       </div>
-      <Card>
         {songs.map((song) => {
           return (
-            <Link to={`/mySongs/${song.id}`} className="bg-base-100 p-3 rounded">
+            <Link to={`/mySongs/${song.id}`} className="bg-base-200 p-3 rounded block mb-2">
               {song.attributes.name}
             </Link>
           );
         })}
-      </Card>
     </>
   );
 }

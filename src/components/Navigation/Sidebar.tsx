@@ -28,10 +28,7 @@ export default function Sidebar() {
         <div className="flex flex-col grow justify-between">
           <ul className="menu">
             <li>
-              <a>Sidebar Item 1</a>
-            </li>
-            <li>
-              <a>Sidebar Item 2</a>
+              <Link to="/mySongs">Всі пісні</Link>
             </li>
           </ul>
 

@@ -8,31 +8,17 @@ export function getStrapiURL(path = "") {
 
 export async function fetchAPI(
   path: string,
-  config: any = {
-    usePublicToken: false,
-  },
   urlParamsObject: any = {},
   options = {}
 ) {
-  const { usePublicToken } = config;
-
-  let headers;
-
-  if (usePublicToken) {
-    headers = {
-      Authorization: `Bearer 7e0833be3171f22a847a1ee557d84dea5f2b8f5e07116f5db978f6f15a62f9212f94ee5ea7a2d43e17844653d0902bb0ada7429c7c2201ab9de86823419531d656de37bb7b1fa055cbb7b2fa47d4e3ecbdfb8629ea810fc7fd4eaecbec6635e6d81a6ded495484caa5f595a1e4286e5b6560e91f866094af1020cd79c3350766`,
-    };
-  } else {
-    //get token from localstorage
-  }
-
+  
   try {
     // Merge default and user options
     const mergedOptions = {
       next: { revalidate: 60 },
       headers: {
         "Content-Type": "application/json",
-        ...headers,
+        Authorization: `Bearer 774099e6aefe03b082250a5dd917928a50b6aaf5d71b4959e929923a4a6fa82f957dd1fa472e1b7d032672cb23dc308be35c2d532a2d0eb512d36b213b781701ae7375a56109ab2dd00797c4a71b16c3dbc6ce3f68b255384364528cde1c1a45563505e8284fb28942c670f3292a1f522a9078f21ac8964c95837babfe7b22e2`,
       },
       ...options,
     };
@@ -40,23 +26,22 @@ export async function fetchAPI(
     // Build request URL
     const queryString = qs.stringify(urlParamsObject);
 
+
     const requestUrl = `${getStrapiURL(
       `/api${path}${queryString ? `?${queryString}` : ""}`
     )}`;
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
     const data = await response.json();
     return data;
+    
   } catch (error) {
-    console.error("tryCatch: ", error);
-    throw new Error(
-      `Please check if your server is running and you set all the required tokens.`
-    );
+    console.error(error);
+    throw new Error(`Please check if your server is running and you set all the required tokens.`);
   }
 }
+
+
 
 export async function loginUser({ username, password }) {
     const response = await fetch(getStrapiURL("/api/auth/local"), {

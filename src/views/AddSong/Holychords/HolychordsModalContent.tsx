@@ -3,7 +3,7 @@ import { getStrapiURL } from "../../../utils/fetch-api";
 import { useNavigate } from "react-router-dom";
 
 const token =
-  "2617389405e4ccfa460cd79db4f210344f2c239f3d9e09b59768608684b0d9bfaa2175fd721c5f143160a08fce023878c03c9535a634ead226dede7befa1f1c1465174faf2b3eef21957bfbc23aab484c6c98a2e0af2c137cea767bb218a1039b984ae23ae607f38c56de5671da792dc3e06a54b769a148737073076f0cd7b93";
+  "774099e6aefe03b082250a5dd917928a50b6aaf5d71b4959e929923a4a6fa82f957dd1fa472e1b7d032672cb23dc308be35c2d532a2d0eb512d36b213b781701ae7375a56109ab2dd00797c4a71b16c3dbc6ce3f68b255384364528cde1c1a45563505e8284fb28942c670f3292a1f522a9078f21ac8964c95837babfe7b22e2";
 
 export default function HolychordsModalContent() {
   const [url, setUrl] = React.useState();
@@ -21,7 +21,6 @@ export default function HolychordsModalContent() {
         return res.json();
       })
       .then((data) => {
-          console.log(data.id);
         navigate(`/mySongs/${data.id}`);
       })
       .catch((e) => {

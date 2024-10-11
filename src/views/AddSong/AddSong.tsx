@@ -17,7 +17,7 @@ export default function AddSong() {
           content={<HolychordsModalContent />}
         />
         <button className="btn btn-disabled">Вставити текст</button>
-        <button className="btn">Створити в редакторі</button>
+        <button className="btn btn-disabled">Створити в редакторі</button>
       </div>
     </>
   );
