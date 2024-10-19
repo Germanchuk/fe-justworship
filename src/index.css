@@ -14,15 +14,9 @@ code {
     monospace;
 }
 
-.my-masonry-grid {
-  display: flex;
-  margin-left: -30px; /* Adjusts for gutter */
-  width: auto;
-}
-
-.my-masonry-grid_column {
-  padding-left: 30px; /* Adjusts for gutter */
-  background-clip: padding-box;
+.threeCols {
+  column-count: 3; /* Create 3 columns */
+  column-gap: 16px; /* Optional: Adjust space between columns */
 }
 
 @tailwind base;

@@ -1,6 +1,7 @@
 .Section {
     display: flex;
     flex-direction: column;
+    break-inside: avoid; 
     padding-bottom: 24px;
 }
 

@@ -55,12 +55,7 @@ export default function SongSections({ song, setSong, editMode = false }) {
   }
 
   return (
-    <div className="max-h-96">
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="my-masonry-grid"
-        columnClassName="my-masonry-grid_column"
-      >
+    <div className="max-h-screen threeCols">
         {song.content.map((section, index) => {
           return (
             <>
@@ -78,7 +73,6 @@ export default function SongSections({ song, setSong, editMode = false }) {
             </>
           );
         })}
-      </Masonry>
     </div>
   );
 }
