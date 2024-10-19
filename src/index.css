@@ -14,6 +14,17 @@ code {
     monospace;
 }
 
+.my-masonry-grid {
+  display: flex;
+  margin-left: -30px; /* Adjusts for gutter */
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 30px; /* Adjusts for gutter */
+  background-clip: padding-box;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

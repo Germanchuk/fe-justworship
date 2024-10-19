@@ -1,6 +1,7 @@
 .Section {
     display: flex;
     flex-direction: column;
+    padding-bottom: 24px;
 }
 
 .Section__controls {
