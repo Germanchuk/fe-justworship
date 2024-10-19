@@ -1,61 +1,85 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { fetchAPI } from "../../utils/fetch-api";
-import Block from "./Block/Block";
-import EditIcon from "../../icons/EditIcon";
-import ArrowLeftIcon from "../../icons/ArrowLeftIcon";
-import MagicInput from "../../components/MagicInput/MagicInput";
+import Song from "../../components/Song/Song";
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  PencilIcon,
+} from "@heroicons/react/24/outline";
 
 export default function SingleSong() {
   const { songId } = useParams();
-  const [editMode, setEditMode] = React.useState(false);
+  const [initialSong, setInitialSong] = React.useState<any>({});
   const [song, setSong] = React.useState<any>({});
+  const [editMode, setEditMode] = React.useState(false);
 
-  useEffect(() => {
+  const songChanged = JSON.stringify(song) !== JSON.stringify(initialSong);
+
+  React.useEffect(() => {
     fetchAPI(`/songs/${songId}`).then((data) => {
       setSong(data.data.attributes);
+      setInitialSong(JSON.parse(JSON.stringify(data.data.attributes))); // deep copy of data.data.attributes);
     });
   }, [songId]);
 
+  const saveSong = async () => {
+    await fetchAPI(
+      `/songs/${songId}`,
+      {},
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          data: song,
+        }),
+      }
+    );
+    // Create a deep copy of `song` before setting `initialSong`
+    setInitialSong(JSON.parse(JSON.stringify(song)));
+    setEditMode(false);
+  };
+
   if (Object.keys(song).length === 0) {
-    return null;
+    return <div>Такої пісні не існує</div>;
   }
 
   return (
-    <div>
-      <div className="mb-4">
-        <SongTitle editMode={editMode}>{song?.name}</SongTitle>
-      </div>
-      <div className="grid grid-cols-1 gap-3 text-lg">
-        {song.content.map((block: any, index) => {
-          return <Block data={block} key={index} editMode={editMode} />;
-        })}
-      </div>
-      <ToggleModeButton setEditMode={setEditMode} editMode={editMode} />
-    </div>
+    <>
+      <Song song={song} setSong={setSong} editMode={editMode} />
+      <ToggleModeButton
+        toggleMode={() => setEditMode(!editMode)}
+        editMode={editMode}
+      />
+      {songChanged && <SavingButton saveSong={saveSong} />}
+    </>
   );
 }
 
-function SongTitle({ children, editMode }) {
-  if (editMode) {
-    return (
-      <MagicInput className="text-3xl font-bold tracking-tight focus:outline-neutral">
-        {children}
-      </MagicInput>
-    );
-  } else {
-    return <h1 className="text-3xl font-bold tracking-tight">{children}</h1>;
-  }
-}
-
-function ToggleModeButton({ setEditMode, editMode }) {
+function ToggleModeButton({ toggleMode, editMode }) {
   return (
     <div className="fixed bottom-4 right-4">
       <button
         className="btn btn-square bg-base-300 ring-neutral ring-1"
-        onClick={() => setEditMode(!editMode)}
+        onClick={toggleMode}
       >
-        {editMode ? <ArrowLeftIcon /> : <EditIcon />}
+        {editMode ? (
+          <ArrowLeftIcon className="w-6 h-6" />
+        ) : (
+          <PencilIcon className="w-6 h-6" />
+        )}
+      </button>
+    </div>
+  );
+}
+
+function SavingButton({ saveSong }) {
+  return (
+    <div className="fixed bottom-4 left-4">
+      <button
+        className="btn btn-square bg-base-300 ring-neutral ring-1"
+        onClick={saveSong}
+      >
+        <CheckIcon className="w-6 h-6" />
       </button>
     </div>
   );

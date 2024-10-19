@@ -26,7 +26,6 @@ export async function fetchAPI(
     // Build request URL
     const queryString = qs.stringify(urlParamsObject);
 
-
     const requestUrl = `${getStrapiURL(
       `/api${path}${queryString ? `?${queryString}` : ""}`
     )}`;

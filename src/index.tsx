@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import "./index.css";
-import "./views/SingleSong/Block/block.css";
-import "./components/MagicInput/MagicInput.css";
+import "./views/TextToSong/HighlightedOutput/Block/block.css";
+import "./components/Song/MagicInput/MagicInput.css";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -18,7 +18,6 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <NavigationProvider>
@@ -29,7 +28,6 @@ root.render(
         </NavigationProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

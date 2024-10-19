@@ -1,6 +1,6 @@
-import React from "react";
 import Modal from "../../components/Modal/Modal";
 import HolychordsModalContent from "./Holychords/HolychordsModalContent";
+import { Link } from "react-router-dom";
 
 export default function AddSong() {
   return (
@@ -16,8 +16,12 @@ export default function AddSong() {
           trigger={<button className="btn">Імпортувати з Holychords</button>}
           content={<HolychordsModalContent />}
         />
-        <button className="btn btn-disabled">Вставити текст</button>
-        <button className="btn btn-disabled">Створити в редакторі</button>
+        <Link to="/mySongs/add/textToSong">
+          <button className="btn btn-disabled">Вставити текст</button>
+        </Link>
+        <Link to="/mySongs/add/fromScratch">
+          <button className="btn">Створити в редакторі</button>
+        </Link>
       </div>
     </>
   );

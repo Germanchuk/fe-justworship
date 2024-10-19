@@ -4,10 +4,12 @@ import Lists from "./views/Lists/Lists";
 import AddSong from "./views/AddSong/AddSong";
 import Home from "./views/Home/Home";
 import SongsList from "./views/SongsList/SongsList";
-import SingleSong from "./views/SingleSong/SingleSong";
 import Login from "./views/Login/Login";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Registration from "./views/Registration/Registration";
+import TextToSong from "./views/TextToSong/TextToSong";
+import SingleSong from "./views/SingleSong/SingleSong";
+import FromScratch from "./views/FromScratch/FromScratch";
 
 function App() {
   const routes = useRoutes([
@@ -31,6 +33,14 @@ function App() {
         {
           path: "mySongs/add",
           element: <AddSong />,
+        },
+        {
+          path: "mySongs/add/textToSong",
+          element: <TextToSong />,
+        },
+        {
+          path: "mySongs/add/fromScratch",
+          element: <FromScratch />,
         },
         {
           path: "mySongs/edit/:id",

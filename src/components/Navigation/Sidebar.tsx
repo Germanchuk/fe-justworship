@@ -30,6 +30,9 @@ export default function Sidebar() {
             <li>
               <Link to="/mySongs">Всі пісні</Link>
             </li>
+            <li>
+              <Link to="/sandbox">Пісочниця</Link>
+            </li>
           </ul>
 
           <Link to="/login">
