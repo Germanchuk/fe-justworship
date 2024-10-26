@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { fetchAPI } from "../../utils/fetch-api";
 import Card from "../../components/Card/Card";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function Lists() {
   const [lists, setLists] = React.useState([]);
@@ -24,8 +25,8 @@ export default function Lists() {
               <ul className="list-inside space-y-2">
                 {list.attributes.songs.data.map((song) => (
                   <li className="bg-base-100 p-3 rounded">
-                    {song.attributes.name}
-                  </li>
+                    <Link to={`/mySongs/${song.id}`}>{song.attributes.name}</Link>
+                </li>
                 ))}
               </ul>
             </Card>
