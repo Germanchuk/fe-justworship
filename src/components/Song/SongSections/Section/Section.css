@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     break-inside: avoid; 
-    padding-bottom: 24px;
+    margin-bottom: 24px;
 }
 
 .Section__controls {

@@ -19,7 +19,7 @@ function App() {
       element: <ProtectedRoute />, 
       children: [
         {
-          path: "*",
+          path: "/",
           element: <Home />,
         },
         {

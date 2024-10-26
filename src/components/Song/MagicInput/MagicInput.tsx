@@ -45,7 +45,7 @@ function renderLine(line, index) {
       return (
         <div
           key={index}
-          className="text-primary"
+          className="text-primary chords"
           style={{ whiteSpace: "pre-wrap" }}
         >
           {line}

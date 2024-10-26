@@ -55,7 +55,7 @@ export default function SongSections({ song, setSong, editMode = false }) {
   }
 
   return (
-    <div className="max-h-screen threeCols">
+    <div className="threeCols">
         {song.content.map((section, index) => {
           return (
             <>

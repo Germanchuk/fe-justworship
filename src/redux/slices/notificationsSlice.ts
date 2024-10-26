@@ -7,6 +7,7 @@ const notificationsSlice = createSlice({
   reducers: {
     addNotification: (state, action) => {
       state.push(action.payload);
+      return state;
     },
     removeNotification: (state, action) => {
         return state.filter(notification => notification.id !== action.payload);

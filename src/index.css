@@ -14,11 +14,37 @@ code {
     monospace;
 }
 
-.threeCols {
-  column-count: 3; /* Create 3 columns */
-  column-gap: 16px; /* Optional: Adjust space between columns */
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+/* MY CODE GOES BELOW */
+
+select {
+  appearance: none; 
+}
+
+.threeCols {
+  column-count: 3; /* Create 3 columns */
+  column-gap: 8px; /* Optional: Adjust space between columns */
+  overflow-x: scroll;
+  max-height: calc(100vh - 48px);
+}
+
+@media screen and (max-width: 1024px) {
+  .threeCols {
+    column-count: 2;
+  }
+  
+}
+
+@media screen and (max-width: 768px) {
+  .threeCols {
+    column-count: initial;
+    overflow-x: initial;
+    max-height: initial;
+  }
+  
+}

@@ -1,7 +1,37 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { fetchAPI } from "../../utils/fetch-api";
+import Card from "../../components/Card/Card";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function Home() {
+  const [lists, setLists] = React.useState([]);
+  const user = useSelector((state: any) => state.user);
+  useEffect(() => {
+    fetchAPI("/myLists", { populate: "songs" }).then((data) => {
+      setLists(data.data);
+    });
+  }, []);
   return (
-    <div>Home</div>
-  )
+    <>
+      <h1 className="text-3xl font-bold tracking-tight pb-4">
+        Всі списки @{user?.username}
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {lists.length &&
+          lists?.map((list) => (
+            <Card>
+              <h3 className="card-title">{list.date}</h3>
+              <ul className="list-inside space-y-2">
+                {list.songs.map((song) => (
+                  <li className="bg-base-100 p-3 rounded">
+                    <Link to={`/mySongs/${song.id}`}>{song.name}</Link>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          ))}
+      </div>
+    </>
+  );
 }
