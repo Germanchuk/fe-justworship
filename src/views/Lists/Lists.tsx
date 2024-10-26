@@ -12,6 +12,7 @@ export default function Lists() {
       setLists(data.data);
     });
   }, []);
+  
   return (
     <>
       <h1 className="text-3xl font-bold tracking-tight pb-4">
