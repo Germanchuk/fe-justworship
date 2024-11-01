@@ -1,73 +1,12 @@
 import React from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-
-const keys = [
-  {
-    title: "A",
-    value: "A",
-  },
-  {
-    title: "A#",
-    value: "Asharp",
-  },
-  {
-    title: "B",
-    value: "B",
-  },
-  {
-    title: "C",
-    value: "C",
-  },
-  {
-    title: "C#",
-    value: "Csharp",
-  },
-  {
-    title: "D",
-    value: "D",
-  },
-  {
-    title: "D#",
-    value: "Dsharp",
-  },
-  {
-    title: "E",
-    value: "E",
-  },
-  {
-    title: "F",
-    value: "F",
-  },
-  {
-    title: "F#",
-    value: "Fsharp",
-  },
-  {
-    title: "G",
-    value: "G",
-  },
-  {
-    title: "G#",
-    value: "Gsharp",
-  },
-];
+import {
+  transpose,
+  deriveTranspositionFromKey,
+  keys,
+} from "../../../utils/keyUtils";
 
 const transpositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-
-function deriveKeyFromTransposition(key, transposition) {
-  const index = keys.findIndex((k) => k.value === key);
-  return (
-    keys[index + transposition]?.value ?? {
-      title: "C",
-      value: "C",
-    }
-  );
-}
-
-function deriveTranspositionFromKey(key, derivedKey) {
-  const index = keys.findIndex((k) => k.value === key);
-  return index - keys.findIndex((k) => k.value === derivedKey);
-}
 
 export default function KeySelector({
   basicKey,
@@ -76,7 +15,7 @@ export default function KeySelector({
   setTransposition,
 }) {
   const [derivedKey, setDerivedKey] = React.useState(
-    deriveKeyFromTransposition(basicKey, transposition)
+    transpose(basicKey, transposition)
   );
   const handleBasicKey = (key) => {
     setBasicKey(key);
@@ -90,7 +29,7 @@ export default function KeySelector({
 
   const handleTransposition = (transposition) => {
     setTransposition(transposition);
-    setDerivedKey(deriveKeyFromTransposition(basicKey, transposition));
+    setDerivedKey(transpose(basicKey, transposition));
   };
   return (
     <div className="flex gap-2 items-center">
@@ -100,7 +39,7 @@ export default function KeySelector({
         setValue={handleBasicKey}
         tooltipMessage="Це реальна тональність пісні."
       />
-      {/* =
+      =
       <KeyPicker
         value={derivedKey}
         setValue={handleDerivedKey}
@@ -110,7 +49,7 @@ export default function KeySelector({
       <TranspositionPicker
         value={transposition}
         setValue={handleTransposition}
-      /> */}
+      />
     </div>
   );
 }
@@ -124,7 +63,9 @@ function KeyPicker({ value, setValue, tooltipMessage }) {
         onChange={(e) => setValue(e.target.value)}
       >
         {keys.map((key) => (
-          <option value={key.value}>{key.title}</option>
+          <option key={key} value={key}>
+            {key.replace(/sharp/g, "#")}
+          </option>
         ))}
       </select>
       <div className="tooltip align-middle" data-tip={tooltipMessage}>
@@ -138,12 +79,14 @@ function KeyPicker({ value, setValue, tooltipMessage }) {
 function TranspositionPicker({ value, setValue }) {
   return (
     <select
-      className="pl-2.5 border rounded"
+      className="px-4 border rounded"
       value={value}
       onChange={(e) => setValue(e.target.value)}
     >
       {transpositions.map((trans) => (
-        <option value={trans}>{trans}</option>
+        <option key={trans} value={trans}>
+          {trans}
+        </option>
       ))}
     </select>
   );

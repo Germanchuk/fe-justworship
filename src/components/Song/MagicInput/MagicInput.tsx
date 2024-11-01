@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { isChordsLine, transposeLine } from "../../../utils/keyUtils";
 
 export default function MagicInput({
   wrapperClassName,
@@ -6,11 +7,16 @@ export default function MagicInput({
   value = "",
   setValue,
   editMode = false,
+  transposition = 0,
 }: any) {
   return (
     <div className={classNames("MagicInput", wrapperClassName)}>
       <div className={classNames("MagicInput__output", className)}>
-        {value.split("\n").map(renderLine)}
+        {value
+          .split("\n")
+          .map((line, index) =>
+            renderLine(line, index, editMode, transposition)
+          )}
       </div>
       {editMode && (
         <textarea
@@ -28,7 +34,7 @@ export default function MagicInput({
   );
 }
 
-function renderLine(line, index) {
+function renderLine(line, index, editMode, transposition) {
   switch (identifyLine(line, index)) {
     case "blockTitle":
       return (
@@ -48,7 +54,9 @@ function renderLine(line, index) {
           className="text-primary chords"
           style={{ whiteSpace: "pre-wrap" }}
         >
-          {line}
+          {!editMode && !!transposition
+            ? transposeLine(line, transposition)
+            : line}
         </div>
       );
 
@@ -79,16 +87,6 @@ function identifyLine(line, index) {
     return "chord";
   }
   return "text";
-}
-
-function isChordsLine(line) {
-  const specialLine = line.replace(/[|.]/g, " ");
-  // Updated pattern to include dots, pipes, and spaces
-  const chordPattern =
-    /^(\s*\|\s*)?([A-H](#|b)?(m|M|dim|aug|sus|add|7|9|11|13)?(\/[A-G](#|b)?)?(\s*\.?\s*)?)+(\s*\|\s*)?$/;
-
-  // Remove leading and trailing spaces, then test with the updated pattern
-  return chordPattern.test(specialLine.trim());
 }
 
 function isSongStructureItem(str) {

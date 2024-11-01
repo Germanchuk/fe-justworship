@@ -8,7 +8,7 @@ export default function Home() {
   const [lists, setLists] = React.useState([]);
   const user = useSelector((state: any) => state.user);
   useEffect(() => {
-    fetchAPI("/myLists", { populate: "songs" }).then((data) => {
+    fetchAPI("/myLists", { populate: ["songs", "band"] }).then((data) => {
       setLists(data.data);
     });
   }, []);
@@ -18,19 +18,7 @@ export default function Home() {
         Всі списки @{user?.username}
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {lists.length &&
-          lists?.map((list) => (
-            <Card>
-              <h3 className="card-title">{list.date}</h3>
-              <ul className="list-inside space-y-2">
-                {list.songs.map((song) => (
-                  <li className="bg-base-100 p-3 rounded">
-                    <Link to={`/mySongs/${song.id}`}>{song.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          ))}
+        {lists.length && lists?.map((list) => <Card list={list} />)}
       </div>
     </>
   );

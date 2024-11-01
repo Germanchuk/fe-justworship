@@ -1,18 +1,8 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { fetchAPI } from "../../../utils/fetch-api";
-import MagicInput from "../MagicInput/MagicInput";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { v4 as uuidv4 } from "uuid";
 import Section from "./Section/Section";
-import Masonry from "react-masonry-css";
 
 export default function SongSections({ song, setSong, editMode = false }) {
-  const breakpointColumnsObj = {
-    default: 3, // 3 columns by default (you can adjust this as needed)
-    1100: 2, // 2 columns when the screen width is <= 1100px
-    700: 1, // 1 column when the screen width is <= 700px
-  };
 
   const getBlockChanger = (blockIndex) => (newValue) => {
     setSong((song) => {
@@ -56,23 +46,21 @@ export default function SongSections({ song, setSong, editMode = false }) {
 
   return (
     <div className="threeCols">
-        {song.content.map((section, index) => {
-          return (
-            <>
-              <Section
-                id={section.id}
-                value={section.content}
-                setValue={getBlockChanger(index)}
-                deleteBlock={getBlockRemover(index)}
-                addBlockBelow={addBlockBelow(index)}
-                key={section.id}
-                // wrapperClassName="py-2"
-                className="text-lg py-6"
-                editMode={editMode}
-              />
-            </>
-          );
-        })}
+      {song.content.map((section, index) => {
+        return (
+          <Section
+            id={section.id}
+            value={section.content}
+            setValue={getBlockChanger(index)}
+            deleteBlock={getBlockRemover(index)}
+            addBlockBelow={addBlockBelow(index)}
+            key={index}
+            className="text-lg py-6"
+            editMode={editMode}
+            transposition={song.transposition}
+          />
+        );
+      })}
     </div>
   );
 }

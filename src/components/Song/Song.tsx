@@ -5,9 +5,10 @@ import KeySelector from "./KeySelector/KeySelector";
 import { useState } from "react";
 import { EyeSlashIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
+import { deriveTranspositionFromKey, remapChords } from "../../utils/keyUtils";
 
 export default function Song({ song, setSong, editMode }) {
-    const [chordsHidden, setChordsHidden] = useState(false);
+  const [chordsHidden, setChordsHidden] = useState(false);
   const handleSongName = (value) => {
     setSong((song) => {
       return { ...song, name: value };
@@ -20,9 +21,12 @@ export default function Song({ song, setSong, editMode }) {
     });
   };
 
-  const setBasicKey = (key) => {
+  const setBasicKey = (newKey) => {
     setSong((song) => {
-      return { ...song, key };
+      return { ...song,
+        key: newKey,
+        content: remapChords(song.content, deriveTranspositionFromKey(song.key, newKey))
+       };
     });
   };
   const setTransposition = (transposition) => {
@@ -32,9 +36,11 @@ export default function Song({ song, setSong, editMode }) {
   };
 
   return (
-    <div className={classNames("flex flex-col gap-4 pb-8", {
-        "chordsHidden": chordsHidden
-    })}>
+    <div
+      className={classNames("flex flex-col gap-4 pb-8", {
+        chordsHidden: chordsHidden,
+      })}
+    >
       <MagicInput
         className="text-3xl font-bold"
         value={song.name}
@@ -58,8 +64,11 @@ export default function Song({ song, setSong, editMode }) {
             editMode={editMode}
           />
         </div>
-        <button className="btn btn-square" onClick={() => setChordsHidden(!chordsHidden)}>
-            <EyeSlashIcon className="w-4" />
+        <button
+          className="btn btn-square"
+          onClick={() => setChordsHidden(!chordsHidden)}
+        >
+          <EyeSlashIcon className="w-4" />
         </button>
       </div>
       <SongSections song={song} setSong={setSong} editMode={editMode} />
