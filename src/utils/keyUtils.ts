@@ -41,7 +41,7 @@ export function transposeLine(line, transposition) {
     // Перевіряємо, чи є це акорди
     const chord = (str.match(/[A-G]/) || [])[0];
     console.log(chord);
-    const sharp = str.includes("#") ? "#" : "";
+    const sharp = str.includes("#") ? "sharp" : "";
 
     if (chord) {
       const newChord = transpose(chord + sharp, transposition).replace(
