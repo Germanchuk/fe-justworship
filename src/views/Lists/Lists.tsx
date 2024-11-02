@@ -16,7 +16,7 @@ export default function Lists() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold tracking-tight pb-4">
+      <h1 className="text-xl font-bold tracking-tight pb-4">
         Списки пісень гурту "{user?.currentBand?.name}"
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

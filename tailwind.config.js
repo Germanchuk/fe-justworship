@@ -6,16 +6,24 @@ import tailwindTypography from "@tailwindcss/typography";
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    colors: {
+      "card-orange": "#fff7ed",
+      "card-orange-border": "#fdba74",
+    },
   },
   daisyui: {
     themes: [
       {
         mytheme: {
           ...themes.light,
-          "primary": "#D62839",
+          "primary": "#b91c1c",
           "secondary": "#f6d860",
-          "accent": "#f3eed9",
+          "neutral-content": "#71717a",
+          "accent": "#fecaca",
+          "base-100": "#fff",
+          "base-200": "#f4f4f5",
+          "base-300": "#d4d4d8",
+          "base-content": "#09090b"
         },
       }
     ]

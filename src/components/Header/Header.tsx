@@ -5,9 +5,9 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 
 export default function Header() {
   return (
-    <div className="navbar bg-base-300 mb-4 rounded-xl shadow-xl">
+    <div className="navbar bg-base-300 mb-4 rounded-xl shadow-md">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl">
+        <Link to="/" className="btn btn-ghost text-2xl">
           Just Worship
         </Link>
       </div>

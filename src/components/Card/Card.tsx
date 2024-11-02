@@ -3,11 +3,11 @@ import { formatDate } from "../../utils/utils";
 
 export default function Card({ list }) {
   return (
-    <div className="rounded-lg p-3 bg-base-200 shadow-md w-full">
+    <div className="rounded-lg p-3 bg-card-orange shadow-sm w-full ring-1 ring-card-orange-border">
       <h3 className="text-xl font-semibold">
         {formatDate(list?.attributes?.date)}
       </h3>
-      <p className="text-neutral mb-2">
+      <p className="text-neutral-content mb-2">
         {list?.attributes?.band?.data?.attributes?.name}
       </p>
       <ul className="list-inside space-y-2">
