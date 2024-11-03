@@ -50,6 +50,9 @@ export default function Sidebar() {
             <li>
               <Link to="/myLists">Списки пісень</Link>
             </li>
+            <li>
+              <Link to="/preferences">Налаштування</Link>
+            </li>
           </ul>
 
           <Link to="/login">

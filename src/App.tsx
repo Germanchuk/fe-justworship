@@ -10,6 +10,7 @@ import Registration from "./views/Registration/Registration";
 import TextToSong from "./views/TextToSong/TextToSong";
 import SingleSong from "./views/SingleSong/SingleSong";
 import FromScratch from "./views/FromScratch/FromScratch";
+import Preferences from "./views/Preferences/Preferences";
 
 function App() {
   const routes = useRoutes([
@@ -20,7 +21,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Lists />,
+          element: <Home />,
         },
         {
           path: "mySongs",
@@ -49,6 +50,10 @@ function App() {
         {
           path: "myLists",
           element: <Lists />,
+        },
+        {
+          path: "/preferences",
+          element: <Preferences />
         }
       ]
     },

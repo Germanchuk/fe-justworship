@@ -9,14 +9,14 @@ export default function AuthenticatedLayout({ children }) {
   const user = useSelector((state: any) => state.user);
   useEffect(() => {
     fetchAPI("/users/me", {
-      populate: ["bands", "currentBand"],
+      populate: ["bands", "currentBand", "church"],
     }).then((data) => {
       dispatch(setUser(data));
     });
   }, []);
 
   if (!user) {
-    return null;
+    return <div>Loading...</div>;
   }
   
   return (

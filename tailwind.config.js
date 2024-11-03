@@ -9,6 +9,7 @@ module.exports = {
     colors: {
       "card-orange": "#fff7ed",
       "card-orange-border": "#fdba74",
+      "base-700": "#3f3f46",
     },
   },
   daisyui: {
