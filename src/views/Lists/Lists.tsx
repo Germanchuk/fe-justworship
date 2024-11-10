@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { fetchAPI } from "../../utils/fetch-api";
 import Card from "../../components/Card/Card";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { formatDate } from "../../utils/utils";
 
 export default function Lists() {
   const [lists, setLists] = React.useState([]);

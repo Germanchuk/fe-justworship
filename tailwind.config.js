@@ -10,6 +10,7 @@ module.exports = {
       "card-orange": "#fff7ed",
       "card-orange-border": "#fdba74",
       "base-700": "#3f3f46",
+      create: "#e0f2fe",
     },
   },
   daisyui: {
@@ -17,17 +18,17 @@ module.exports = {
       {
         mytheme: {
           ...themes.light,
-          "primary": "#b91c1c",
-          "secondary": "#f6d860",
+          primary: "#b91c1c",
+          secondary: "#f6d860",
           "neutral-content": "#71717a",
-          "accent": "#fecaca",
+          accent: "#4ade80",
           "base-100": "#fff",
           "base-200": "#f4f4f5",
           "base-300": "#d4d4d8",
-          "base-content": "#09090b"
+          "base-content": "#09090b",
         },
-      }
-    ]
+      },
+    ],
   },
   plugins: [tailwindTypography, daisyui],
 };

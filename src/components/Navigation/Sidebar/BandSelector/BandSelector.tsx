@@ -1,0 +1,148 @@
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CheckCircleIcon,
+  ChevronDownIcon,
+  PlusCircleIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
+import classNames from "classnames";
+import React from "react";
+import CircleIcon from "../../../../icons/CircleIcon";
+import { useDispatch } from "react-redux";
+import { fetchAPI } from "../../../../utils/fetch-api";
+import { Link, useNavigate } from "react-router-dom";
+import { Routes } from "../../../../constants/routes";
+import Dropdown from "../../../Dropdown/Dropdown";
+import { setCurrentBand } from "../../../../redux/slices/userSlice";
+
+export default function BandSelector({ bands, currentBand }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleBandChange = (bandId) => () => {
+    if (bandId === currentBand?.id) {
+      return;
+    }
+
+    dispatch(setCurrentBand(bands?.find((band) => band?.id === bandId)));
+
+    fetchAPI("/users-permissions/users/me", null, {
+      method: "PUT",
+      body: JSON.stringify({
+        currentBand: bandId,
+      }),
+    })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(() => {
+        dispatch(
+          // @ts-ignore
+          addNotificationWithTimeout({
+            message: "Щось не так",
+            type: "error",
+          })
+        );
+      });
+  };
+
+  return (
+    <div className="flex justify-between gap-2 py-1 pr-1 hover:bg-base-200 active:bg-base-200">
+      <div className="col-span-2 flex items-center">
+        <UserGroupIcon className="h-5 w-5 mr-2" />
+        Гурт:
+      </div>
+      <div className="col-span-3">
+        {!!bands?.length ? (
+          <Dropdown
+            trigger={(isOpen) => (
+              <button className="btn btn-sm btn-outline btn-base-200 w-44">
+                {currentBand?.name ? currentBand?.name : "Виберіть гурт"}
+                <ChevronDownIcon
+                  className={classNames("w-4 h-4", {
+                    "rotate-180": isOpen,
+                  })}
+                />
+              </button>
+            )}
+          >
+            <ul className="menu bg-base-200 rounded-box w-full shadow-md m-0">
+              {bands?.map((band) => (
+                <li key={band.id} onClick={handleBandChange(band?.id)}>
+                  <span
+                    className={classNames("bg-base-200", {
+                      "bg-base-300": band?.id === currentBand?.id,
+                    })}
+                  >
+                    {band?.id === currentBand?.id ? (
+                      <CheckCircleIcon className="w-5 h-5" />
+                    ) : (
+                      <CircleIcon className="w-5 h-5" />
+                    )}
+                    {band?.name}
+                  </span>
+                </li>
+              ))}
+              <li>
+                <Link
+                  to={Routes.JoinBand}
+                  className="bg-base-200 ring-1 ring-base-700"
+                >
+                  <PlusCircleIcon className="w-5 h-5" />
+                  Приєднатись до гурту
+                </Link>
+              </li>
+            </ul>
+          </Dropdown>
+        ) : (
+          <button
+            className="btn btn-sm btn-outline btn-base-200 w-44"
+            onClick={() => navigate(Routes.JoinBand)}
+          >
+            <PlusCircleIcon className="w-5 h-5" />
+            Приєднатись
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="mb-6">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <h2 className="text-xl font-semibold">
+          {bands?.length > 1 ? "Гурти:" : "Гурт:"}
+        </h2>
+        <button
+          className="btn btn-sm btn-outline btn-base-200"
+          onClick={() => navigate(Routes.JoinBand)}
+        >
+          <PlusCircleIcon className="w-5 h-5" />
+          {!bands?.length && "Приєднатись до гурту"}
+        </button>
+      </div>
+      <ul className="join join-vertical w-full mb-4">
+        {!!bands?.length &&
+          bands?.map((band) => (
+            <li
+              className={classNames(
+                "flex justify-start btn btn-base-200 join-item",
+                {
+                  "bg-base-700 text-base-100": band?.id === currentBand?.id,
+                }
+              )}
+              onClick={handleBandChange(band?.id)}
+            >
+              {band?.id === currentBand?.id ? (
+                <CheckCircleIcon className="w-5 h-5" />
+              ) : (
+                <CircleIcon className="w-5 h-5" />
+              )}
+              {band?.name}
+            </li>
+          ))}
+      </ul>
+    </div>
+  );
+}

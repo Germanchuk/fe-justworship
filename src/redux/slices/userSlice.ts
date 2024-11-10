@@ -10,8 +10,14 @@ const userSlice = createSlice({
         ...action.payload
       }
     },
+    setCurrentBand: (state, action) => {
+      return {
+        ...state,
+        currentBand: action.payload
+      }
+    }
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, setCurrentBand } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
 
 body {
   margin: 0;
@@ -10,7 +10,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -18,12 +18,10 @@ code {
 @tailwind components;
 @tailwind utilities;
 
-
-
 /* MY CODE GOES BELOW */
 
 select {
-  appearance: none; 
+  appearance: none;
 }
 
 .threeCols {
@@ -37,7 +35,6 @@ select {
   .threeCols {
     column-count: 2;
   }
-  
 }
 
 @media screen and (max-width: 768px) {
@@ -46,5 +43,11 @@ select {
     overflow-x: initial;
     max-height: initial;
   }
-  
+}
+
+.menu li > *:not(ul, .menu-title, details, .btn):active,
+.menu li > *:not(ul, .menu-title, details, .btn).active,
+.menu li > details > summary:active {
+  background-color: unset;
+  color: unset;
 }

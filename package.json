@@ -15,6 +15,7 @@
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "^10.4.20",
     "classnames": "^2.5.1",
+    "lodash.debounce": "^4.0.8",
     "postcss": "^8.4.41",
     "qs": "^6.13.0",
     "react": "^18.2.0",

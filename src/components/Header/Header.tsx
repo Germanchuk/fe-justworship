@@ -8,12 +8,15 @@ export default function Header() {
     <div className="navbar bg-base-300 mb-4 rounded-xl shadow-md">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-2xl">
-          Just Worship
+          Пісні спасенних
         </Link>
       </div>
       <div className="flex-none">
         <div className="flex gap-2">
-          <label htmlFor="my-drawer-4" className="block drawer-button btn btn-square p-1">
+          <label
+            htmlFor="my-drawer-4"
+            className="block drawer-button btn btn-square p-1"
+          >
             <Bars3Icon />
           </label>
         </div>

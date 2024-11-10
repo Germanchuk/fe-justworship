@@ -11,51 +11,99 @@ import TextToSong from "./views/TextToSong/TextToSong";
 import SingleSong from "./views/SingleSong/SingleSong";
 import FromScratch from "./views/FromScratch/FromScratch";
 import Preferences from "./views/Preferences/Preferences";
+import JoinChurch from "./views/JoinChurch/JoinChurch";
+import { Routes } from "./constants/routes";
+import CreateChurch from "./views/CreateChurch/CreateChurch";
+import SingleChurch from "./views/SingleChurch/SingleChurch";
+import JoinBand from "./views/JoinBand/JoinBand";
+import SingleBand from "./views/SingleBand/SingleBand";
+import CreateBand from "./views/CreateBand/CreateBand";
+import ChurchSongs from "./views/ChurchSongs/ChurchSongs";
+import ChurchShedule from "./views/ChurchShedule/ChurchShedule";
+import BandSongs from "./views/BandSongs/BandSongs";
+import BandShedule from "./views/BandShedule/BandShedule";
+import CreateShedule from "./views/CreateShedule/CreateShedule";
 
 function App() {
   const routes = useRoutes([
     {
       path: "/",
       // @ts-ignore-next-line
-      element: <ProtectedRoute />, 
+      element: <ProtectedRoute />,
       children: [
         {
-          path: "/",
+          path: Routes.Root,
           element: <Home />,
         },
         {
-          path: "mySongs",
+          path: Routes.PublicSongs,
           element: <SongsList />,
         },
         {
-          path: "mySongs/:songId",
+          path: Routes.SongById,
           element: <SingleSong />,
         },
         {
-          path: "mySongs/add",
+          path: Routes.AddSong,
           element: <AddSong />,
         },
         {
-          path: "mySongs/add/textToSong",
+          path: Routes.AddSongTextToSong,
           element: <TextToSong />,
         },
         {
-          path: "mySongs/add/fromScratch",
+          path: Routes.AddSongFromScratch,
           element: <FromScratch />,
         },
         {
-          path: "mySongs/edit/:id",
-          element: <Lists />,
+          path: Routes.Preferences,
+          element: <Preferences />,
         },
         {
-          path: "myLists",
-          element: <Lists />,
+          path: Routes.JoinChurch,
+          element: <JoinChurch />,
         },
         {
-          path: "/preferences",
-          element: <Preferences />
+          path: Routes.CreateChurch,
+          element: <CreateChurch />,
+        },
+        {
+          path: Routes.SingleChurch,
+          element: <SingleChurch />,
+        },
+        {
+          path: Routes.JoinBand,
+          element: <JoinBand />,
+        },
+        {
+          path: Routes.SingleBand,
+          element: <SingleBand />,
+        },
+        {
+          path: Routes.CreateBand,
+          element: <CreateBand />,
+        },
+        {
+          path: Routes.ChurchSongs,
+          element: <ChurchSongs />,
+        },
+        {
+          path: Routes.ChurchShedule,
+          element: <ChurchShedule />,
+        },
+        {
+          path: Routes.BandSongs,
+          element: <BandSongs />,
+        },
+        {
+          path: Routes.BandShedule,
+          element: <BandShedule />,
+        },
+        {
+          path: Routes.CreateBandShedule,
+          element: <CreateShedule />
         }
-      ]
+      ],
     },
     {
       path: "/login",

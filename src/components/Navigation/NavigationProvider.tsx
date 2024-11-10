@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
 
 export default function NavigationProvider({ children }) {
