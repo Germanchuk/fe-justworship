@@ -5,7 +5,7 @@ import Card from "../../components/Card/Card";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../constants/routes";
-//
+
 export default function BandShedule() {
   const navigate = useNavigate();
   const [lists, setLists] = React.useState([]);
