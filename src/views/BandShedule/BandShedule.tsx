@@ -11,11 +11,12 @@ export default function BandShedule() {
   const [lists, setLists] = React.useState([]);
   const user = useSelector((state: any) => state.user);
   useEffect(() => {
-    fetchAPI("/currentBandLists", { populate: ["songs", "band"] }).then(
-      (data) => {
-        setLists(data.data);
-      }
-    );
+    fetchAPI("/currentBandLists", {
+      populate: ["songs", "band"],
+      sort: { date: "desc" },
+    }).then((data) => {
+      setLists(data.data);
+    });
   }, []);
 
   return (

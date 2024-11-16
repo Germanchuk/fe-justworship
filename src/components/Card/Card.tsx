@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { formatDate } from "../../utils/utils";
+import { Routes } from "../../constants/routes";
 
 export default function Card({ list }) {
   return (
@@ -12,7 +13,7 @@ export default function Card({ list }) {
       </p>
       <ul className="list-inside space-y-2">
         {list.attributes.songs.data.map((song) => (
-          <Link className="block bg-base-100 p-2 rounded" to={`/mySongs/${song.id}`}>
+          <Link className="block bg-base-100 p-2 rounded" to={`${Routes.PublicSongs}/${song.id}`}>
             <li className="flex justify-between">
               <span>{song.attributes.name}</span>
               <span>{song.attributes.key?.replace(/sharp/g, "#") ?? "-"} / {song.attributes.bpm ?? "-"}</span>

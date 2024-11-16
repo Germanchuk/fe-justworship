@@ -2,7 +2,7 @@ import Modal from "../../components/Modal/Modal";
 import HolychordsModalContent from "./Holychords/HolychordsModalContent";
 import { Link } from "react-router-dom";
 
-export default function AddSong() {
+export default function CreateSong() {
   return (
     <>
       <div className="flex justify-between items-center pb-8">

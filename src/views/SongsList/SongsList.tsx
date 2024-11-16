@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { fetchAPI } from "../../utils/fetch-api";
 import Card from "../../components/Card/Card";
 import { Link } from "react-router-dom";
+import { Routes } from "../../constants/routes";
 
 export default function SongsList() {
   const [songs, setSongs] = React.useState([]);
@@ -24,13 +25,16 @@ export default function SongsList() {
           <AddIcon />
         </Link>
       </div>
-        {songs.map((song) => {
-          return (
-            <Link to={`/mySongs/${song.id}`} className="bg-base-200 p-3 rounded block mb-2">
-              {song.attributes.name}
-            </Link>
-          );
-        })}
+      {songs.map((song) => {
+        return (
+          <Link
+            to={`${Routes.PublicSongs}/${song.id}`}
+            className="bg-base-200 p-3 rounded block mb-2"
+          >
+            {song.attributes.name}
+          </Link>
+        );
+      })}
     </>
   );
 }

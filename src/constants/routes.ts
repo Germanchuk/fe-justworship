@@ -5,13 +5,20 @@ export enum Routes {
     Preferences = "/preferences",
     //
     PublicSongs = "/publicSongs",
+    SinglePublicSong = "/publicSongs/:songId",
+    EditPublicSong = "/publicSongs/edit/:songId",
+    //
     ChurchSongs = "/churchSongs",
+    SingleChurchSong = "/churchSongs/:songId",
+    EditChurchSong = "/churchSongs/edit/:songId",
+    //
     BandSongs = "/bandSongs",
-    SongById = "/songs/:songId",
-    AddSong = "/songs/add",
-    AddSongTextToSong = "/songs/add/textToSong",
-    AddSongFromScratch = "/songs/add/fromScratch",
-    MySongEditId = "/songs/edit/:songId",
+    SingleBandSong = "/bandSongs/:songId",
+    EditBandSong = "/bandSongs/edit/:songId",
+    //
+    CreateSong = "/songs/create",
+    AddSongTextToSong = "/songs/create/textToSong",
+    AddSongFromScratch = "/songs/create/fromScratch",
     //
     ChurchShedule = "/churchShedule",
     BandShedule = "/bandShedule",

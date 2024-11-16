@@ -1,7 +1,7 @@
 import "./App.css";
 import { useRoutes } from "react-router-dom";
 import Lists from "./views/Lists/Lists";
-import AddSong from "./views/AddSong/AddSong";
+import CreateSong from "./views/CreateSong/CreateSong";
 import Home from "./views/Home/Home";
 import SongsList from "./views/SongsList/SongsList";
 import Login from "./views/Login/Login";
@@ -33,19 +33,19 @@ function App() {
       children: [
         {
           path: Routes.Root,
-          element: <Home />,
+          element: <BandShedule />,
         },
         {
           path: Routes.PublicSongs,
           element: <SongsList />,
         },
         {
-          path: Routes.SongById,
+          path: Routes.SinglePublicSong,
           element: <SingleSong />,
         },
         {
-          path: Routes.AddSong,
-          element: <AddSong />,
+          path: Routes.CreateSong,
+          element: <CreateSong />,
         },
         {
           path: Routes.AddSongTextToSong,
