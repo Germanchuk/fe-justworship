@@ -5,6 +5,7 @@ import {
   deriveTranspositionFromKey,
   keys,
 } from "../../../utils/keyUtils";
+import classNames from "classnames";
 
 const transpositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
@@ -38,6 +39,7 @@ export default function KeySelector({
         value={basicKey}
         setValue={handleBasicKey}
         tooltipMessage="Це реальна тональність пісні."
+        disabled
       />
       =
       <KeyPicker
@@ -54,13 +56,16 @@ export default function KeySelector({
   );
 }
 
-function KeyPicker({ value, setValue, tooltipMessage }) {
+function KeyPicker({ value, setValue, tooltipMessage, disabled = false }) {
   return (
     <span>
       <select
-        className="pl-2.5 border rounded"
+        className={classNames("pl-2.5 border rounded", {
+          "opacity-40": disabled,
+        })}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        disabled={disabled}
       >
         {keys.map((key) => (
           <option key={key} value={key}>
