@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { isChordsLine, transposeLine } from "../../../utils/keyUtils";
+import ChordLine from "./ChordLine/ChordLine";
 
 export default function MagicInput({
   wrapperClassName,
@@ -12,11 +13,13 @@ export default function MagicInput({
   return (
     <div className={classNames("MagicInput", wrapperClassName)}>
       <div className={classNames("MagicInput__output", className)}>
-        {value
-          .split("\n")
-          .map((line, index) =>
-            renderLine(line, index, editMode, transposition)
-          )}
+        {value.split("\n").map((line, index) => {
+          if (editMode) {
+            return renderEditorLine(line, index);
+          } else {
+            return renderWorkspaceLine(line, index, transposition);
+          }
+        })}
       </div>
       {editMode && (
         <textarea
@@ -34,7 +37,38 @@ export default function MagicInput({
   );
 }
 
-function renderLine(line, index, editMode, transposition) {
+function renderEditorLine(line, index) {
+  switch (identifyLine(line, index)) {
+    case "blockTitle":
+      return (
+        <div
+          className="MagicInput__blockTitle inline-block bg-accent rounded whitespace-pre"
+          key={index}
+        >
+          {line}
+        </div>
+      );
+
+    case "chord":
+      return <ChordLine key={index}>{line}</ChordLine>;
+
+    case "text":
+      return (
+        <div className="whitespace-pre" key={index}>
+          {line}
+        </div>
+      );
+
+    case "empty":
+      return (
+        <div key={index}>
+          <br />
+        </div>
+      );
+  }
+}
+
+function renderWorkspaceLine(line, index, transposition) {
   switch (identifyLine(line, index)) {
     case "blockTitle":
       return (
@@ -49,15 +83,9 @@ function renderLine(line, index, editMode, transposition) {
 
     case "chord":
       return (
-        <div
-          key={index}
-          className="text-primary chords"
-          style={{ whiteSpace: "pre-wrap" }}
-        >
-          {!editMode && !!transposition
-            ? transposeLine(line, transposition)
-            : line}
-        </div>
+        <ChordLine key={index} chordsTooltipEnabled={true}>
+          {transposeLine(line, transposition)}
+        </ChordLine>
       );
 
     case "text":

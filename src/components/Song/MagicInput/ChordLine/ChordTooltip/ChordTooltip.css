@@ -1,0 +1,13 @@
+.ChordTooltip__wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.ChordTooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  padding: 5px;
+  z-index: 100;
+}
