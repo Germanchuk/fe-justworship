@@ -6,10 +6,10 @@ export default function ChordLine({ children, chordsTooltipEnabled = false }) {
   return (
     <div className="text-primary chords whitespace-pre">
       {parts.map((part, index) =>
-        part.trim() ? (
+        part.trim() && part.trim() !== "." && part.trim() !== "|" ? (
           <ChordTooltip key={index}>{part}</ChordTooltip>
         ) : (
-          part // Keeps the spaces as they are
+          part // Keeps the spaces and . | as they are
         )
       )}
     </div>

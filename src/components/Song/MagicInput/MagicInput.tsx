@@ -84,7 +84,7 @@ function renderWorkspaceLine(line, index, transposition) {
     case "chord":
       return (
         <ChordLine key={index} chordsTooltipEnabled={true}>
-          {transposeLine(line, transposition)}
+          {transposition ? transposeLine(line, transposition) : line}
         </ChordLine>
       );
 

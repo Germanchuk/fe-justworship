@@ -6,7 +6,6 @@ import { useState } from "react";
 import { EyeSlashIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { deriveTranspositionFromKey, remapChords } from "../../utils/keyUtils";
-import Tooltip from "./MagicInput/ChordLine/ChordTooltip/ChordTooltip";
 
 export default function Song({ song, setSong, editMode }) {
   const [chordsHidden, setChordsHidden] = useState(false);
@@ -46,9 +45,6 @@ export default function Song({ song, setSong, editMode }) {
         chordsHidden: chordsHidden,
       })}
     >
-      <div>
-        <Tooltip trigger={<div className="btn">trig</div>}>Hello</Tooltip>
-      </div>
       <MagicInput
         className="text-3xl font-bold"
         value={song.name}

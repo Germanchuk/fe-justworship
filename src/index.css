@@ -7,6 +7,7 @@ body {
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
 
 code {
@@ -28,6 +29,7 @@ select {
   column-count: 3; /* Create 3 columns */
   column-gap: 8px; /* Optional: Adjust space between columns */
   overflow-x: scroll;
+  overflow-y: visible;
   max-height: calc(100vh - 48px);
 }
 

@@ -5,9 +5,7 @@
 }
 
 .ChordTooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
+  position: fixed;
   padding: 5px;
   z-index: 100;
 }
