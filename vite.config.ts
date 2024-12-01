@@ -17,12 +17,12 @@ export default defineConfig({
         theme_color: "#f4f4f5",
         icons: [
           {
-            src: "/assets/logo192.png",
+            src: "../assets/logo192.png", // шлях з перспективи dist/manifest...
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/assets/logo512.png",
+            src: "../assets/logo512.png",
             sizes: "512x512",
             type: "image/png",
           },
