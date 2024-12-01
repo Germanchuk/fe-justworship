@@ -2,7 +2,7 @@ import qs from "qs";
 
 export function getStrapiURL(path = "") {
   return `${
-    process.env.NEXT_PUBLIC_STRAPI_API_URL || "https://be.justworship.uk"
+    "https://be.justworship.uk"
   }${path}`;
 }
 
@@ -45,6 +45,7 @@ export async function fetchAPI(
 
 
 export async function loginUser({ username, password }) {
+  console.log("loginUser", username, password);
     const response = await fetch(getStrapiURL("/api/auth/local"), {
       method: "POST",
       headers: {
