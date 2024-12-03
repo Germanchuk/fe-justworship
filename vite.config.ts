@@ -36,7 +36,7 @@ export default defineConfig({
       workbox: {
         runtimeCaching: [
           {
-            urlPattern: "https://be.justworship.uk/api/*",
+            urlPattern: /^https:\/\/be\.justworship\.uk\/api\/.*/,
             handler: "NetworkFirst",
             options: {
               cacheName: "api-cache",
