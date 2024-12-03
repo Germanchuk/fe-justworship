@@ -8,6 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: "auto",
+      devOptions: {
+        enabled: true,
+      },
       manifest: {
         name: "Just Worship",
         short_name: "Just Worship",
@@ -25,6 +29,25 @@ export default defineConfig({
             src: "/logo512.png",
             sizes: "512x512",
             type: "image/png",
+          },
+        ],
+      },
+      strategies: "generateSW",
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: "https://be.justworship.uk/api/*",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-cache",
+              expiration: {
+                maxEntries: 50, // Максимум 50 елементів
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 днів
+              },
+              cacheableResponse: {
+                statuses: [0, 200], // Кешувати тільки успішні відповіді
+              },
+            },
           },
         ],
       },
