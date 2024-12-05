@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks/useAuth"; // Створюємо свій х
 import AuthenticatedLayout from "../AuthenticatedLayout/AuthenticatedLayout";
 import { useEffect } from "react";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const isAuthenticated = useAuth();
 
   if (!isAuthenticated) {
