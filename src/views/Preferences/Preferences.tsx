@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Preferences() {
   return (
-    <div>Preferences</div>
+    <div><button className='btn btn-primary' onClick={() => window.location.reload()}>Hard reload</button></div>
   )
 }
