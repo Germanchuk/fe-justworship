@@ -41,8 +41,8 @@ export default defineConfig({
             options: {
               cacheName: "api-cache",
               expiration: {
-                maxEntries: 50, // Максимум 50 елементів
-                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 днів
+                maxEntries: 9999, // Максимум 9999 елементів
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 365 днів
               },
               cacheableResponse: {
                 statuses: [0, 200], // Кешувати тільки успішні відповіді
