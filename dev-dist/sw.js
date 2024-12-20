@@ -82,7 +82,7 @@ define(['./workbox-e755d862'], (function (workbox) { 'use strict';
     "revision": "3ca0b8505b4bec776b69afdba2768812"
   }, {
     "url": "index.html",
-    "revision": "0.mh5gaok7b4g"
+    "revision": "0.3tk9vnu6p0o"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
@@ -91,8 +91,8 @@ define(['./workbox-e755d862'], (function (workbox) { 'use strict';
   workbox.registerRoute(/^https:\/\/be\.justworship\.uk\/api\/.*/, new workbox.NetworkFirst({
     "cacheName": "api-cache",
     plugins: [new workbox.ExpirationPlugin({
-      maxEntries: 50,
-      maxAgeSeconds: 604800
+      maxEntries: 9999,
+      maxAgeSeconds: 31536000
     }), new workbox.CacheableResponsePlugin({
       statuses: [0, 200]
     })]
