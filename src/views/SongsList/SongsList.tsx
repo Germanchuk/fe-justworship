@@ -21,7 +21,7 @@ export default function SongsList() {
     <>
       <div className="flex justify-between items-center pb-4">
         <h1 className="text-3xl font-bold tracking-tight">Всі пісні</h1>
-        <Link className="btn btn-square" to="/songs/add">
+        <Link className="btn btn-square" to={Routes.CreateSong}>
           <AddIcon />
         </Link>
       </div>

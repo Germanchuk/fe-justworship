@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";
 import { addNotificationWithTimeout } from "../../redux/slices/notificationsSlice";
+import { Routes } from "../../constants/routes";
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
@@ -36,7 +37,7 @@ export default function Login() {
       .then((data) => {
         localStorage.setItem("authToken", data.jwt);
         dispatch(setUser(data.user));
-        navigate("/");
+        navigate(Routes.Root);
         dispatch(
           // @ts-ignore
           addNotificationWithTimeout({
@@ -93,7 +94,7 @@ export default function Login() {
       </form>
       <div>
         <div className="text-center">Немає аккаунту?</div>
-        <Link to="/register">
+        <Link to={Routes.Register}>
           <button className="btn btn-link">Зареєструватися</button>
         </Link>
       </div>

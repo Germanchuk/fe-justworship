@@ -1,13 +1,12 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import NoteIcon from "../../icons/NoteIcon";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { Routes } from "../../constants/routes";
 
 export default function Header() {
   return (
     <div className="navbar bg-base-300 mb-4 rounded-xl shadow-md">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-2xl">
+        <Link to={Routes.Root} className="btn btn-ghost text-2xl">
           Пісні спасенних
         </Link>
       </div>

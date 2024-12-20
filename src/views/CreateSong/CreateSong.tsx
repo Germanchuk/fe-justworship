@@ -1,4 +1,5 @@
 import Modal from "../../components/Modal/Modal";
+import { Routes } from "../../constants/routes";
 import HolychordsModalContent from "./Holychords/HolychordsModalContent";
 import { Link } from "react-router-dom";
 
@@ -15,11 +16,12 @@ export default function CreateSong() {
         <Modal
           trigger={<button className="btn">Імпортувати з Holychords</button>}
           content={<HolychordsModalContent />}
+          title={"Імпортувати з Holychords"}
         />
-        <Link to="/mySongs/add/textToSong">
+        <Link to={Routes.AddSongTextToSong}>
           <button className="btn btn-disabled">Вставити текст</button>
         </Link>
-        <Link to="/mySongs/add/fromScratch">
+        <Link to={Routes.AddSongFromScratch}>
           <button className="btn">Створити в редакторі</button>
         </Link>
       </div>

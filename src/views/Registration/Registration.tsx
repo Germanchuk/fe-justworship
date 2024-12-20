@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";
 import { addNotificationWithTimeout } from "../../redux/slices/notificationsSlice";
+import { Routes } from "../../constants/routes";
 
 export default function Registration() {
   const [email, setEmail] = React.useState("");
@@ -59,7 +60,7 @@ export default function Registration() {
       .then((data) => {
         localStorage.setItem("authToken", data.jwt);
         dispatch(setUser(data.user));
-        navigate("/");
+        navigate(Routes.Root);
         //
         dispatch(
           // @ts-ignore
@@ -128,7 +129,7 @@ export default function Registration() {
       </form>
       <div className="flex flex-col items-center">
         <div className="text-center">Вже є аккаунт?</div>
-        <Link to="/login">
+        <Link to={Routes.Login}>
           <button className="btn btn-link">Увійти</button>
         </Link>
       </div>

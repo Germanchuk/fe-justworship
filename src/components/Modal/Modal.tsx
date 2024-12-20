@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Modal({ trigger, content }: any) {
+export default function Modal({ trigger, content, title }: any) {
   const ref = React.useRef(null);
   return (
     <>
@@ -16,13 +16,16 @@ export default function Modal({ trigger, content }: any) {
 
       <dialog ref={ref} className="modal">
         <div className="modal-box">
-          <form method="dialog">
+          <form method="dialog" className="flex justify-between items-center">
             {/* if there is a button in form, it will close the modal */}
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            {title && (<h4 className="text-lg">{title}</h4>)}
+            <button className="btn btn-sm btn-circle btn-ghost">
               <CloseIcon />
             </button>
           </form>
-          {content}
+          <div className="pt-4">
+            {content}
+          </div>
         </div>
       </dialog>
     </>

@@ -3,6 +3,7 @@ import Song from "../../components/Song/Song";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { fetchAPI } from "../../utils/fetch-api";
 import { useNavigate } from "react-router-dom";
+import { Routes } from "../../constants/routes";
 
 export default function FromScratch() {
   // add intermediate auto saving into localStorage
@@ -22,7 +23,7 @@ export default function FromScratch() {
         }
       );
 
-      data && navigate(`/mySongs/${data.data.id}`);
+      data && navigate(`${Routes.PublicSongs}/${data.data.id}`);
     } catch {
       // ignore error
     }
