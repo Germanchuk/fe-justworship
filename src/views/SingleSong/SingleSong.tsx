@@ -17,7 +17,9 @@ export default function SingleSong() {
   const songChanged = JSON.stringify(song) !== JSON.stringify(initialSong);
 
   React.useEffect(() => {
-    fetchAPI(`/songs/${songId}`).then((data) => {
+    fetchAPI(`/songs/${songId}`, {
+      populate: ["sections"],
+    }).then((data) => {
       setSong(data.data.attributes);
       setInitialSong(JSON.parse(JSON.stringify(data.data.attributes))); // deep copy of data.data.attributes);
     });

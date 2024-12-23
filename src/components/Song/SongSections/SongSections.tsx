@@ -1,42 +1,41 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { v4 as uuidv4 } from "uuid";
 import Section from "./Section/Section";
 
 export default function SongSections({ song, setSong, editMode = false }) {
 
   const getBlockChanger = (blockIndex) => (newValue) => {
     setSong((song) => {
-      const updatedBlocks = [...song.content];
+      const updatedSections = [...song.sections];
 
-      updatedBlocks[blockIndex].content = newValue;
+      updatedSections[blockIndex].content = newValue;
 
-      return { ...song, content: updatedBlocks };
+      return { ...song, sections: updatedSections };
     });
   };
 
-  const getBlockRemover = (blockIndex) => () => {
+  const getBlockRemover = (sectionIndex) => () => {
     setSong((song) => {
-      const updatedBlocks = [...song.content];
-      updatedBlocks.splice(blockIndex, 1);
-      return { ...song, content: updatedBlocks };
+      const updatedSections = [...song.sections];
+      updatedSections.splice(sectionIndex, 1);
+      return { ...song, sections: updatedSections };
     });
   };
 
   const addFirstBlock = () => {
     setSong((song) => {
-      return { ...song, content: [{ id: uuidv4(), content: "" }] };
+      return { ...song, sections: [{ content: "" }] };
     });
   };
 
-  const addBlockBelow = (blockIndex) => () => {
+  const addBlockBelow = (sectionIndex) => () => {
     setSong((song) => {
-      const updatedBlocks = [...song.content];
-      updatedBlocks.splice(blockIndex + 1, 0, { id: uuidv4(), content: "" });
-      return { ...song, content: updatedBlocks };
+      const updatedSections = [...song.sections];
+      updatedSections.splice(sectionIndex + 1, 0, { content: "" });
+      return { ...song, sections: updatedSections };
     });
   };
 
-  if (!song || !song.content || Object.keys(song.content).length === 0) {
+  if (!song || !song.sections || Object.keys(song.sections).length === 0) {
     return (
       <button onClick={addFirstBlock} className="btn btn-block btn-outline">
         Додати першу секцію <PlusIcon className="h-6" />
@@ -46,7 +45,7 @@ export default function SongSections({ song, setSong, editMode = false }) {
 
   return (
     <div className="threeCols">
-      {song.content.map((section, index) => {
+      {song.sections.map((section, index) => {
         return (
           <Section
             id={section.id}

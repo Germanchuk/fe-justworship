@@ -26,8 +26,8 @@ export default function Song({ song, setSong, editMode }) {
       return {
         ...song,
         key: newKey,
-        content: remapChords(
-          song.content,
+        sections: remapChords(
+          song.sections,
           deriveTranspositionFromKey(song.key, newKey)
         ),
       };
