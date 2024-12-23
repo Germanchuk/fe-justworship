@@ -47,6 +47,7 @@ export default function Section({
         setValue={setValue}
         editMode={editMode}
         transposition={transposition}
+        useModifiers
       />
       {editMode && (
         <div className={classNames("Section__controls")}>

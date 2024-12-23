@@ -2,6 +2,10 @@ import classNames from "classnames";
 import { isChordsLine, transposeLine } from "../../../utils/keyUtils";
 import ChordLine from "./ChordLine/ChordLine";
 
+function NormalText({ children }) {
+  return <div style={{ whiteSpace: "pre-wrap" }}>{children}</div>;
+}
+
 export default function MagicInput({
   wrapperClassName,
   className,
@@ -9,15 +13,30 @@ export default function MagicInput({
   setValue,
   editMode = false,
   transposition = 0,
+  useModifiers = false,
 }: any) {
+  const actualTransposition = editMode ? 0 : transposition;
   return (
     <div className={classNames("MagicInput", wrapperClassName)}>
       <div className={classNames("MagicInput__output", className)}>
         {value.split("\n").map((line, index) => {
-          if (editMode) {
-            return renderEditorLine(line, index);
+          if (useModifiers) {
+            const modifier = modifiers.find((m) => m.detector(line, index));
+            return modifier ? (
+              modifier.Component(line, index, actualTransposition)
+            ) : (
+              <NormalText key={index}>{line}</NormalText>
+            );
           } else {
-            return renderWorkspaceLine(line, index, transposition);
+            if (line) {
+              return <NormalText key={index}>{line}</NormalText>;
+            } else {
+              return (
+                <div key={index}>
+                  <br />
+                </div>
+              );
+            }
           }
         })}
       </div>
@@ -37,85 +56,38 @@ export default function MagicInput({
   );
 }
 
-function renderEditorLine(line, index) {
-  switch (identifyLine(line, index)) {
-    case "blockTitle":
-      return (
-        <div
-          className="MagicInput__blockTitle inline-block bg-accent rounded whitespace-pre"
-          key={index}
-        >
-          {line}
-        </div>
-      );
-
-    case "chord":
-      return <ChordLine key={index}>{line}</ChordLine>;
-
-    case "text":
-      return (
-        <div className="whitespace-pre" key={index}>
-          {line}
-        </div>
-      );
-
-    case "empty":
-      return (
-        <div key={index}>
-          <br />
-        </div>
-      );
-  }
-}
-
-function renderWorkspaceLine(line, index, transposition) {
-  switch (identifyLine(line, index)) {
-    case "blockTitle":
-      return (
-        <div
-          className="MagicInput__blockTitle inline-block bg-accent rounded"
-          style={{ whiteSpace: "pre-wrap" }}
-          key={index}
-        >
-          {line}
-        </div>
-      );
-
-    case "chord":
-      return (
-        <ChordLine key={index} chordsTooltipEnabled={true}>
-          {transposition ? transposeLine(line, transposition) : line}
-        </ChordLine>
-      );
-
-    case "text":
-      return (
-        <div style={{ whiteSpace: "pre-wrap" }} key={index}>
-          {line}
-        </div>
-      );
-
-    case "empty":
-      return (
-        <div key={index}>
-          <br />
-        </div>
-      );
-  }
-}
-
-function identifyLine(line, index) {
-  if (!line) {
-    return "empty";
-  }
-  if (index === 0 && isSongStructureItem(line)) {
-    return "blockTitle";
-  }
-  if (isChordsLine(line)) {
-    return "chord";
-  }
-  return "text";
-}
+const modifiers = [
+  {
+    internalName: "emptyLine",
+    detector: (line) => !line,
+    Component: (_, index) => (
+      <div key={index}>
+        <br />
+      </div>
+    ),
+  },
+  {
+    internalName: "chordsLine",
+    detector: (line) => isChordsLine(line),
+    Component: (line, index, transposition) => (
+      <ChordLine key={index} chordsTooltipEnabled={true}>
+        {transposition ? transposeLine(line, transposition) : line}
+      </ChordLine>
+    ),
+  },
+  {
+    internalName: "blockTitle",
+    detector: (line, index) => index === 0 && isSongStructureItem(line),
+    Component: (line, index) => (
+      <div
+        className="MagicInput__blockTitle inline-block bg-accent rounded whitespace-pre"
+        key={index}
+      >
+        {line}
+      </div>
+    ),
+  },
+];
 
 function isSongStructureItem(str) {
   // Normalize the input to lowercase and trim any extra spaces
