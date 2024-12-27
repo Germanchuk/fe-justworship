@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { fetchAPI } from "../../utils/fetch-api";
-import Card from "../../components/Card/Card";
+import SongsList from "../../components/SongsList/SongsList";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../constants/routes";
@@ -34,7 +34,7 @@ export default function BandShedule() {
         </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {lists.length && lists?.map((list) => <Card list={list} />)}
+        {lists.length && lists?.map((list) => <SongsList list={list} />)}
       </div>
     </>
   );

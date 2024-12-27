@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { fetchAPI } from "../../utils/fetch-api";
-import Card from "../../components/Card/Card";
+import Card from "../../components/SongsList/SongsList";
 import { useSelector } from "react-redux";
 
 export default function Home() {

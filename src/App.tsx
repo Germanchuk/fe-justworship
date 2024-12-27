@@ -1,8 +1,8 @@
 import "./App.css";
 import { Route, Routes as RouterRoutes, useLocation } from "react-router-dom";
-import Lists from "./views/Lists/Lists";
+// import Lists from "./views/Lists/Lists";
 import CreateSong from "./views/CreateSong/CreateSong";
-import Home from "./views/Home/Home";
+// import Home from "./views/Home/Home";
 import SongsList from "./views/SongsList/SongsList";
 import Login from "./views/Login/Login";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
@@ -22,7 +22,7 @@ import ChurchSongs from "./views/ChurchSongs/ChurchSongs";
 import ChurchShedule from "./views/ChurchShedule/ChurchShedule";
 import BandSongs from "./views/BandSongs/BandSongs";
 import BandShedule from "./views/BandShedule/BandShedule";
-import CreateShedule from "./views/CreateShedule/CreateShedule";
+import SingleShedule from "./views/SingleShedule/SingleShedule";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -63,7 +63,7 @@ function App() {
           <Route path={Routes.ChurchShedule} element={<ChurchShedule />} />
           <Route path={Routes.BandSongs} element={<BandSongs />} />
           <Route path={Routes.BandShedule} element={<BandShedule />} />
-          <Route path={Routes.CreateBandShedule} element={<CreateShedule />} />
+          <Route path={Routes.SingleBandShedule} element={<SingleShedule />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} />

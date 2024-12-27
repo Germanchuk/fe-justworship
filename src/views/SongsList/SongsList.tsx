@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { fetchAPI } from "../../utils/fetch-api";
-import Card from "../../components/Card/Card";
 import { Link } from "react-router-dom";
 import { Routes } from "../../constants/routes";
 

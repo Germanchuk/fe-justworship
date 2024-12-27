@@ -10,11 +10,9 @@ export enum Routes {
   //
   ChurchSongs = "/churchSongs",
   SingleChurchSong = "/churchSongs/:songId",
-  EditChurchSong = "/churchSongs/edit/:songId",
   //
   BandSongs = "/bandSongs",
   SingleBandSong = "/bandSongs/:songId",
-  EditBandSong = "/bandSongs/edit/:songId",
   //
   CreateSong = "/songs/create",
   AddSongTextToSong = "/songs/create/textToSong",
@@ -22,7 +20,8 @@ export enum Routes {
   //
   ChurchShedule = "/churchShedule",
   BandShedule = "/bandShedule",
-  CreateBandShedule = "/bandShedule/create",
+  CreateBandShedule = "/bandShedule/create", // for Link to be reliable
+  SingleBandShedule = "/bandShedule/:sheduleId",
   //
   JoinChurch = "/churches",
   CreateChurch = "/churches/add",

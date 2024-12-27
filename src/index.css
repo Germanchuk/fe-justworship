@@ -85,3 +85,9 @@ select {
     transform: translate(-20px, 0);
   }
 }
+
+/* DatePicker overrides */
+
+.Bridge .react-datepicker-wrapper {
+  display: block;
+}
