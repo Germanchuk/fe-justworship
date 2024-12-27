@@ -1,12 +1,12 @@
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { uk } from "date-fns/locale";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, LegacyRef, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import DragDropList from "./DragDropList/DragDropList";
 import { useParams } from "react-router-dom";
 import { fetchAPI } from "../../utils/fetch-api";
 
-const Trigger = forwardRef(({ value, onClick }: any, ref) => (
+const Trigger = forwardRef(({ value, onClick }: any, ref: LegacyRef<HTMLButtonElement>) => (
   <button
     onClick={onClick}
     ref={ref}
