@@ -12,7 +12,6 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import NotificationsCenter from "./components/NotificationsCenter/NotificationsCenter";
 import NavigationProvider from "./components/Navigation/NavigationProvider";
-import { fetchAPI } from "./utils/fetch-api";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

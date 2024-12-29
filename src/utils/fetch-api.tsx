@@ -2,7 +2,7 @@ import qs from "qs";
 
 export function getStrapiURL(path = "") {
   return `${
-    "https://be.justworship.uk"
+    "http://localhost:1337"
   }${path}`;
 }
 

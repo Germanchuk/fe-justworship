@@ -23,7 +23,9 @@ export default function FromScratch() {
         }
       );
 
-      data && navigate(`${Routes.PublicSongs}/${data.data.id}`);
+      if (data) {
+        navigate(`${Routes.PublicSongs}/${data.data.id}`);
+      }
     } catch {
       // ignore error
     }
