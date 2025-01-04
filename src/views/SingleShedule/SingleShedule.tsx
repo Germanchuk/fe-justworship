@@ -1,6 +1,6 @@
 import { CalendarIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { uk } from "date-fns/locale";
-import { forwardRef, LegacyRef, useEffect, useState } from "react";
+import { forwardRef, LegacyRef, useCallback, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import DragDropList from "./DragDropList/DragDropList";
 import { useNavigate, useParams } from "react-router-dom";
@@ -39,6 +39,8 @@ export default function SingleShedule() {
   const [initialShedule, setInitialShedule] = useState(null);
   const [shedule, setShedule] = useState(null);
 
+  console.log("shedule", shedule);
+
   const sheduleChanged =
     JSON.stringify(shedule) !== JSON.stringify(initialShedule);
 
@@ -57,19 +59,26 @@ export default function SingleShedule() {
     });
   }, []);
 
-  function setItems(items) {
+  const addItem = useCallback((newItem) => {
+    setShedule((prev) => ({
+      ...prev,
+      songs: [...prev.songs, newItem],
+    }));
+  }, []);
+
+  const setItems = useCallback((items) => {
     setShedule((prev) => ({
       ...prev,
       songs: items,
     }));
-  }
+  }, []);
 
-  function setDate(date) {
+  const setDate = useCallback((date) => {
     setShedule((prev) => ({
       ...prev,
       date: format(date, "yyyy-MM-dd"), // to be consistent (api support any type of date)
     }));
-  }
+  }, []);
 
   async function saveShedule() {
     const data = await fetchAPI(
@@ -109,6 +118,7 @@ export default function SingleShedule() {
           <DragDropList
             items={shedule?.songs || []}
             setItems={setItems}
+            addItem={addItem}
           />
         </div>
       </div>

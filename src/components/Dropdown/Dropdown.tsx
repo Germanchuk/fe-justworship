@@ -24,7 +24,7 @@ const Dropdown = ({ trigger, children }) => {
   }, []);
 
   return (
-    <div ref={dropdownRef} style={{ position: "relative" }}>
+    <div ref={dropdownRef} className="relative">
       <div onClick={handleToggle}>{trigger(isOpen)}</div>
       {isOpen && (
         <div

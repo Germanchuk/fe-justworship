@@ -20,7 +20,6 @@ export default function JoinChurch() {
           },
         })
           .then((data) => {
-            console.log(data);
             setResults(data.data); // Update state with API results
           })
           .catch((error) => {

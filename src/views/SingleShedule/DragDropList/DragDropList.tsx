@@ -2,7 +2,7 @@ import { Bars2Icon } from "@heroicons/react/24/outline";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import MagicItem from "./MagicItem/MagicItem";
 
-const DragDropList = ({ items, setItems }) => {
+const DragDropList = ({ items, setItems, addItem }) => {
 
   const onDragEnd = (result) => {
     // If dropped outside the list
@@ -60,7 +60,7 @@ const DragDropList = ({ items, setItems }) => {
               </Draggable>
             ))}
             {provided.placeholder}
-            <MagicItem />
+            <MagicItem addItem={addItem} />
           </ul>
         )}
       </Droppable>

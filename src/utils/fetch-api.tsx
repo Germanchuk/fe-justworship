@@ -1,9 +1,9 @@
 import qs from "qs";
+import store from "../redux/store";
+import { disableGlobalLoader, enableGlobalLoader } from "../redux/slices/viewConfigSlice";
 
 export function getStrapiURL(path = "") {
-  return `${
-    "https://be.justworship.uk"
-  }${path}`;
+  return `${import.meta.env.VITE_API_URL}${path}`;
 }
 
 export async function fetchAPI(
@@ -11,9 +11,8 @@ export async function fetchAPI(
   urlParamsObject: any = {},
   options = {}
 ) {
-
   const token = localStorage.getItem("authToken");
-  
+  store.dispatch(enableGlobalLoader());
   try {
     // Merge default and user options
     const mergedOptions = {
@@ -35,32 +34,32 @@ export async function fetchAPI(
     const response = await fetch(requestUrl, mergedOptions);
     const data = await response.json();
     return data;
-    
   } catch (error) {
     console.error(error);
-    throw new Error(`Please check if your server is running and you set all the required tokens.`);
+    throw new Error(
+      `Please check if your server is running and you set all the required tokens.`
+    );
+  } finally {
+    store.dispatch(disableGlobalLoader());
   }
 }
 
-
-
 export async function loginUser({ username, password }) {
-  console.log("loginUser", username, password);
-    const response = await fetch(getStrapiURL("/api/auth/local"), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        identifier: username,
-        password,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
+  const response = await fetch(getStrapiURL("/api/auth/local"), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      identifier: username,
+      password,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
+  return data;
 }
 
 export async function registerUser({ username, password, email }) {
@@ -72,7 +71,7 @@ export async function registerUser({ username, password, email }) {
     body: JSON.stringify({
       username,
       password,
-      email
+      email,
     }),
   });
   if (!response.ok) {
