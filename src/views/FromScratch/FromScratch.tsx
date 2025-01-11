@@ -4,6 +4,7 @@ import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { fetchAPI } from "../../utils/fetch-api";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../constants/routes";
+import ReactDOM from "react-dom";
 
 export default function FromScratch() {
   // add intermediate auto saving into localStorage
@@ -40,7 +41,7 @@ export default function FromScratch() {
 }
 
 function SavingButton({ createEntry }) {
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed bottom-4 right-4">
       <button
         className="btn btn-success btn-square ring-neutral ring-1"
@@ -48,6 +49,6 @@ function SavingButton({ createEntry }) {
       >
         <CheckCircleIcon className="w-6 h-6" />
       </button>
-    </div>
+    </div>, document.body
   );
 }
