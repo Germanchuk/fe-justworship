@@ -6,6 +6,7 @@ import EditIcon from "../../../icons/EditIcon";
 import ArrowLeftIcon from "../../../icons/ArrowLeftIcon";
 import MagicInput from "../../../components/Song/MagicInput/MagicInput";
 import { ContentBlock, SongObject } from "../../../utils/compiler/compiler";
+import ReactDOM from "react-dom";
 
 export default function SingleSong({
   songObject,
@@ -57,7 +58,7 @@ function SongTitle({ children, editMode }) {
 }
 
 function ToggleModeButton({ setEditMode, editMode }) {
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed bottom-4 right-4">
       <button
         className="btn btn-square bg-base-300 ring-neutral ring-1"
@@ -65,6 +66,6 @@ function ToggleModeButton({ setEditMode, editMode }) {
       >
         {editMode ? <ArrowLeftIcon /> : <EditIcon />}
       </button>
-    </div>
+    </div>, document.body
   );
 }

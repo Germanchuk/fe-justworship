@@ -8,6 +8,7 @@ import { fetchAPI } from "../../utils/fetch-api";
 import { format } from "date-fns";
 import { Routes } from "../../constants/routes";
 import { formatDate } from "../../utils/utils";
+import ReactDOM from "react-dom";
 
 const EMPTY_SHEDULE = {
   date: "",
@@ -128,7 +129,7 @@ export default function SingleShedule() {
 }
 
 function SavingButton({ saveShedule }) {
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed bottom-4 left-4">
       <button
         className="btn btn-square bg-base-300 ring-neutral ring-1"
@@ -136,6 +137,6 @@ function SavingButton({ saveShedule }) {
       >
         <CheckIcon className="w-6 h-6" />
       </button>
-    </div>
+    </div>, document.body
   );
 }

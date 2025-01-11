@@ -7,6 +7,7 @@ import {
   CheckIcon,
   PencilIcon,
 } from "@heroicons/react/24/outline";
+import ReactDOM from "react-dom";
 
 export default function SingleSong() {
   const { songId } = useParams();
@@ -58,7 +59,7 @@ export default function SingleSong() {
 }
 
 function ToggleModeButton({ toggleMode, editMode }) {
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed bottom-4 right-4">
       <button
         className="btn btn-square bg-base-300 ring-neutral ring-1"
@@ -70,12 +71,12 @@ function ToggleModeButton({ toggleMode, editMode }) {
           <PencilIcon className="w-6 h-6" />
         )}
       </button>
-    </div>
+    </div>, document.body
   );
 }
 
 function SavingButton({ saveSong }) {
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed bottom-4 left-4">
       <button
         className="btn btn-square bg-base-300 ring-neutral ring-1"
@@ -83,6 +84,6 @@ function SavingButton({ saveSong }) {
       >
         <CheckIcon className="w-6 h-6" />
       </button>
-    </div>
+    </div>, document.body
   );
 }
