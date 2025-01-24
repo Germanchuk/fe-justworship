@@ -18,7 +18,6 @@ export default function MagicItem({ addItem }) {
 
   const resetInput = useCallback(() => {
     setSearchQuery("");
-    setIsFocused(false);
   }, [setSearchQuery]);
 
   return (

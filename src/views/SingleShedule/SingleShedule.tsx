@@ -40,8 +40,6 @@ export default function SingleShedule() {
   const [initialShedule, setInitialShedule] = useState(null);
   const [shedule, setShedule] = useState(null);
 
-  console.log("shedule", shedule);
-
   const sheduleChanged =
     JSON.stringify(shedule) !== JSON.stringify(initialShedule);
 
@@ -80,6 +78,13 @@ export default function SingleShedule() {
       date: format(date, "yyyy-MM-dd"), // to be consistent (api support any type of date)
     }));
   }, []);
+
+  const deleteItem = useCallback((itemId) => {
+    setShedule((prev) => ({
+      ...prev,
+      songs: prev.songs.filter((item) => item.id !== itemId),
+    }))
+  }, [setShedule]);
 
   async function saveShedule() {
     const data = await fetchAPI(
@@ -120,6 +125,7 @@ export default function SingleShedule() {
             items={shedule?.songs || []}
             setItems={setItems}
             addItem={addItem}
+            deleteItem={deleteItem}
           />
         </div>
       </div>
@@ -132,7 +138,7 @@ function SavingButton({ saveShedule }) {
   return ReactDOM.createPortal(
     <div className="fixed bottom-4 left-4">
       <button
-        className="btn btn-square bg-base-300 ring-neutral ring-1"
+        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
         onClick={saveShedule}
       >
         <CheckIcon className="w-6 h-6" />

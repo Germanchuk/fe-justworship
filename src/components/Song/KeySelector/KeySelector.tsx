@@ -73,10 +73,10 @@ function KeyPicker({ value, setValue, tooltipMessage, disabled = false }) {
           </option>
         ))}
       </select>
-      <div className="tooltip align-middle" data-tip={tooltipMessage}>
-        <InformationCircleIcon className="w-5 h-5 ml-1" />
-        {/* створити допитливий режим - приклад пісні де багато тултіпів з поясненнями */}
-      </div>
+      {/*<div className="tooltip align-middle" data-tip={tooltipMessage}>*/}
+      {/*  <InformationCircleIcon className="w-5 h-5 ml-1" />*/}
+      {/*  /!* створити допитливий режим - приклад пісні де багато тултіпів з поясненнями *!/*/}
+      {/*</div>*/}
     </span>
   );
 }
@@ -84,7 +84,7 @@ function KeyPicker({ value, setValue, tooltipMessage, disabled = false }) {
 function TranspositionPicker({ value, setValue }) {
   return (
     <select
-      className="px-4 border rounded"
+      className="px-4 border rounded block"
       value={value}
       onChange={(e) => setValue(e.target.value)}
     >

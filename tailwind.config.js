@@ -10,7 +10,9 @@ module.exports = {
       "card-orange": "#fff7ed",
       "card-orange-border": "#fdba74",
       "base-700": "#3f3f46",
-      create: "#e0f2fe",
+      "create-base": "#e0f2fe",
+      "delete-base": "#fecaca",
+      "delete-content": "#450a0a",
     },
   },
   daisyui: {
