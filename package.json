@@ -7,7 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "start": "vite preview --port 3000"
+    "start": "vite preview --port 6666"
   },
   "dependencies": {
     "@babel/core": "^7.16.0",
