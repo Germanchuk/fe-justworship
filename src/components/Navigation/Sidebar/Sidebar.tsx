@@ -83,17 +83,17 @@ export default function Sidebar() {
                       Всі пісні церкви
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      to={Routes.ChurchShedule}
-                      className={classNames({
-                        "bg-base-300": pathname.includes(Routes.ChurchShedule),
-                        "pointer-events-none opacity-30": !hasChurch,
-                      })}
-                    >
-                      Дати служінь
-                    </Link>
-                  </li>
+                  {/*<li>*/}
+                  {/*  <Link*/}
+                  {/*    to={Routes.ChurchShedule}*/}
+                  {/*    className={classNames({*/}
+                  {/*      "bg-base-300": pathname.includes(Routes.ChurchShedule),*/}
+                  {/*      "pointer-events-none opacity-30": !hasChurch,*/}
+                  {/*    })}*/}
+                  {/*  >*/}
+                  {/*    Дати служінь*/}
+                  {/*  </Link>*/}
+                  {/*</li>*/}
                 </ul>
               </li>
               <li>
@@ -121,22 +121,22 @@ export default function Sidebar() {
                         "pointer-events-none opacity-30": !hasBand,
                       })}
                     >
-                      Дати виступів
+                      Дати служінь
                     </Link>
                   </li>
                 </ul>
               </li>
-              <li>
-                <Link
-                  to={Routes.PublicSongs}
-                  className={classNames("py-2.5", {
-                    "bg-base-300": pathname.includes(Routes.PublicSongs),
-                  })}
-                >
-                  <GlobeEuropeAfricaIcon className="h-5 w-5" />
-                  Всі пісні
-                </Link>
-              </li>
+              {/*<li> OUT OF MVP SCOPE */}
+              {/*  <Link*/}
+              {/*    to={Routes.PublicSongs}*/}
+              {/*    className={classNames("py-2.5", {*/}
+              {/*      "bg-base-300": pathname.includes(Routes.PublicSongs),*/}
+              {/*    })}*/}
+              {/*  >*/}
+              {/*    <GlobeEuropeAfricaIcon className="h-5 w-5" />*/}
+              {/*    Всі пісні*/}
+              {/*  </Link>*/}
+              {/*</li>*/}
             </ul>
           </div>
 

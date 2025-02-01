@@ -14,7 +14,7 @@ export default function Modal({ trigger, content, title }: any) {
         },
       })}
 
-      <dialog ref={ref} className="modal">
+      <dialog ref={ref} className="modal z-10">
         <div className="modal-box">
           <form method="dialog" className="flex justify-between items-center">
             {/* if there is a button in form, it will close the modal */}

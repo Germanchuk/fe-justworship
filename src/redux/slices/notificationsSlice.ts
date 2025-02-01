@@ -18,7 +18,7 @@ const notificationsSlice = createSlice({
 export const { addNotification, removeNotification } = notificationsSlice.actions;
 
 interface Notification {
-    id: string;
+    id?: string;
     message: string;
     type: "info" | "success" | "warning" | "error";
     timeout?: number;

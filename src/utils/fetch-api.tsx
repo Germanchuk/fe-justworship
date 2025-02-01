@@ -32,13 +32,16 @@ export async function fetchAPI(
     )}`;
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
-    const data = await response.json();
-    return data;
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error.message);
+    }
+
+    return await response.json();
+
   } catch (error) {
-    console.error(error);
-    throw new Error(
-      `Please check if your server is running and you set all the required tokens.`
-    );
+    throw new Error(error);
   } finally {
     store.dispatch(disableGlobalLoader());
   }

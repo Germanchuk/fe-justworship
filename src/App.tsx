@@ -22,13 +22,18 @@ import ChurchSongs from "./views/ChurchSongs/ChurchSongs";
 import ChurchShedule from "./views/ChurchShedule/ChurchShedule";
 import BandSongs from "./views/BandSongs/BandSongs";
 import BandShedule from "./views/BandShedule/BandShedule";
-import SingleShedule from "./views/SingleShedule/SingleShedule";
+import SingleShedule from "./views/SingleSchedule/SingleShedule";
 import { useEffect, useState } from "react";
+import {useSelector} from "react-redux";
+import WelcomePage from "./views/WelcomePage/WelcomePage.tsx";
 
 function App() {
   const location = useLocation();
+  const user = useSelector((state: any) => state.user);
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransistionStage] = useState("fadeIn");
+
+  const Root = user?.currentBand ? BandShedule : WelcomePage;
 
   useEffect(() => {
     if (location !== displayLocation) setTransistionStage("fadeOut");
@@ -46,7 +51,7 @@ function App() {
     >
       <RouterRoutes location={displayLocation}>
         <Route path="/" element={<ProtectedRoute />}>
-          <Route path={Routes.Root} element={<BandShedule />} />
+          <Route path={Routes.Root} element={<Root />} />
           <Route path={Routes.PublicSongs} element={<SongsList />} />
           <Route path={Routes.SinglePublicSong} element={<SingleSong />} />
           <Route path={Routes.CreateSong} element={<CreateSong />} />

@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { fetchAPI } from "../../utils/fetch-api";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { Routes } from "../../constants/routes";
+import {PlusCircleIcon} from "@heroicons/react/24/outline";
 
 export default function SongsList() {
   const [songs, setSongs] = React.useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
-    fetchAPI("/songs").then((data) => {
-      console.log(data.data);
+    fetchAPI("/currentBandSongs").then((data) => {
       setSongs(data.data);
     });
   }, []);
@@ -20,9 +21,13 @@ export default function SongsList() {
     <>
       <div className="flex justify-between items-center pb-4">
         <h1 className="text-3xl font-bold tracking-tight">Всі пісні</h1>
-        <Link className="btn btn-square" to={Routes.CreateSong}>
-          <AddIcon />
-        </Link>
+        <button
+          className="btn btb-ghost bg-create"
+          onClick={() => navigate(Routes.CreateSong)}
+        >
+          <PlusCircleIcon className="w-5 h-5"/>
+          Додати
+        </button>
       </div>
       {songs.map((song) => {
         return (
@@ -30,7 +35,7 @@ export default function SongsList() {
             to={`${Routes.PublicSongs}/${song.id}`}
             className="bg-base-200 p-3 rounded block mb-2"
           >
-            {song.attributes.name}
+          {song.attributes.name}
           </Link>
         );
       })}

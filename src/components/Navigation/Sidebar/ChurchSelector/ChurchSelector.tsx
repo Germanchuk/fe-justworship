@@ -17,7 +17,7 @@ export default function ChurchSelector({ church }) {
         {church ? (
           <button
             className="btn btn-ghost btn-sm w-44 bg-base-300"
-            onClick={() => navigate(`${Routes.JoinChurch}/${church.id}`)}
+            // onClick={() => navigate(`${Routes.JoinChurch}/${church.id}`)}
           >
             {church?.name}
           </button>

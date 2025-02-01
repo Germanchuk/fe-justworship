@@ -18,9 +18,9 @@ export default function CreateSong() {
           content={<HolychordsModalContent />}
           title={"Імпортувати з Holychords"}
         />
-        <Link to={Routes.AddSongTextToSong}>
-          <button className="btn btn-disabled">Вставити текст</button>
-        </Link>
+        {/*<Link to={Routes.AddSongTextToSong}>*/}
+        {/*  <button className="btn btn-disabled">Вставити текст</button>*/}
+        {/*</Link>*/}
         <Link to={Routes.AddSongFromScratch}>
           <button className="btn">Створити в редакторі</button>
         </Link>

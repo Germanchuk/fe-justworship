@@ -6,22 +6,22 @@ export default function NotificationsCenter() {
   const notifications = useSelector((state: any) => state.notifications);
   const dispatch = useDispatch();
   return (
-    <div className="toast min-w-0 max-w-screen">
+    <div className="toast toast-top toast-center w-screen">
       {notifications.map((notification: any) => {
         return (
           <div
             role="alert"
             key={notification.id}
-            className={`block w-full alert alert-${
+            className={`block z-20 py-2 px-3 alert rounded-lg shadow-xl alert-${
               notification?.type ?? "info"
             }`}
           >
             <div className="w-full flex items-center justify-between gap-3">
-              <span className="whitespace-break-spaces text-left">
+              <span className="text-xl whitespace-break-spaces text-left">
                 {notification.message}
               </span>
               <button
-                className="btn btn-outline btn-xs btn-square"
+                className="btn btn-ghost btn-sm bg-transparent btn-square"
                 onClick={() => dispatch(removeNotification(notification.id))}
               >
                 <XMarkIcon />

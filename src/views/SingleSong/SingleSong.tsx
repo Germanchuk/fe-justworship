@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { fetchAPI } from "../../utils/fetch-api";
 import Song from "../../components/Song/Song";
 import {
@@ -8,27 +8,37 @@ import {
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import ReactDOM from "react-dom";
+import {useDispatch} from "react-redux";
+import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.ts";
+import { Routes } from "../../constants/routes";
 
 export default function SingleSong() {
   const { songId } = useParams();
   const [initialSong, setInitialSong] = React.useState<any>({});
   const [song, setSong] = React.useState<any>({});
   const [editMode, setEditMode] = React.useState(false);
+  const [ error, setError ] = React.useState();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const songChanged = JSON.stringify(song) !== JSON.stringify(initialSong);
 
   React.useEffect(() => {
-    fetchAPI(`/songs/${songId}`, {
+    fetchAPI(`/currentBandSongs/${songId}`, {
       populate: ["sections"],
-    }).then((data) => {
-      setSong(data.data.attributes);
-      setInitialSong(JSON.parse(JSON.stringify(data.data.attributes))); // deep copy of data.data.attributes);
-    });
+    })
+      .then((data) => {
+        setSong(data.data);
+        setInitialSong(JSON.parse(JSON.stringify(data.data))); // deep copy of data.data);
+      })
+      .catch((error) => {
+        setError(error);
+      });
   }, [songId]);
 
   const saveSong = async () => {
     await fetchAPI(
-      `/songs/${songId}`,
+      `/currentBandSongs/${songId}`,
       {},
       {
         method: "PUT",
@@ -36,11 +46,45 @@ export default function SingleSong() {
           data: song,
         }),
       }
-    );
-    // Create a deep copy of `song` before setting `initialSong`
-    setInitialSong(JSON.parse(JSON.stringify(song)));
-    setEditMode(false);
+    ).then(() => {
+      dispatch(addNotificationWithTimeout({
+        type: "success",
+        message: "Збережено"
+      }));
+      // Create a deep copy of `song` before setting `initialSong`
+      setInitialSong(JSON.parse(JSON.stringify(song)));
+      setEditMode(false);
+    })
+    .catch(() => {
+      dispatch(addNotificationWithTimeout({
+        type: "error",
+        message: "Нажаль пісня не збереглась, спробуй ще раз"
+      }));
+    })
   };
+
+  const deleteSong = async () => {
+    await fetchAPI(
+      `/currentBandSongs/${songId}`,
+      {},
+      {
+        method: "DELETE",
+        body: song
+      }
+    ).then(() => {
+      navigate(Routes.BandSongs);
+    })
+      .catch(() => {
+        dispatch(addNotificationWithTimeout({
+          type: "error",
+          message: "Помилка серверу, не вдалось видалити пісню"
+        }));
+      });
+  }
+
+  if (error) {
+    throw new Error(error);
+  }
 
   if (Object.keys(song).length === 0) {
     return <div>Такої пісні не існує</div>;
@@ -48,7 +92,12 @@ export default function SingleSong() {
 
   return (
     <>
-      <Song song={song} setSong={setSong} editMode={editMode} />
+      <Song
+        song={song}
+        setSong={setSong}
+        editMode={editMode}
+        deleteSong={deleteSong}
+      />
       <ToggleModeButton
         toggleMode={() => setEditMode(!editMode)}
         editMode={editMode}

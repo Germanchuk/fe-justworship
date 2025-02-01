@@ -9,6 +9,9 @@ import { format } from "date-fns";
 import { Routes } from "../../constants/routes";
 import { formatDate } from "../../utils/utils";
 import ReactDOM from "react-dom";
+import DeleteSchedule from "./DeleteSchedule/DeleteSchedule.tsx";
+import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.ts";
+import {useDispatch} from "react-redux";
 
 const EMPTY_SHEDULE = {
   date: "",
@@ -36,6 +39,7 @@ const Trigger = forwardRef(
 export default function SingleShedule() {
   const { sheduleId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isCreateMode = sheduleId === "create";
   const [initialShedule, setInitialShedule] = useState(null);
   const [shedule, setShedule] = useState(null);
@@ -86,7 +90,7 @@ export default function SingleShedule() {
     }))
   }, [setShedule]);
 
-  async function saveShedule() {
+  async function saveSchedule() {
     const data = await fetchAPI(
       isCreateMode ? "/currentBandLists" : `/currentBandLists/${sheduleId}`,
       {},
@@ -103,6 +107,29 @@ export default function SingleShedule() {
     if (isCreateMode && data) {
       navigate(`${Routes.BandShedule}/${data.data.id}`);
     }
+  }
+
+  function deleteSchedule() {
+    fetchAPI(
+      `/currentBandLists/${sheduleId}`,
+      {},
+      {
+        method: "DELETE"
+      }
+    )
+      .then(() => {
+        navigate(Routes.Root);
+        dispatch(addNotificationWithTimeout({
+          type: "success",
+          message: "Список видалено"
+        }));
+      })
+      .catch(() => {
+        dispatch(addNotificationWithTimeout({
+          type: "error",
+          message: "Помилка серверу, не вдалось видалити список"
+        }));
+      });
   }
 
   if (!shedule) return null;
@@ -129,7 +156,8 @@ export default function SingleShedule() {
           />
         </div>
       </div>
-      {sheduleChanged && <SavingButton saveShedule={saveShedule} />}
+      {!isCreateMode && <DeleteSchedule deleteSchedule={deleteSchedule} />}
+      {sheduleChanged && <SavingButton saveShedule={saveSchedule} />}
     </>
   );
 }

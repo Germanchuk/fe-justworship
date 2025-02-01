@@ -13,6 +13,7 @@ module.exports = {
       "create-base": "#e0f2fe",
       "delete-base": "#fecaca",
       "delete-content": "#450a0a",
+      "error": "#b91c1c",
     },
   },
   daisyui: {

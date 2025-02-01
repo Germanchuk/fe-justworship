@@ -39,19 +39,18 @@ export default function KeySelector({
         value={basicKey}
         setValue={handleBasicKey}
         tooltipMessage="Це реальна тональність пісні."
-        disabled
       />
-      =
-      <KeyPicker
-        value={derivedKey}
-        setValue={handleDerivedKey}
-        tooltipMessage="Це тональність в якій показуються акорди. Вона інша тому, що враховує транспозицію (каподастр). Зазвичай це робиться, щоб зручніше було грати."
-      />
-      +
-      <TranspositionPicker
-        value={transposition}
-        setValue={handleTransposition}
-      />
+      {/*=*/}
+      {/*<KeyPicker*/}
+      {/*  value={derivedKey}*/}
+      {/*  setValue={handleDerivedKey}*/}
+      {/*  tooltipMessage="Це тональність в якій показуються акорди. Вона інша тому, що враховує транспозицію (каподастр). Зазвичай це робиться, щоб зручніше було грати."*/}
+      {/*/>*/}
+      {/*+*/}
+      {/*<TranspositionPicker*/}
+      {/*  value={transposition}*/}
+      {/*  setValue={handleTransposition}*/}
+      {/*/>*/}
     </div>
   );
 }

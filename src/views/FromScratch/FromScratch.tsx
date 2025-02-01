@@ -14,7 +14,7 @@ export default function FromScratch() {
   const createEntry = async () => {
     try {
       const data = await fetchAPI(
-        "/songs",
+        "/currentBandSongs",
         {},
         {
           method: "POST",

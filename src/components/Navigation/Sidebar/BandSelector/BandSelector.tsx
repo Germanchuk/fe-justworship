@@ -57,7 +57,7 @@ export default function BandSelector({ bands, currentBand }) {
         {!!bands?.length ? (
           <Dropdown
             trigger={(isOpen) => (
-              <button className="btn btn-sm btn-outline btn-base-200 w-44">
+              <button className="btn btn-sm btn-outline btn-base-200 w-44 disabled">
                 {currentBand?.name ? currentBand?.name : "Виберіть гурт"}
                 <ChevronDownIcon
                   className={classNames("w-4 h-4", {
@@ -71,7 +71,7 @@ export default function BandSelector({ bands, currentBand }) {
               {bands?.map((band) => (
                 <li key={band.id} onClick={handleBandChange(band?.id)}>
                   <span
-                    className={classNames("bg-base-200", {
+                    className={classNames("bg-base-200 opacity-30", { // out of MVP
                       "bg-base-300": band?.id === currentBand?.id,
                     })}
                   >
@@ -97,8 +97,8 @@ export default function BandSelector({ bands, currentBand }) {
           </Dropdown>
         ) : (
           <button
-            className="btn btn-sm btn-outline btn-base-200 w-44"
-            onClick={() => navigate(Routes.JoinBand)}
+            className="btn btn-sm btn-outline btn-base-200 w-44 opacity-30"
+            // onClick={() => navigate(Routes.JoinBand)} out of MVP
           >
             <PlusCircleIcon className="w-5 h-5" />
             Приєднатись

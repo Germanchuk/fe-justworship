@@ -2,22 +2,23 @@ import MagicInput from "./MagicInput/MagicInput";
 import SongSections from "./SongSections/SongSections";
 import "./Song.css";
 import KeySelector from "./KeySelector/KeySelector";
-import { useState } from "react";
-import { EyeSlashIcon } from "@heroicons/react/24/outline";
+import {useState} from "react";
+import {EyeSlashIcon} from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { deriveTranspositionFromKey, remapChords } from "../../utils/keyUtils";
+import {deriveTranspositionFromKey, remapChords} from "../../utils/keyUtils";
+import DeleteSong from "./DeleteSong/DeleteSong.tsx";
 
-export default function Song({ song, setSong, editMode }) {
+export default function Song({song, setSong, deleteSong = null, editMode}) {
   const [chordsHidden, setChordsHidden] = useState(false);
   const handleSongName = (value) => {
     setSong((song) => {
-      return { ...song, name: value };
+      return {...song, name: value};
     });
   };
 
   const setBpm = (value) => {
     setSong((song) => {
-      return { ...song, bpm: value.replace(/\D+/g, "") };
+      return {...song, bpm: value.replace(/\D+/g, "")};
     });
   };
 
@@ -35,7 +36,7 @@ export default function Song({ song, setSong, editMode }) {
   };
   const setTransposition = (transposition) => {
     setSong((song) => {
-      return { ...song, transposition };
+      return {...song, transposition};
     });
   };
 
@@ -72,10 +73,11 @@ export default function Song({ song, setSong, editMode }) {
           className="btn btn-square"
           onClick={() => setChordsHidden(!chordsHidden)}
         >
-          <EyeSlashIcon className="w-4" />
+          <EyeSlashIcon className="w-4"/>
         </button>
       </div>
-      <SongSections song={song} setSong={setSong} editMode={editMode} />
+      <SongSections song={song} setSong={setSong} editMode={editMode}/>
+      {editMode && deleteSong && <DeleteSong deleteSong={deleteSong} />}
     </div>
   );
 }

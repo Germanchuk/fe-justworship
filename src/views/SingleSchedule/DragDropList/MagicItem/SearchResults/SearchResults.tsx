@@ -12,7 +12,7 @@ export default function SearchResults({ searchQuery, addItem, resetInput }) {
 
   const debouncedSearch = useCallback(
     debounce((searchTerm) => {
-      fetchAPI("/songs", {
+      fetchAPI("/currentBandSongs", {
         filters: {
           name: {
             $containsi: searchTerm,
