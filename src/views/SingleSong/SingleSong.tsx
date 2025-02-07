@@ -4,7 +4,7 @@ import { fetchAPI } from "../../utils/fetch-api";
 import Song from "../../components/Song/Song";
 import {
   ArrowLeftIcon,
-  CheckIcon,
+  CheckIcon, DocumentDuplicateIcon,
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import ReactDOM from "react-dom";
@@ -20,6 +20,7 @@ export default function SingleSong() {
   const [ error, setError ] = React.useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isReadonly = Boolean(initialSong?.readonly);
 
   const songChanged = JSON.stringify(song) !== JSON.stringify(initialSong);
 
@@ -46,13 +47,14 @@ export default function SingleSong() {
           data: song,
         }),
       }
-    ).then(() => {
+    ).then((data) => {
       dispatch(addNotificationWithTimeout({
         type: "success",
         message: "Збережено"
       }));
+      setSong(data.data);
       // Create a deep copy of `song` before setting `initialSong`
-      setInitialSong(JSON.parse(JSON.stringify(song)));
+      setInitialSong(JSON.parse(JSON.stringify(data.data)));
       setEditMode(false);
     })
     .catch(() => {
@@ -82,6 +84,24 @@ export default function SingleSong() {
       });
   }
 
+  const copySong = () => {
+    fetchAPI(
+      `/copySong/${songId}`,
+      {},
+      {
+        method: "POST",
+      }
+    ).then((data) => {
+      navigate(`${Routes.PublicSongs}/${data.data.id}`);
+    })
+      .catch(() => {
+        dispatch(addNotificationWithTimeout({
+          type: "error",
+          message: "Помилка серверу, не вдалось скопіювати пісню"
+        }));
+      });
+  }
+
   if (error) {
     throw new Error(error);
   }
@@ -98,10 +118,12 @@ export default function SingleSong() {
         editMode={editMode}
         deleteSong={deleteSong}
       />
-      <ToggleModeButton
+      {isReadonly ?
+        <CopyButton copySong={copySong} />
+        : <ToggleModeButton
         toggleMode={() => setEditMode(!editMode)}
         editMode={editMode}
-      />
+      />}
       {songChanged && <SavingButton saveSong={saveSong} />}
     </>
   );
@@ -128,10 +150,23 @@ function SavingButton({ saveSong }) {
   return ReactDOM.createPortal(
     <div className="fixed bottom-4 left-4">
       <button
-        className="btn btn-square bg-base-300 ring-neutral ring-1"
+        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
         onClick={saveSong}
       >
         <CheckIcon className="w-6 h-6" />
+      </button>
+    </div>, document.body
+  );
+}
+
+function CopyButton({ copySong }) {
+  return ReactDOM.createPortal(
+    <div className="fixed bottom-4 right-4">
+      <button
+        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
+        onClick={copySong}
+      >
+        <DocumentDuplicateIcon className="w-6 h-6" />
       </button>
     </div>, document.body
   );
