@@ -20,6 +20,7 @@ export default function ChurchSongs() {
           name: {
             $containsi: searchTerm,
           },
+          hidden: { $eq: false },
         },
       })
         .then((data) => {
@@ -45,7 +46,7 @@ export default function ChurchSongs() {
   }, [debouncedSearch]);
 
   useEffect(() => {
-    fetchAPI("/currentChurchSongs")
+    fetchAPI("/currentChurchSongs", {filters: {hidden: {$eq: false}}})
       .then(data => setData(data))
       .catch(() => {
         dispatch(addNotificationWithTimeout({
