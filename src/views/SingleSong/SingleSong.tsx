@@ -16,7 +16,7 @@ export default function SingleSong() {
   const { songId } = useParams();
   const [initialSong, setInitialSong] = React.useState<any>({});
   const [song, setSong] = React.useState<any>({});
-  const [preferences, setPreferences] = React.useState({});
+  const [preferences, setPreferences] = React.useState<any>({});
   const [editMode, setEditMode] = React.useState(false);
   const [ error, setError ] = React.useState();
   const dispatch = useDispatch();
