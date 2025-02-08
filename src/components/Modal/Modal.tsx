@@ -1,10 +1,15 @@
-import React from "react";
+import React, {useEffect} from "react";
 
-export default function Modal({ trigger, content, title }: any) {
+export default function Modal({ trigger = null, content, title, hideCloseButton = false }: any) {
   const ref = React.useRef(null);
+  useEffect(() => {
+    if (ref?.current && !trigger) {
+      ref.current?.showModal();
+    }
+  });
   return (
     <>
-      {React.cloneElement(trigger, {
+      {trigger && React.cloneElement(trigger, {
         onClick: (e) => {
           if (trigger.props.onClick) {
             trigger.props.onClick(e);
@@ -19,9 +24,9 @@ export default function Modal({ trigger, content, title }: any) {
           <form method="dialog" className="flex justify-between items-center">
             {/* if there is a button in form, it will close the modal */}
             {title && (<h4 className="text-lg">{title}</h4>)}
-            <button className="btn btn-sm btn-circle btn-ghost">
+            {!hideCloseButton && <button className="btn btn-sm btn-circle btn-ghost">
               <CloseIcon />
-            </button>
+            </button>}
           </form>
           <div className="pt-4">
             {content}

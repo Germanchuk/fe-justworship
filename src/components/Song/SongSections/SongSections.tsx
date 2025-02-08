@@ -1,7 +1,7 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Section from "./Section/Section";
 
-export default function SongSections({ song, setSong, editMode = false }) {
+export default function SongSections({ song, setSong, editMode = false, transposition = 0 }) {
 
   const getBlockChanger = (blockIndex) => (newValue) => {
     setSong((song) => {
@@ -56,7 +56,7 @@ export default function SongSections({ song, setSong, editMode = false }) {
             key={index}
             className="text-lg py-6"
             editMode={editMode}
-            transposition={song.transposition}
+            transposition={transposition}
           />
         );
       })}

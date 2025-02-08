@@ -1,6 +1,7 @@
 import classNames from "classnames";
-import { isChordsLine, transposeLine } from "../../../utils/keyUtils";
+import { isChordsLine, isChordsLine2 } from "../../../utils/keyUtils";
 import ChordLine from "./ChordLine/ChordLine";
+import {transpose} from "chord-transposer";
 
 function NormalText({ children }) {
   return <div style={{ whiteSpace: "pre-wrap" }}>{children}</div>;
@@ -68,10 +69,10 @@ const modifiers = [
   },
   {
     internalName: "chordsLine",
-    detector: (line) => isChordsLine(line),
+    detector: (line) => isChordsLine(line) && isChordsLine2(line),
     Component: (line, index, transposition) => (
       <ChordLine key={index} chordsTooltipEnabled={true}>
-        {transposition ? transposeLine(line, transposition) : line}
+        {transposition ? transpose(line).down(transposition).toString() : line}
       </ChordLine>
     ),
   },

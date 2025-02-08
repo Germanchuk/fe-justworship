@@ -1,61 +1,44 @@
-import React from "react";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import React, {useState} from "react";
 import {
-  transpose,
-  deriveTranspositionFromKey,
   keys,
 } from "../../../utils/keyUtils";
 import classNames from "classnames";
-
-const transpositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+import Modal from "../../Modal/Modal.tsx";
 
 export default function KeySelector({
   basicKey,
-  transposition,
   setBasicKey,
-  setTransposition,
 }) {
-  const [derivedKey, setDerivedKey] = React.useState(
-    transpose(basicKey, transposition)
-  );
-  const handleBasicKey = (key) => {
-    setBasicKey(key);
-    setTransposition(0);
-    setDerivedKey(key);
-  };
-  const handleDerivedKey = (key) => {
-    setDerivedKey(key);
-    setTransposition(deriveTranspositionFromKey(basicKey, key));
-  };
-
-  const handleTransposition = (transposition) => {
-    setTransposition(transposition);
-    setDerivedKey(transpose(basicKey, transposition));
-  };
+const [keyCandidate, setKeyCandidate] = useState("");
+  const changeKey = () => setBasicKey(keyCandidate);
+  const transposeSong = () => setBasicKey(keyCandidate, { shouldRemapSections: true });
+  const revert = () => setKeyCandidate(basicKey);
   return (
     <div className="flex gap-2 items-center">
       <div className="text font-semibold">Тональність:</div>
       <KeyPicker
         value={basicKey}
-        setValue={handleBasicKey}
-        tooltipMessage="Це реальна тональність пісні."
+        setValue={setKeyCandidate}
       />
-      {/*=*/}
-      {/*<KeyPicker*/}
-      {/*  value={derivedKey}*/}
-      {/*  setValue={handleDerivedKey}*/}
-      {/*  tooltipMessage="Це тональність в якій показуються акорди. Вона інша тому, що враховує транспозицію (каподастр). Зазвичай це робиться, щоб зручніше було грати."*/}
-      {/*/>*/}
-      {/*+*/}
-      {/*<TranspositionPicker*/}
-      {/*  value={transposition}*/}
-      {/*  setValue={handleTransposition}*/}
-      {/*/>*/}
+      {keyCandidate && keyCandidate !== basicKey && (
+        <Modal
+          title={basicKey.replace("sharp", "#") + " → " + keyCandidate.replace("sharp", "#")}
+          content={<div>
+            <p className="mb-4">Тональність пісні вказується вручну і може відрізнятись від тональності акордів. Тому є вартіанти:</p>
+            <div className="flex flex-col items-center gap-2">
+              <button className="btn btn-outline" onClick={changeKey}>Виправити тональність</button>
+              <button className="btn btn-outline" onClick={transposeSong}>Перетонувати всю пісню</button>
+              <button className="btn" onClick={revert}>Відмінити</button>
+          </div>
+        </div>}
+          hideCloseButton
+        />
+      )}
     </div>
   );
 }
 
-function KeyPicker({ value, setValue, tooltipMessage, disabled = false }) {
+function KeyPicker({ value, setValue, disabled = false }) {
   return (
     <span>
       <select
@@ -72,26 +55,22 @@ function KeyPicker({ value, setValue, tooltipMessage, disabled = false }) {
           </option>
         ))}
       </select>
-      {/*<div className="tooltip align-middle" data-tip={tooltipMessage}>*/}
-      {/*  <InformationCircleIcon className="w-5 h-5 ml-1" />*/}
-      {/*  /!* створити допитливий режим - приклад пісні де багато тултіпів з поясненнями *!/*/}
-      {/*</div>*/}
     </span>
   );
 }
 
-function TranspositionPicker({ value, setValue }) {
-  return (
-    <select
-      className="px-4 border rounded block"
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    >
-      {transpositions.map((trans) => (
-        <option key={trans} value={trans}>
-          {trans}
-        </option>
-      ))}
-    </select>
-  );
-}
+// function TranspositionPicker({ value, setValue }) {
+//   return (
+//     <select
+//       className="px-4 border rounded block"
+//       value={value}
+//       onChange={(e) => setValue(e.target.value)}
+//     >
+//       {transpositions.map((trans) => (
+//         <option key={trans} value={trans}>
+//           {trans}
+//         </option>
+//       ))}
+//     </select>
+//   );
+// }

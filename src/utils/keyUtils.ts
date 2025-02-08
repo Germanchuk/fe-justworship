@@ -1,3 +1,23 @@
+import * as Transposer from "chord-transposer";
+import XRegExp from "xregexp";
+
+
+// Regex for recognizing chords
+const TRIAD_PATTERN = "(M|maj|major|m|min|minor|dim|sus|dom|aug|\\+|-)";
+const ADDED_TONE_PATTERN = "(\\(?([/\\.\\+]|add)?[#b]?\\d+[\\+-]?\\)?)";
+const SUFFIX_PATTERN = `(?<suffix>\\(?${TRIAD_PATTERN}?${ADDED_TONE_PATTERN}*\\)?)`;
+const BASS_PATTERN = "(\\/(?<bass>[A-G](#|b)?))?";
+
+export const ROOT_PATTERN = "(?<root>[A-G](#|b)?)";
+
+const CHORD_REGEX = XRegExp(
+  `^${ROOT_PATTERN}${SUFFIX_PATTERN}${BASS_PATTERN}$`
+);
+
+export function isChord(token: string): boolean {
+  return CHORD_REGEX.test(token);
+}
+
 export const keys = [
   "A",
   "Asharp",
@@ -33,28 +53,21 @@ export function deriveTranspositionFromKey(desiredKey, rootKey) {
   return transposition;
 }
 
-export function transposeLine(line, transposition) {
+export function transposeLine(line, oldKey, newKey) {
+
   // Зберігаємо початкові пробіли за допомогою регулярного виразу
   const chordsWithSpaces = line.match(/(\S+|\s+)/g);
 
-  const transposedChords = chordsWithSpaces.map((str) => {
-    // Перевіряємо, чи є це акорди
-    const chord = (str.match(/[A-G]/) || [])[0];
-    console.log(chord);
-    const sharp = str.includes("#") ? "sharp" : "";
+  const transposedChords = chordsWithSpaces.map((token) => {
+    // Перевіряємо, чи це акорд чи пробіли
+    const isChord = !/^[\s]*$/.test(token);
 
-    if (chord) {
-      const newChord = transpose(chord + sharp, transposition).replace(
-        "sharp",
-        "#"
-      );
-
-      const ending = str.replace(/[A-G]/, "").replace("#", "");
-
-      return newChord + ending;
+    if (isChord) {
+      console.log(token);
+      return Transposer.transpose(token).fromKey(oldKey.replace("sharp", "#")).toKey(newKey.replace("sharp", "#")).toString();
     } else {
       // Повертаємо пробіли без змін
-      return str;
+      return token;
     }
   });
 
@@ -75,13 +88,23 @@ export function isChordsLine(line) {
   return chords.every((chord) => chordRegex.test(chord));
 }
 
-export function remapChords(content, transposition) {
+export function isChordsLine2(line) {
+  return line.split(/(\s+|-|]|\[)/g)?.reduce((result, currentValue) => {
+    if (isChord(currentValue)) {
+      return true;
+    } else {
+      return result;
+    }
+  }, false);
+}
+
+export function remapChords(content, oldKey, newKey) {
   const updatedContent = content.map((section) => ({
     content: section.content
       .split("\n")
       .map((line) => {
         if (isChordsLine(line)) {
-          return transposeLine(line, transposition);
+          return transposeLine(line, oldKey, newKey);
         }
         return line;
       })

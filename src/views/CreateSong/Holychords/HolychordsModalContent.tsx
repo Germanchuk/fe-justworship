@@ -1,26 +1,17 @@
 import React from "react";
-import { getStrapiURL } from "../../../utils/fetch-api";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../../constants/routes";
+import {fetchAPI} from "../../../utils/fetch-api";
 
-const token =
-  "774099e6aefe03b082250a5dd917928a50b6aaf5d71b4959e929923a4a6fa82f957dd1fa472e1b7d032672cb23dc308be35c2d532a2d0eb512d36b213b781701ae7375a56109ab2dd00797c4a71b16c3dbc6ce3f68b255384364528cde1c1a45563505e8284fb28942c670f3292a1f522a9078f21ac8964c95837babfe7b22e2";
 
 export default function HolychordsModalContent() {
   const [url, setUrl] = React.useState();
   const navigate = useNavigate();
   function handleClick(url) {
-    fetch(`${getStrapiURL()}/api/parseHolychords`, {
+    fetchAPI("/parseHolychords", {}, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
       body: JSON.stringify({ data: { url } }),
     })
-      .then((res) => {
-        return res.json();
-      })
       .then((data) => {
         navigate(`${Routes.PublicSongs}/${data.id}`);
       })

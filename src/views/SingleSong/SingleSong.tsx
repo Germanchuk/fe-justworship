@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import { fetchAPI } from "../../utils/fetch-api";
 import Song from "../../components/Song/Song";
@@ -16,13 +16,40 @@ export default function SingleSong() {
   const { songId } = useParams();
   const [initialSong, setInitialSong] = React.useState<any>({});
   const [song, setSong] = React.useState<any>({});
+  const [preferences, setPreferences] = React.useState({});
   const [editMode, setEditMode] = React.useState(false);
   const [ error, setError ] = React.useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isReadonly = Boolean(initialSong?.readonly);
+  const renderTime = useRef(0);
 
   const songChanged = JSON.stringify(song) !== JSON.stringify(initialSong);
+
+  React.useEffect(() => {
+    fetchAPI(`/getPreferencesBySongId/${songId}`)
+      .then((response) => {
+        setPreferences(response.data);
+      });
+  }, [songId]);
+
+  React.useEffect(() => {
+    if (renderTime.current === 0 || renderTime.current === 1) {
+      renderTime.current++;
+      return;
+    }
+      if (!preferences?.id) {
+        fetchAPI(`/createPreference/${songId}`, {}, {
+          method: "POST",
+          body: JSON.stringify(preferences)
+        });
+      } else {
+        fetchAPI(`/savePreference/${preferences?.id}`, {}, {
+          method: "PUT",
+          body: JSON.stringify(preferences),
+        });
+      }
+  }, [preferences, songId]);
 
   React.useEffect(() => {
     fetchAPI(`/currentBandSongs/${songId}`, {
@@ -117,6 +144,8 @@ export default function SingleSong() {
         setSong={setSong}
         editMode={editMode}
         deleteSong={deleteSong}
+        preferences={preferences}
+        setPreferences={setPreferences}
       />
       {isReadonly ?
         <CopyButton copySong={copySong} />
