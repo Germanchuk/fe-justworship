@@ -60,7 +60,7 @@ export default function Login() {
     <div className="flex justify-center items-center gap-y-6 h-screen flex-col">
       <div>
         <h1 className="text-3xl font-bold">Just Worship</h1>
-        <p className="text-center">вхід</p>
+        <p className="text-center">вхід:</p>
       </div>
       <form
         className="flex justify-center items-center gap-y-4 flex-col"
