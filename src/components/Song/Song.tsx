@@ -3,13 +3,14 @@ import SongSections from "./SongSections/SongSections";
 import "./Song.css";
 import KeySelector from "./KeySelector/KeySelector";
 import {useState} from "react";
-import {EyeSlashIcon} from "@heroicons/react/24/outline";
+import {DocumentArrowDownIcon, EyeIcon, EyeSlashIcon} from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { remapChords} from "../../utils/keyUtils";
+import {remapChords} from "../../utils/keyUtils";
 import DeleteSong from "./DeleteSong/DeleteSong.tsx";
 import CapoSelector from "./CapoSelector/CapoSelector.tsx";
+import {createDocument} from "../../services";
 
-export default function Song({ song, setSong, deleteSong = null, editMode, preferences = null, setPreferences = null }) {
+export default function Song({song, setSong, deleteSong = null, editMode, preferences = null, setPreferences = null}) {
   const [chordsHidden, setChordsHidden] = useState(false);
   const handleSongName = (value) => {
     setSong((song) => {
@@ -23,7 +24,7 @@ export default function Song({ song, setSong, deleteSong = null, editMode, prefe
     });
   };
 
-  const setBasicKey = (newKey, { shouldRemapSections = false } = {}) => {
+  const setBasicKey = (newKey, {shouldRemapSections = false} = {}) => {
     setSong((song) => {
       if (shouldRemapSections) {
         song.sections = remapChords(
@@ -40,7 +41,7 @@ export default function Song({ song, setSong, deleteSong = null, editMode, prefe
   };
   const setTransposition = (transposition) => {
     setPreferences((preferences) => {
-      return {...preferences, transposition };
+      return {...preferences, transposition};
     });
   };
 
@@ -61,7 +62,8 @@ export default function Song({ song, setSong, deleteSong = null, editMode, prefe
           basicKey={song.key}
           setBasicKey={setBasicKey}
         />
-        <CapoSelector value={preferences?.transposition || 0} setValue={setTransposition} basicKey={song.key} editMode={editMode} />
+        <CapoSelector value={preferences?.transposition || 0} setValue={setTransposition} basicKey={song.key}
+                      editMode={editMode}/>
         <div className="flex gap-2 items-center">
           <div className="text font-semibold">Темп:</div>
           <MagicInput
@@ -71,15 +73,26 @@ export default function Song({ song, setSong, deleteSong = null, editMode, prefe
             editMode={editMode}
           />
         </div>
-        <button
-          className="btn btn-square"
-          onClick={() => setChordsHidden(!chordsHidden)}
-        >
-          <EyeSlashIcon className="w-4"/>
-        </button>
+        <div className="flex gap-2">
+          <button
+            className="btn btn-sm"
+            onClick={() => setChordsHidden(!chordsHidden)}
+          >
+            {chordsHidden ? <EyeIcon className="w-4"/>
+              : <EyeSlashIcon className="w-4"/>}
+            {chordsHidden ? "Показати" : "Сховати"} акорди
+          </button>
+          <button
+            className="btn btn-sm"
+            onClick={() => createDocument(song)}
+          >
+            <DocumentArrowDownIcon className="w-5"/>
+            .docx
+          </button>
+        </div>
       </div>
-      <SongSections song={song} setSong={setSong} editMode={editMode} transposition={preferences?.transposition || 0} />
-      {editMode && deleteSong && <DeleteSong deleteSong={deleteSong} />}
+      <SongSections song={song} setSong={setSong} editMode={editMode} transposition={preferences?.transposition || 0}/>
+      {editMode && deleteSong && <DeleteSong deleteSong={deleteSong}/>}
     </div>
   );
 }
