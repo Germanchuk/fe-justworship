@@ -24,6 +24,8 @@ FROM nginx:alpine
 
 # Копіюємо зібрані файли з папки "dist" у папку, яку використовує Nginx для сервінгу
 COPY --from=build /app/dist /usr/share/nginx/html
+# Копіюємо конфіг
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Відкриваємо порт 80
 EXPOSE 80
