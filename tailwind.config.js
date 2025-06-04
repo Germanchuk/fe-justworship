@@ -7,6 +7,7 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     colors: {
+      "editor-highlight": "#fffbeb",
       "card-orange": "#fff7ed",
       "card-orange-border": "#fdba74",
       "base-700": "#3f3f46",

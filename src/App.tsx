@@ -26,6 +26,7 @@ import SingleShedule from "./views/SingleSchedule/SingleShedule";
 import { useEffect, useState } from "react";
 import {useSelector} from "react-redux";
 import WelcomePage from "./views/WelcomePage/WelcomePage.tsx";
+import Sandbox from "./views/Sandbox/Sandbox.tsx";
 
 function App() {
   const location = useLocation();
@@ -69,6 +70,7 @@ function App() {
           <Route path={Routes.BandSongs} element={<BandSongs />} />
           <Route path={Routes.BandShedule} element={<BandShedule />} />
           <Route path={Routes.SingleBandShedule} element={<SingleShedule />} />
+          <Route path={"/sandbox"} element={<Sandbox />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} />
