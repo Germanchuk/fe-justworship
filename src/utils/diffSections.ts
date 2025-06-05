@@ -1,6 +1,11 @@
 export interface Section {
   id?: number;
   content: string;
+  /**
+   * Number of newline characters following this section. Optional so older
+   * data without spacing information continues to work.
+   */
+  spacing?: number;
 }
 
 function buildLcsMatrix(a: string[], b: string[]): number[][] {
