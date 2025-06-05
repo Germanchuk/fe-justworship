@@ -2,8 +2,7 @@ import classNames from "classnames";
 import {useEffect, useRef, useState} from "react";
 import InlineSection from "./InlineSection/InlineSection.tsx";
 import diffSections from "../../utils/diffSections.ts";
-
-const SECTION_SEPARATOR = "\n\n";
+import parseSections from "../../utils/parseSections.ts";
 
 export default function LyricsPlayground({song, setSong}: any) {
 
@@ -13,7 +12,12 @@ export default function LyricsPlayground({song, setSong}: any) {
 
   useEffect(() => {
     if (song?.sections) {
-      const combined = song.sections.map((s) => s.content).join(SECTION_SEPARATOR);
+      const combined = song.sections
+        .map((s, idx) => {
+          const sep = idx < song.sections.length - 1 ? "\n".repeat(s.spacing ?? 2) : "";
+          return s.content + sep;
+        })
+        .join("");
       setTextareaValue(combined);
     }
   }, [song?.sections]);
@@ -23,11 +27,17 @@ export default function LyricsPlayground({song, setSong}: any) {
     const rawText = e.target.value;
     setTextareaValue(rawText);
 
-    const newContents = rawText.split(SECTION_SEPARATOR);
+    const parsed = parseSections(rawText);
+    const newContents = parsed.map((p) => p.content);
 
     setSong((prevSong: any) => {
       const oldSections = prevSong.sections || [];
-      const updatedSections = diffSections(oldSections, newContents);
+      const updatedSections = diffSections(oldSections, newContents).map(
+        (section, idx) => ({
+          ...section,
+          spacing: parsed[idx]?.spacing ?? section.spacing ?? 2,
+        })
+      );
 
       return { ...prevSong, sections: updatedSections };
     });
@@ -40,9 +50,12 @@ export default function LyricsPlayground({song, setSong}: any) {
           return (
             <>
               <InlineSection key={section.id ?? index} section={section} />
-              {song?.sections?.length !== index && <br />}
+              {index < song.sections.length - 1 &&
+                Array.from({ length: section.spacing ?? 2 }).map((_, i) => (
+                  <br key={`br-${index}-${i}`} />
+                ))}
             </>
-          )
+          );
         })}
       </div>
       <textarea
