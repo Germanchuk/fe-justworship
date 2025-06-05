@@ -9,7 +9,6 @@ export default function LyricsPlayground({song, setSong}: any) {
   const [textareaValue, setTextareaValue] = useState("");
   const textareaRef = useRef(null);
 
-
   useEffect(() => {
     if (song?.sections) {
       const combined = song.sections
@@ -51,7 +50,7 @@ export default function LyricsPlayground({song, setSong}: any) {
             <>
               <InlineSection key={section.id ?? index} section={section} />
               {index < song.sections.length - 1 &&
-                Array.from({ length: section.spacing ?? 2 }).map((_, i) => (
+                Array.from({ length: (section.spacing ?? 2) - 1 }).map((_, i) => (
                   <br key={`br-${index}-${i}`} />
                 ))}
             </>
