@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {useEffect, useRef, useState} from "react";
 import InlineSection from "./InlineSection/InlineSection.tsx";
+import diffSections from "../../utils/diffSections.ts";
 
 const SECTION_SEPARATOR = "\n\n";
 
@@ -9,7 +10,6 @@ export default function LyricsPlayground({song, setSong}: any) {
   const [textareaValue, setTextareaValue] = useState("");
   const textareaRef = useRef(null);
 
-  console.log(song?.sections);
 
   useEffect(() => {
     if (song?.sections) {
@@ -27,25 +27,9 @@ export default function LyricsPlayground({song, setSong}: any) {
 
     setSong((prevSong: any) => {
       const oldSections = prevSong.sections || [];
-      const newSections = [];
+      const updatedSections = diffSections(oldSections, newContents);
 
-      for (let i = 0; i < newContents.length; i++) {
-        const content = newContents[i];
-        const oldSection = oldSections[i];
-
-        if (oldSection && oldSection.content === content) {
-          // Якщо зміст не змінився — залишаємо ту ж секцію
-          newSections.push(oldSection);
-        } else if (oldSection) {
-          // Змінився текст — залишаємо id, змінюємо content
-          newSections.push({ ...oldSection, content });
-        } else {
-          // Нова секція — без id, бекенд потім присвоїть
-          newSections.push({ content });
-        }
-      }
-
-      return { ...prevSong, sections: newSections };
+      return { ...prevSong, sections: updatedSections };
     });
   };
 
@@ -55,7 +39,7 @@ export default function LyricsPlayground({song, setSong}: any) {
         {song?.sections.map((section, index) => {
           return (
             <>
-              <InlineSection section={section} />
+              <InlineSection key={section.id ?? index} section={section} />
               {song?.sections?.length !== index && <br />}
             </>
           )
