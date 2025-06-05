@@ -1,5 +1,5 @@
 import MagicInput from "./MagicInput/MagicInput";
-import SongSections from "./SongSections/SongSections";
+import LyricsPlayground from "../LyricsPlayground/LyricsPlayground";
 import "./Song.css";
 import KeySelector from "./KeySelector/KeySelector";
 import {useState} from "react";
@@ -91,7 +91,7 @@ export default function Song({song, setSong, deleteSong = null, editMode, prefer
           </button>
         </div>
       </div>
-      <SongSections song={song} setSong={setSong} editMode={editMode} transposition={preferences?.transposition || 0}/>
+      <LyricsPlayground song={song} setSong={setSong} />
       {editMode && deleteSong && <DeleteSong deleteSong={deleteSong}/>}
     </div>
   );

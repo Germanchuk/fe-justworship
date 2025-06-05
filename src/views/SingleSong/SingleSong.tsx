@@ -4,7 +4,7 @@ import { fetchAPI } from "../../utils/fetch-api";
 import Song from "../../components/Song/Song";
 import {
   ArrowLeftIcon,
-  CheckIcon, DocumentDuplicateIcon,
+  DocumentDuplicateIcon,
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import ReactDOM from "react-dom";
@@ -23,8 +23,8 @@ export default function SingleSong() {
   const navigate = useNavigate();
   const isReadonly = Boolean(initialSong?.readonly);
   const renderTime = useRef(0);
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const songChanged = JSON.stringify(song) !== JSON.stringify(initialSong);
 
   React.useEffect(() => {
     fetchAPI(`/getPreferencesBySongId/${songId}`)
@@ -63,6 +63,25 @@ export default function SingleSong() {
         setError(error);
       });
   }, [songId]);
+
+  React.useEffect(() => {
+    if (!initialSong?.id) return;
+    if (JSON.stringify(song) === JSON.stringify(initialSong)) return;
+
+    if (saveTimeout.current) {
+      clearTimeout(saveTimeout.current);
+    }
+
+    saveTimeout.current = setTimeout(() => {
+      saveSong();
+    }, 5000);
+
+    return () => {
+      if (saveTimeout.current) {
+        clearTimeout(saveTimeout.current);
+      }
+    };
+  }, [song]);
 
   const saveSong = async () => {
     await fetchAPI(
@@ -153,7 +172,6 @@ export default function SingleSong() {
         toggleMode={() => setEditMode(!editMode)}
         editMode={editMode}
       />}
-      {songChanged && <SavingButton saveSong={saveSong} />}
     </>
   );
 }
@@ -175,18 +193,6 @@ function ToggleModeButton({ toggleMode, editMode }) {
   );
 }
 
-function SavingButton({ saveSong }) {
-  return ReactDOM.createPortal(
-    <div className="fixed bottom-4 left-4">
-      <button
-        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
-        onClick={saveSong}
-      >
-        <CheckIcon className="w-6 h-6" />
-      </button>
-    </div>, document.body
-  );
-}
 
 function CopyButton({ copySong }) {
   return ReactDOM.createPortal(
