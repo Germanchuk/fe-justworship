@@ -29,5 +29,5 @@ export function isSongStructureLine(str) {
   ];
 
   // Check if the input matches any of the song structure items
-  return songStructureItems.map((i) => i).some((item) => input.includes(item));
+  return songStructureItems.some((item) => input.includes(item));
 }
