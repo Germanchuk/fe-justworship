@@ -4,6 +4,7 @@ import InlineSection from "./InlineSection/InlineSection.tsx";
 import diffSections from "../../utils/diffSections.ts";
 
 const SECTION_SEPARATOR = "\n\n";
+const SECTION_SEPARATOR_REGEX = /\n{2,}/g;
 
 export default function LyricsPlayground({song, setSong}: any) {
 
@@ -23,7 +24,7 @@ export default function LyricsPlayground({song, setSong}: any) {
     const rawText = e.target.value;
     setTextareaValue(rawText);
 
-    const newContents = rawText.split(SECTION_SEPARATOR);
+    const newContents = rawText.split(SECTION_SEPARATOR_REGEX);
 
     setSong((prevSong: any) => {
       const oldSections = prevSong.sections || [];
