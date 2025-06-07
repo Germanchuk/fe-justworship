@@ -23,3 +23,10 @@ position: absolute;
   outline-width: 1px;
   outline-color: orange;
 }
+
+.LyricsPlayground__undo {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10;
+}

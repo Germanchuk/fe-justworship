@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import InlineSection from "./InlineSection/InlineSection.tsx";
 import diffSections from "../../utils/diffSections.ts";
 import parseSections from "../../utils/parseSections.ts";
@@ -7,7 +7,11 @@ import parseSections from "../../utils/parseSections.ts";
 export default function LyricsPlayground({song, setSong}: any) {
 
   const [textareaValue, setTextareaValue] = useState("");
-  const textareaRef = useRef(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const historyRef = useRef<Array<{ value: string; sections: any[] }>>([]);
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const isUndoingRef = useRef(false);
+  const UNDO_LIMIT = 15;
 
   useEffect(() => {
     if (song?.sections) {
@@ -18,6 +22,7 @@ export default function LyricsPlayground({song, setSong}: any) {
         })
         .join("");
       setTextareaValue(combined);
+      historyRef.current = [{ value: combined, sections: song.sections }];
     }
   }, [song?.sections]);
 
@@ -42,8 +47,51 @@ export default function LyricsPlayground({song, setSong}: any) {
     });
   };
 
+  const recordHistory = () => {
+    const last = historyRef.current[historyRef.current.length - 1];
+    if (!last || last.value !== textareaValue) {
+      historyRef.current.push({ value: textareaValue, sections: song.sections });
+      if (historyRef.current.length > UNDO_LIMIT) {
+        historyRef.current.shift();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isUndoingRef.current) return;
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(recordHistory, 3000);
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    };
+  }, [textareaValue]);
+
+  const handleUndo = () => {
+    if (historyRef.current.length <= 1) return;
+    historyRef.current.pop();
+    const last = historyRef.current[historyRef.current.length - 1];
+    isUndoingRef.current = true;
+    setTextareaValue(last.value);
+    setSong((prevSong: any) => ({ ...prevSong, sections: last.sections }));
+    setTimeout(() => { isUndoingRef.current = false; }, 0);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+      e.preventDefault();
+      handleUndo();
+    }
+  };
+
   return (
     <div className={classNames("LyricsPlayground", "min-h-96")}>
+      <button
+        className="btn btn-xs LyricsPlayground__undo"
+        onClick={handleUndo}
+        disabled={historyRef.current.length <= 1}
+      >
+        Undo
+      </button>
       <div className={classNames("LyricsPlayground__output p-2")}>
         {song?.sections.map((section, index) => {
           return (
@@ -64,6 +112,7 @@ export default function LyricsPlayground({song, setSong}: any) {
         )}
         value={textareaValue}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         autoComplete="off"
         autoCorrect="off"
       />
