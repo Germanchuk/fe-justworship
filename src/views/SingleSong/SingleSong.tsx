@@ -4,18 +4,28 @@ import { fetchAPI } from "../../utils/fetch-api";
 import Song from "../../components/Song/Song";
 import {
   ArrowLeftIcon,
-  CheckIcon, DocumentDuplicateIcon,
+  ArrowUturnLeftIcon,
+  CheckIcon,
+  DocumentDuplicateIcon,
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import ReactDOM from "react-dom";
 import {useDispatch} from "react-redux";
 import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.ts";
 import { Routes } from "../../constants/routes";
+import useSongEditor from "../../hooks/useSongEditor";
 
 export default function SingleSong() {
   const { songId } = useParams();
-  const [initialSong, setInitialSong] = React.useState<any>({});
-  const [song, setSong] = React.useState<any>({});
+  const {
+    song,
+    setSong,
+    loadSong,
+    undoSong,
+    canUndo,
+    songChanged,
+    initialSong,
+  } = useSongEditor<any>({});
   const [preferences, setPreferences] = React.useState<any>({});
   const [editMode, setEditMode] = React.useState(false);
   const [ error, setError ] = React.useState();
@@ -23,8 +33,6 @@ export default function SingleSong() {
   const navigate = useNavigate();
   const isReadonly = Boolean(initialSong?.readonly);
   const renderTime = useRef(0);
-
-  const songChanged = JSON.stringify(song) !== JSON.stringify(initialSong);
 
   React.useEffect(() => {
     fetchAPI(`/getPreferencesBySongId/${songId}`)
@@ -56,8 +64,7 @@ export default function SingleSong() {
       populate: ["sections"],
     })
       .then((data) => {
-        setSong(data.data);
-        setInitialSong(JSON.parse(JSON.stringify(data.data))); // deep copy of data.data);
+        loadSong(data.data);
       })
       .catch((error) => {
         setError(error);
@@ -79,9 +86,7 @@ export default function SingleSong() {
         type: "success",
         message: "Збережено"
       }));
-      setSong(data.data);
-      // Create a deep copy of `song` before setting `initialSong`
-      setInitialSong(JSON.parse(JSON.stringify(data.data)));
+      loadSong(data.data);
       setEditMode(false);
     })
     .catch(() => {
@@ -154,6 +159,7 @@ export default function SingleSong() {
         editMode={editMode}
       />}
       {songChanged && <SavingButton saveSong={saveSong} />}
+      {editMode && <UndoButton undo={undoSong} disabled={!canUndo} />}
     </>
   );
 }
@@ -183,6 +189,20 @@ function SavingButton({ saveSong }) {
         onClick={saveSong}
       >
         <CheckIcon className="w-6 h-6" />
+      </button>
+    </div>, document.body
+  );
+}
+
+function UndoButton({ undo, disabled }) {
+  return ReactDOM.createPortal(
+    <div className="fixed bottom-4 left-20">
+      <button
+        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
+        onClick={undo}
+        disabled={disabled}
+      >
+        <ArrowUturnLeftIcon className="w-6 h-6" />
       </button>
     </div>, document.body
   );
