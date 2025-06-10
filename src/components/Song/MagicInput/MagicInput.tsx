@@ -16,16 +16,23 @@ export default function MagicInput({
   editMode = false,
   transposition = 0,
   useModifiers = false,
+  hideLyrics = false,
+  showChordTooltips = true,
 }: any) {
   const actualTransposition = editMode ? 0 : transposition;
   return (
     <div className={classNames("MagicInput", wrapperClassName)}>
       <div className={classNames("MagicInput__output", className)}>
         {value.split("\n").map((line, index) => {
+          const isChord = isChordsLine(line) && isChordsLine2(line);
+          if (!editMode && hideLyrics && !isChord && line.trim()) {
+            return <div key={index}></div>;
+          }
+
           if (useModifiers) {
             const modifier = modifiers.find((m) => m.detector(line, index));
             return modifier ? (
-              modifier.Component(line, index, actualTransposition)
+              modifier.Component(line, index, actualTransposition, showChordTooltips)
             ) : (
               <NormalText key={index}>{line}</NormalText>
             );
@@ -71,8 +78,8 @@ const modifiers = [
   {
     internalName: "chordsLine",
     detector: (line) => isChordsLine(line) && isChordsLine2(line),
-    Component: (line, index, transposition) => (
-      <ChordLine key={index} chordsTooltipEnabled={true}>
+    Component: (line, index, transposition, showChordTooltips) => (
+      <ChordLine key={index} chordsTooltipEnabled={showChordTooltips}>
         {transposition ? transpose(line).down(transposition).toString() : line}
       </ChordLine>
     ),

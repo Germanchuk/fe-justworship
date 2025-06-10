@@ -10,7 +10,7 @@ import DeleteSong from "./DeleteSong/DeleteSong.tsx";
 import CapoSelector from "./CapoSelector/CapoSelector.tsx";
 import {createDocument} from "../../services";
 
-export default function Song({song, setSong, deleteSong = null, editMode, preferences = null, setPreferences = null}) {
+export default function Song({song, setSong, deleteSong = null, editMode, preferences = null, setPreferences = null, hideLyrics = false, showTips = true}) {
   const [chordsHidden, setChordsHidden] = useState(false);
   const handleSongName = (value) => {
     setSong((song) => {
@@ -91,7 +91,7 @@ export default function Song({song, setSong, deleteSong = null, editMode, prefer
           </button>
         </div>
       </div>
-      <LyricsPlayground song={song} setSong={setSong} />
+      <LyricsPlayground song={song} setSong={setSong} hideLyrics={hideLyrics} showTips={showTips} />
       {editMode && deleteSong && <DeleteSong deleteSong={deleteSong}/>}
     </div>
   );

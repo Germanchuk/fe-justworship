@@ -2,28 +2,62 @@ import React, {useRef} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import { fetchAPI } from "../../utils/fetch-api";
 import Song from "../../components/Song/Song";
-import {
-  ArrowLeftIcon,
-  DocumentDuplicateIcon,
-  PencilIcon,
-} from "@heroicons/react/24/outline";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import ReactDOM from "react-dom";
 import {useDispatch} from "react-redux";
+import ActionBar from "./ActionBar";
 import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.ts";
 import { Routes } from "../../constants/routes";
 
 export default function SingleSong() {
   const { songId } = useParams();
   const [initialSong, setInitialSong] = React.useState<any>({});
-  const [song, setSong] = React.useState<any>({});
+  const [song, setSongState] = React.useState<any>({});
   const [preferences, setPreferences] = React.useState<any>({});
   const [editMode, setEditMode] = React.useState(false);
+  const [hideLyrics, setHideLyrics] = React.useState(false);
+  const [showTips, setShowTips] = React.useState(true);
+  const [lockEditing, setLockEditing] = React.useState(false);
+  const history = useRef<any[]>([]);
+  const historyIndex = useRef(-1);
+  const prevSongRef = useRef<any>();
   const [ error, setError ] = React.useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isReadonly = Boolean(initialSong?.readonly);
   const renderTime = useRef(0);
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const updateSong = (value: any) => {
+    setSongState((prev) => {
+      const newSong = typeof value === 'function' ? value(prev) : value;
+      if (prevSongRef.current) {
+        history.current = history.current.slice(0, historyIndex.current + 1);
+        history.current.push(prev);
+        historyIndex.current++;
+      }
+      prevSongRef.current = newSong;
+      return newSong;
+    });
+  };
+
+  const undo = () => {
+    if (historyIndex.current >= 0) {
+      const prev = history.current[historyIndex.current];
+      historyIndex.current -= 1;
+      prevSongRef.current = prev;
+      setSongState(prev);
+    }
+  };
+
+  const redo = () => {
+    if (historyIndex.current + 1 < history.current.length) {
+      historyIndex.current += 1;
+      const next = history.current[historyIndex.current];
+      prevSongRef.current = next;
+      setSongState(next);
+    }
+  };
 
 
   React.useEffect(() => {
@@ -56,7 +90,8 @@ export default function SingleSong() {
       populate: ["sections"],
     })
       .then((data) => {
-        setSong(data.data);
+        setSongState(data.data);
+        prevSongRef.current = data.data;
         setInitialSong(JSON.parse(JSON.stringify(data.data))); // deep copy of data.data);
       })
       .catch((error) => {
@@ -98,7 +133,8 @@ export default function SingleSong() {
         type: "success",
         message: "Збережено"
       }));
-      setSong(data.data);
+      setSongState(data.data);
+      prevSongRef.current = data.data;
       // Create a deep copy of `song` before setting `initialSong`
       setInitialSong(JSON.parse(JSON.stringify(data.data)));
       setEditMode(false);
@@ -160,39 +196,37 @@ export default function SingleSong() {
     <>
       <Song
         song={song}
-        setSong={setSong}
+        setSong={updateSong}
         editMode={editMode}
         deleteSong={deleteSong}
         preferences={preferences}
         setPreferences={setPreferences}
+        hideLyrics={hideLyrics}
+        showTips={showTips}
       />
-      {isReadonly ?
+      {isReadonly ? (
         <CopyButton copySong={copySong} />
-        : <ToggleModeButton
-        toggleMode={() => setEditMode(!editMode)}
-        editMode={editMode}
-      />}
+      ) : (
+        <ActionBar
+          editMode={editMode}
+          toggleEdit={() => !lockEditing && setEditMode(!editMode)}
+          hideLyrics={hideLyrics}
+          toggleHideLyrics={() => setHideLyrics(!hideLyrics)}
+          showTips={showTips}
+          toggleShowTips={() => setShowTips(!showTips)}
+          lockEditing={lockEditing}
+          toggleLock={() => {
+            const next = !lockEditing;
+            setLockEditing(next);
+            if (next) setEditMode(false);
+          }}
+          undo={undo}
+          redo={redo}
+        />
+      )}
     </>
   );
 }
-
-function ToggleModeButton({ toggleMode, editMode }) {
-  return ReactDOM.createPortal(
-    <div className="fixed bottom-4 right-4">
-      <button
-        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
-        onClick={toggleMode}
-      >
-        {editMode ? (
-          <ArrowLeftIcon className="w-6 h-6" />
-        ) : (
-          <PencilIcon className="w-6 h-6" />
-        )}
-      </button>
-    </div>, document.body
-  );
-}
-
 
 function CopyButton({ copySong }) {
   return ReactDOM.createPortal(
