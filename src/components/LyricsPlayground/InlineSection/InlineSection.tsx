@@ -3,15 +3,22 @@ import {isChordsLine, isChordsLine2} from "../../../utils/keyUtils.ts";
 import ChordLine from "../ChordLine/ChordLine.tsx";
 import {isSongStructureLine} from "../../../utils/structureCaptionDetector.ts";
 
-export default function InlineSection({section}) {
+export default function InlineSection({ section, hideLyrics = false, showTips = true }) {
   return section?.content?.split("\n").map((line, index) => {
-    const modifier =
-      modifiers.find((m) => m.detector(line, index));
-    return (<div>{modifier ? (
-      modifier.Component(line, index)
-    ) : (
-      <NormalText key={index}>{line}</NormalText>
-    )}</div>);
+    const isChord = isChordsLine(line) && isChordsLine2(line);
+    if (hideLyrics && !isChord && line.trim()) {
+      return <div key={index}></div>;
+    }
+    const modifier = modifiers.find((m) => m.detector(line, index));
+    return (
+      <div key={index}>
+        {modifier ? (
+          modifier.Component(line, index, showTips)
+        ) : (
+          <NormalText>{line}</NormalText>
+        )}
+      </div>
+    );
   });
 }
 
@@ -33,8 +40,8 @@ const modifiers = [
   {
     internalName: "chordsLine",
     detector: (line) => isChordsLine(line) && isChordsLine2(line),
-    Component: (line, index) => (
-      <ChordLine key={index} chordsTooltipEnabled={true}>
+    Component: (line, index, showTips) => (
+      <ChordLine key={index} chordsTooltipEnabled={showTips}>
         {line}
       </ChordLine>
     ),

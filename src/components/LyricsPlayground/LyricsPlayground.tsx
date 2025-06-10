@@ -4,7 +4,7 @@ import InlineSection from "./InlineSection/InlineSection.tsx";
 import diffSections from "../../utils/diffSections.ts";
 import parseSections from "../../utils/parseSections.ts";
 
-export default function LyricsPlayground({song, setSong}: any) {
+export default function LyricsPlayground({ song, setSong, hideLyrics = false, showTips = true }: any) {
 
   const [textareaValue, setTextareaValue] = useState("");
   const textareaRef = useRef(null);
@@ -48,7 +48,7 @@ export default function LyricsPlayground({song, setSong}: any) {
         {song?.sections.map((section, index) => {
           return (
             <>
-              <InlineSection key={section.id ?? index} section={section} />
+              <InlineSection key={section.id ?? index} section={section} hideLyrics={hideLyrics} showTips={showTips} />
               {index < song.sections.length - 1 &&
                 Array.from({ length: (section.spacing ?? 2) - 1 }).map((_, i) => (
                   <br key={`br-${index}-${i}`} />
