@@ -9,6 +9,7 @@ import {remapChords} from "../../utils/keyUtils";
 import DeleteSong from "./DeleteSong/DeleteSong.tsx";
 import CapoSelector from "./CapoSelector/CapoSelector.tsx";
 import {createDocument} from "../../services";
+import ReactSwitch from "react-switch";
 
 export default function Song({song, setSong, deleteSong = null, editMode, preferences = null, setPreferences = null}) {
   const [chordsHidden, setChordsHidden] = useState(false);
@@ -51,6 +52,12 @@ export default function Song({song, setSong, deleteSong = null, editMode, prefer
         chordsHidden: chordsHidden,
       })}
     >
+      <ReactSwitch
+        checked={chordsHidden}
+        onChange={setChordsHidden}
+        width={72}
+        onClick={() => null}
+      />
       <MagicInput
         className="text-3xl font-bold"
         value={song.name}
