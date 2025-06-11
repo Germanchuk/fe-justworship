@@ -1,24 +1,49 @@
-import {createSlice, Slice} from '@reduxjs/toolkit';
-import {Song} from "../../models";
+import { createSlice, Slice } from '@reduxjs/toolkit';
+import { Song } from '../../models';
 
-const songSlice: Slice<Song, any> = createSlice({
+interface SongState extends Partial<Song> {
+  editMode: boolean;
+}
+
+const initialState: SongState = {
+  editMode: false,
+};
+
+const songSlice: Slice<SongState, any> = createSlice({
   name: 'song',
-  initialState: {
-    name: null,
-    bpm: null,
-    key: null,
-    sections: null
-  },
+  initialState,
   reducers: {
-    setSong: (state, action) => {
-      return {
-        ...state,
-        ...action.payload
-      }
-    }
+    setSong: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    resetSong: () => initialState,
+    setSongName: (state, action) => {
+      state.name = action.payload;
+    },
+    setBpm: (state, action) => {
+      state.bpm = action.payload;
+    },
+    setKey: (state, action) => {
+      state.key = action.payload;
+    },
+    setEditMode: (state, action) => {
+      state.editMode = action.payload;
+    },
+    setSections: (state, action) => {
+      state.sections = action.payload;
+    },
   },
 });
 
-export const { enableGlobalLoader, disableGlobalLoader } = songSlice.actions;
+export const {
+  setSong,
+  resetSong,
+  setSongName,
+  setBpm,
+  setKey,
+  setEditMode,
+  setSections,
+} = songSlice.actions;
 
 export default songSlice.reducer;

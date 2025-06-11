@@ -1,17 +1,16 @@
-import React, {useState} from "react";
-import {
-  keys,
-} from "../../../utils/keyUtils";
+import React, { useState } from "react";
+import { keys } from "../../../utils/keyUtils";
 import classNames from "classnames";
 import Modal from "../../Modal/Modal.tsx";
+import { useKey, useSetKey } from "../../../hooks/song";
 
-export default function KeySelector({
-  basicKey,
-  setBasicKey,
-}) {
-const [keyCandidate, setKeyCandidate] = useState("");
+export default function KeySelector() {
+  const basicKey = useKey();
+  const setBasicKey = useSetKey();
+  const [keyCandidate, setKeyCandidate] = useState("");
   const changeKey = () => setBasicKey(keyCandidate);
-  const transposeSong = () => setBasicKey(keyCandidate, { shouldRemapSections: true });
+  const transposeSong = () =>
+    setBasicKey(keyCandidate, { shouldRemapSections: true });
   const revert = () => setKeyCandidate(basicKey);
   return (
     <div className="flex gap-2 items-center">

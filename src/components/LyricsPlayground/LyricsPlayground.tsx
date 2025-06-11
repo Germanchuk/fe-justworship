@@ -1,31 +1,31 @@
 import classNames from "classnames";
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import InlineSection from "./InlineSection/InlineSection.tsx";
 import diffSections from "../../utils/diffSections.ts";
 import parseSections from "../../utils/parseSections.ts";
+import { useSong, useSections, useSetSections } from "../../hooks/song";
 
 export default function LyricsPlayground({
-  song,
-  setSong,
   transposition = 0,
-  editMode = false,
   className,
 }: any) {
-
+  const song = useSong();
+  const sections = useSections();
+  const setSections = useSetSections();
   const [textareaValue, setTextareaValue] = useState("");
   const textareaRef = useRef(null);
 
   useEffect(() => {
-    if (song?.sections) {
-      const combined = song.sections
+    if (sections) {
+      const combined = sections
         .map((s, idx) => {
-          const sep = idx < song.sections.length - 1 ? "\n".repeat(s.spacing ?? 2) : "";
+          const sep = idx < sections.length - 1 ? "\n".repeat(s.spacing ?? 2) : "";
           return s.content + sep;
         })
         .join("");
       setTextareaValue(combined);
     }
-  }, [song?.sections]);
+  }, [sections]);
 
   // Обробка зміни у textarea з врахуванням id від бекенду
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -35,32 +35,28 @@ export default function LyricsPlayground({
     const parsed = parseSections(rawText);
     const newContents = parsed.map((p) => p.content);
 
-    setSong((prevSong: any) => {
-      const oldSections = prevSong.sections || [];
-      const updatedSections = diffSections(oldSections, newContents).map(
-        (section, idx) => ({
-          ...section,
-          spacing: parsed[idx]?.spacing ?? section.spacing ?? 2,
-        })
-      );
-
-      return { ...prevSong, sections: updatedSections };
-    });
+    const oldSections = sections || [];
+    const updatedSections = diffSections(oldSections, newContents).map(
+      (section, idx) => ({
+        ...section,
+        spacing: parsed[idx]?.spacing ?? section.spacing ?? 2,
+      }),
+    );
+    setSections(updatedSections);
   };
 
   return (
     <div className={classNames("LyricsPlayground", "min-h-96", className)}>
       <div className={classNames("LyricsPlayground__output p-2")}>
-        {song?.sections.map((section, index) => {
+        {sections?.map((section, index) => {
           return (
             <>
               <InlineSection
                 key={section.id ?? index}
                 section={section}
                 transposition={transposition}
-                editMode={editMode}
               />
-              {index < song.sections.length - 1 &&
+              {index < sections.length - 1 &&
                 Array.from({ length: (section.spacing ?? 2) - 1 }).map((_, i) => (
                   <br key={`br-${index}-${i}`} />
                 ))}

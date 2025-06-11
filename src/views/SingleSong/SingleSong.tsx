@@ -1,5 +1,5 @@
-import React, {useRef} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import React, { useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchAPI } from "../../utils/fetch-api";
 import Song from "../../components/Song/Song";
 import {
@@ -8,22 +8,30 @@ import {
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import ReactDOM from "react-dom";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.ts";
+import { useSong, useSetSong, useEditMode, useSetEditMode } from "../../hooks/song";
+import { fetchSongThunk } from "../../redux/thunks/songThunks";
 import { Routes } from "../../constants/routes";
 
 export default function SingleSong() {
   const { songId } = useParams();
   const [initialSong, setInitialSong] = React.useState<any>({});
-  const [song, setSong] = React.useState<any>({});
   const [preferences, setPreferences] = React.useState<any>({});
-  const [editMode, setEditMode] = React.useState(false);
+  const editMode = useEditMode();
+  const setEditMode = useSetEditMode();
   const [ error, setError ] = React.useState();
   const dispatch = useDispatch();
+  const song = useSong();
+  const setSong = useSetSong();
   const navigate = useNavigate();
   const isReadonly = Boolean(initialSong?.readonly);
   const renderTime = useRef(0);
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  React.useEffect(() => {
+    setEditMode(false);
+  }, []);
 
 
   React.useEffect(() => {
@@ -52,17 +60,15 @@ export default function SingleSong() {
   }, [preferences, songId]);
 
   React.useEffect(() => {
-    fetchAPI(`/currentBandSongs/${songId}`, {
-      populate: ["sections"],
-    })
-      .then((data) => {
-        setSong(data.data);
-        setInitialSong(JSON.parse(JSON.stringify(data.data))); // deep copy of data.data);
+    if (!songId) return;
+    dispatch(fetchSongThunk(songId))
+      .then((data: any) => {
+        setInitialSong(JSON.parse(JSON.stringify(data)));
       })
       .catch((error) => {
         setError(error);
       });
-  }, [songId]);
+  }, [songId, dispatch]);
 
   React.useEffect(() => {
     if (!initialSong?.id) return;
@@ -96,7 +102,7 @@ export default function SingleSong() {
     ).then((data) => {
       dispatch(addNotificationWithTimeout({
         type: "success",
-        message: "Збережено"
+        message: "Збережено",
       }));
       setSong(data.data);
       // Create a deep copy of `song` before setting `initialSong`
@@ -159,9 +165,6 @@ export default function SingleSong() {
   return (
     <>
       <Song
-        song={song}
-        setSong={setSong}
-        editMode={editMode}
         deleteSong={deleteSong}
         preferences={preferences}
         setPreferences={setPreferences}

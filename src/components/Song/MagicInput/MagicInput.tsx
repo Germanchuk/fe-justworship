@@ -3,6 +3,7 @@ import { isChordsLine, isChordsLine2 } from "../../../utils/keyUtils";
 import ChordLine from "./ChordLine/ChordLine";
 import {transpose} from "chord-transposer";
 import {isSongStructureLine} from "../../../utils/structureCaptionDetector.ts";
+import { useEditMode } from '../../../hooks/song';
 
 function NormalText({ children }) {
   return <div style={{ whiteSpace: "pre-wrap" }}>{children}</div>;
@@ -13,10 +14,10 @@ export default function MagicInput({
   className,
   value = "",
   setValue,
-  editMode = false,
   transposition = 0,
   useModifiers = false,
 }: any) {
+  const editMode = useEditMode();
   const actualTransposition = editMode ? 0 : transposition;
   return (
     <div className={classNames("MagicInput", wrapperClassName)}>
