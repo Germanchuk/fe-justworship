@@ -1,7 +1,9 @@
 import classNames from "classnames";
 import MagicInput from "../../../../components/Song/MagicInput/MagicInput";
+import { useEditMode } from "../../../../hooks/song";
 
-export default function Block({ data, editMode }) {
+export default function Block({ data }) {
+  const editMode = useEditMode();
 
   return (
     <div
@@ -12,13 +14,14 @@ export default function Block({ data, editMode }) {
         }
       )}
     >
-      {data.title && <BlockTitle editMode={editMode}>{data.title}</BlockTitle>}
-      <BlockContent editMode={editMode} data={data.content} />
+      {data.title && <BlockTitle>{data.title}</BlockTitle>}
+      <BlockContent data={data.content} />
     </div>
   );
 }
 
-function BlockTitle({ children, editMode }) {
+function BlockTitle({ children }) {
+  const editMode = useEditMode();
   if (editMode) {
     return (
       <MagicInput
@@ -32,7 +35,8 @@ function BlockTitle({ children, editMode }) {
   }
 }
 
-function BlockContent({ data, editMode }) {
+function BlockContent({ data }) {
+  const editMode = useEditMode();
   if (editMode) {
     return (
       <MagicInput

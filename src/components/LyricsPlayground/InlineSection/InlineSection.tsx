@@ -3,8 +3,10 @@ import {isChordsLine, isChordsLine2} from "../../../utils/keyUtils.ts";
 import ChordLine from "../ChordLine/ChordLine.tsx";
 import {isSongStructureLine} from "../../../utils/structureCaptionDetector.ts";
 import {transpose} from "chord-transposer";
+import { useEditMode } from '../../../hooks/song';
 
-export default function InlineSection({ section, transposition = 0, editMode = false }) {
+export default function InlineSection({ section, transposition = 0 }) {
+  const editMode = useEditMode();
   const actualTransposition = editMode ? 0 : transposition;
   return section?.content?.split("\n").map((line, index) => {
     const modifier = modifiers.find((m) => m.detector(line, index));
