@@ -2,16 +2,19 @@ import classNames from "classnames";
 import {isChordsLine, isChordsLine2} from "../../../utils/keyUtils.ts";
 import ChordLine from "../ChordLine/ChordLine.tsx";
 import {isSongStructureLine} from "../../../utils/structureCaptionDetector.ts";
+import {transpose} from "chord-transposer";
 
-export default function InlineSection({section}) {
+export default function InlineSection({ section, transposition = 0, editMode = false }) {
+  const actualTransposition = editMode ? 0 : transposition;
   return section?.content?.split("\n").map((line, index) => {
-    const modifier =
-      modifiers.find((m) => m.detector(line, index));
-    return (<div>{modifier ? (
-      modifier.Component(line, index)
-    ) : (
-      <NormalText key={index}>{line}</NormalText>
-    )}</div>);
+    const modifier = modifiers.find((m) => m.detector(line, index));
+    return (
+      <div>
+        {modifier
+          ? modifier.Component(line, index, actualTransposition)
+          : <NormalText key={index}>{line}</NormalText>}
+      </div>
+    );
   });
 }
 
@@ -33,9 +36,9 @@ const modifiers = [
   {
     internalName: "chordsLine",
     detector: (line) => isChordsLine(line) && isChordsLine2(line),
-    Component: (line, index) => (
+    Component: (line, index, transposition) => (
       <ChordLine key={index} chordsTooltipEnabled={true}>
-        {line}
+        {transposition ? transpose(line).down(transposition).toString() : line}
       </ChordLine>
     ),
   },

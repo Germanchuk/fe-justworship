@@ -4,7 +4,13 @@ import InlineSection from "./InlineSection/InlineSection.tsx";
 import diffSections from "../../utils/diffSections.ts";
 import parseSections from "../../utils/parseSections.ts";
 
-export default function LyricsPlayground({song, setSong}: any) {
+export default function LyricsPlayground({
+  song,
+  setSong,
+  transposition = 0,
+  editMode = false,
+  className,
+}: any) {
 
   const [textareaValue, setTextareaValue] = useState("");
   const textareaRef = useRef(null);
@@ -43,12 +49,17 @@ export default function LyricsPlayground({song, setSong}: any) {
   };
 
   return (
-    <div className={classNames("LyricsPlayground", "min-h-96")}>
+    <div className={classNames("LyricsPlayground", "min-h-96", className)}>
       <div className={classNames("LyricsPlayground__output p-2")}>
         {song?.sections.map((section, index) => {
           return (
             <>
-              <InlineSection key={section.id ?? index} section={section} />
+              <InlineSection
+                key={section.id ?? index}
+                section={section}
+                transposition={transposition}
+                editMode={editMode}
+              />
               {index < song.sections.length - 1 &&
                 Array.from({ length: (section.spacing ?? 2) - 1 }).map((_, i) => (
                   <br key={`br-${index}-${i}`} />

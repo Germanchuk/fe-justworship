@@ -91,7 +91,12 @@ export default function Song({song, setSong, deleteSong = null, editMode, prefer
           </button>
         </div>
       </div>
-      <LyricsPlayground song={song} setSong={setSong} />
+      <LyricsPlayground
+        song={song}
+        setSong={setSong}
+        transposition={preferences?.transposition || 0}
+        editMode={editMode}
+      />
       {editMode && deleteSong && <DeleteSong deleteSong={deleteSong}/>}
     </div>
   );
