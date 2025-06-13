@@ -3,13 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import InlineSection from "./InlineSection/InlineSection.tsx";
 import diffSections from "../../utils/diffSections.ts";
 import parseSections from "../../utils/parseSections.ts";
-import { useSong, useSections, useSetSections } from "../../hooks/song";
+import { useSections, useSetSections, useEditMode} from "../../hooks/song";
 
 export default function LyricsPlayground({
   transposition = 0,
   className,
 }: any) {
-  const song = useSong();
+  const editMode = useEditMode();
   const sections = useSections();
   const setSections = useSetSections();
   const [textareaValue, setTextareaValue] = useState("");
@@ -64,7 +64,7 @@ export default function LyricsPlayground({
           );
         })}
       </div>
-      <textarea
+      {!editMode && (<textarea
         ref={textareaRef}
         className={classNames(
           "LyricsPlayground__textarea border border-solid border-base-300 p-2",
@@ -73,7 +73,7 @@ export default function LyricsPlayground({
         onChange={handleChange}
         autoComplete="off"
         autoCorrect="off"
-      />
+      />)}
     </div>
   );
 }

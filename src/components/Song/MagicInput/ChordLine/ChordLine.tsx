@@ -1,7 +1,7 @@
 import React from "react";
 import ChordTooltip from "./ChordTooltip/ChordTooltip";
 
-export default function ChordLine({ children, chordsTooltipEnabled = false }) {
+export default function ChordLine({ children }) {
   const parts = children.split(/(\s+)/);
   return (
     <div className="text-primary chords whitespace-pre">
