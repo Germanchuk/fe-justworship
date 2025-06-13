@@ -3,10 +3,14 @@ import { Song } from '../../models';
 
 interface SongState extends Partial<Song> {
   editMode: boolean;
+  initialSong: Partial<Song>;
+  preferences: any;
 }
 
 const initialState: SongState = {
   editMode: false,
+  initialSong: {},
+  preferences: {},
 };
 
 const songSlice: Slice<SongState, any> = createSlice({
@@ -33,6 +37,12 @@ const songSlice: Slice<SongState, any> = createSlice({
     setSections: (state, action) => {
       state.sections = action.payload;
     },
+    setInitialSong: (state, action) => {
+      state.initialSong = action.payload;
+    },
+    setPreferences: (state, action) => {
+      state.preferences = action.payload;
+    },
   },
 });
 
@@ -44,6 +54,8 @@ export const {
   setKey,
   setEditMode,
   setSections,
+  setInitialSong,
+  setPreferences,
 } = songSlice.actions;
 
 export default songSlice.reducer;

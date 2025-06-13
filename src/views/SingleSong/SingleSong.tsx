@@ -17,14 +17,25 @@ import {
 import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
 import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.ts";
-import { useSong, useSetSong, useEditMode, useSetEditMode } from "../../hooks/song";
+import {
+  useSong,
+  useSetSong,
+  useEditMode,
+  useSetEditMode,
+  useInitialSong,
+  useSetInitialSong,
+  usePreferences,
+  useSetPreferences,
+} from "../../hooks/song";
 import { fetchSongThunk } from "../../redux/thunks/songThunks";
 import { Routes } from "../../constants/routes";
 
 export default function SingleSong() {
   const { songId } = useParams();
-  const [initialSong, setInitialSong] = React.useState<any>({});
-  const [preferences, setPreferences] = React.useState<any>({});
+  const initialSong = useInitialSong();
+  const setInitialSong = useSetInitialSong();
+  const preferences = usePreferences();
+  const setPreferences = useSetPreferences();
   const editMode = useEditMode();
   const setEditMode = useSetEditMode();
   const [ error, setError ] = React.useState();
