@@ -1,6 +1,13 @@
 import React, { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchAPI } from "../../utils/fetch-api";
+import {
+  fetchPreferences,
+  createPreference,
+  updatePreference,
+  saveSong as saveSongRequest,
+  removeSong,
+  copySong as copySongRequest,
+} from "../../services";
 import Song from "../../components/Song/Song";
 import {
   ArrowLeftIcon,
@@ -35,10 +42,10 @@ export default function SingleSong() {
 
 
   React.useEffect(() => {
-    fetchAPI(`/getPreferencesBySongId/${songId}`)
-      .then((response) => {
-        setPreferences(response.data);
-      });
+    if (!songId) return;
+    fetchPreferences(songId).then((response) => {
+      setPreferences(response.data);
+    });
   }, [songId]);
 
   React.useEffect(() => {
@@ -47,15 +54,9 @@ export default function SingleSong() {
       return;
     }
       if (!preferences?.id) {
-        fetchAPI(`/createPreference/${songId}`, {}, {
-          method: "POST",
-          body: JSON.stringify(preferences)
-        });
+        createPreference(songId as string, preferences);
       } else {
-        fetchAPI(`/savePreference/${preferences?.id}`, {}, {
-          method: "PUT",
-          body: JSON.stringify(preferences),
-        });
+        updatePreference(preferences?.id, preferences);
       }
   }, [preferences, songId]);
 
@@ -90,76 +91,51 @@ export default function SingleSong() {
   }, [song]);
 
   const saveSong = async () => {
-    await fetchAPI(
-      `/currentBandSongs/${songId}`,
-      {},
-      {
-        method: "PUT",
-        body: JSON.stringify({
-          data: song,
-        }),
-      }
-    ).then((data) => {
-      dispatch(addNotificationWithTimeout({
-        type: "success",
-        message: "Збережено",
-      }));
-      setSong(data.data);
-      // Create a deep copy of `song` before setting `initialSong`
-      setInitialSong(JSON.parse(JSON.stringify(data.data)));
-      setEditMode(false);
-    })
-    .catch(() => {
-      dispatch(addNotificationWithTimeout({
-        type: "error",
-        message: "Нажаль пісня не збереглась, спробуй ще раз"
-      }));
-    })
+    await saveSongRequest(songId as string, song)
+      .then((data) => {
+        dispatch(
+          addNotificationWithTimeout({
+            type: "success",
+            message: "Збережено",
+          })
+        );
+        setSong(data.data);
+        // Create a deep copy of `song` before setting `initialSong`
+        setInitialSong(JSON.parse(JSON.stringify(data.data)));
+        setEditMode(false);
+      })
+      .catch(() => {
+        dispatch(
+          addNotificationWithTimeout({
+            type: "error",
+            message: "Нажаль пісня не збереглась, спробуй ще раз",
+          })
+        );
+      })
   };
 
   const deleteSong = async () => {
-    await fetchAPI(
-      `/currentBandSongs/${songId}`,
-      {},
-      {
-        method: "DELETE",
-        body: song
-      }
-    ).then(() => {
+    await removeSong(songId as string, song).then(() => {
       navigate(Routes.BandSongs);
     })
       .catch(() => {
         dispatch(addNotificationWithTimeout({
           type: "error",
-          message: "Помилка серверу, не вдалось видалити пісню"
+          message: "Помилка серверу, не вдалось видалити пісню",
         }));
       });
   }
 
   const copySong = () => {
-    fetchAPI(
-      `/copySong/${songId}`,
-      {},
-      {
-        method: "POST",
-      }
-    ).then((data) => {
+    copySongRequest(songId as string).then((data) => {
       navigate(`${Routes.PublicSongs}/${data.data.id}`);
     })
       .catch(() => {
         dispatch(addNotificationWithTimeout({
           type: "error",
-          message: "Помилка серверу, не вдалось скопіювати пісню"
+          message: "Помилка серверу, не вдалось скопіювати пісню",
         }));
       });
-  }
-
-  if (error) {
-    throw new Error(error);
-  }
-
-  if (Object.keys(song).length === 0) {
-    return <div>Такої пісні не існує</div>;
   }
 
   return (
