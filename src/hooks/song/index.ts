@@ -6,6 +6,8 @@ import {
   setSongName,
   setEditMode,
   setSections,
+  setInitialSong,
+  setPreferences,
 } from '../../redux/slices/songSlice';
 import { remapChords } from '../../utils/keyUtils';
 
@@ -15,6 +17,8 @@ export const useKey = () => useSelector((state: any) => state.song.key);
 export const useSongName = () => useSelector((state: any) => state.song.name);
 export const useEditMode = () => useSelector((state: any) => state.song.editMode);
 export const useSections = () => useSelector((state: any) => state.song.sections);
+export const useInitialSong = () => useSelector((state: any) => state.song.initialSong);
+export const usePreferences = () => useSelector((state: any) => state.song.preferences);
 
 export const useSetSong = () => {
   const dispatch = useDispatch();
@@ -53,4 +57,14 @@ export const useSetEditMode = () => {
 export const useSetSections = () => {
   const dispatch = useDispatch();
   return (sections: any) => dispatch(setSections(sections));
+};
+
+export const useSetInitialSong = () => {
+  const dispatch = useDispatch();
+  return (song: any) => dispatch(setInitialSong(song));
+};
+
+export const useSetPreferences = () => {
+  const dispatch = useDispatch();
+  return (prefs: any) => dispatch(setPreferences(prefs));
 };

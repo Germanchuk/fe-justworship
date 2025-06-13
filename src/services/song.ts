@@ -32,13 +32,13 @@ export async function fetchPreferences(songId: string | number) {
 export async function createPreference(songId: string | number, preferences: any) {
   return fetchAPI(`/createPreference/${songId}`, {}, {
     method: "POST",
-    body: JSON.stringify(preferences),
+    body: JSON.stringify({ data: preferences }),
   });
 }
 
 export async function updatePreference(preferenceId: string | number, preferences: any) {
   return fetchAPI(`/savePreference/${preferenceId}`, {}, {
     method: "PUT",
-    body: JSON.stringify(preferences),
+    body: JSON.stringify({ data: preferences }),
   });
 }
