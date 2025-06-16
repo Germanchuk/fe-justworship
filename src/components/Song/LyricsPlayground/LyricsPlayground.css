@@ -1,5 +1,7 @@
 .LyricsPlayground {
   position: relative;
+  margin-left: -8px;
+  margin-right: -8px;
 }
 
 .LyricsPlayground__textarea {

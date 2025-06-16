@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import InlineSection from "./InlineSection/InlineSection.tsx";
-import diffSections from "../../utils/diffSections.ts";
-import parseSections from "../../utils/parseSections.ts";
-import { useSections, useSetSections, useEditMode} from "../../hooks/song";
+import diffSections from "../../../utils/diffSections.ts";
+import parseSections from "../../../utils/parseSections.ts";
+import { useSections, useSetSections, useEditMode} from "../../../hooks/song";
 
 export default function LyricsPlayground({
   transposition = 0,

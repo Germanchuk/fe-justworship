@@ -1,5 +1,5 @@
 import MagicInput from "./MagicInput/MagicInput";
-import LyricsPlayground from "../LyricsPlayground/LyricsPlayground";
+import LyricsPlayground from "./LyricsPlayground/LyricsPlayground";
 import "./Song.css";
 import KeySelector from "./KeySelector/KeySelector";
 import BpmSelector from "./BpmSelector/BpmSelector";
@@ -9,18 +9,13 @@ import classNames from "classnames";
 import DeleteSong from "./DeleteSong/DeleteSong.tsx";
 import CapoSelector from "./CapoSelector/CapoSelector.tsx";
 import {createDocument} from "../../services";
-import ReactSwitch from "react-switch";
-import { useSong, useSongName, useSetSongName, useEditMode } from "../../hooks/song";
+import { useSong, useEditMode } from "../../hooks/song";
+import {SongName} from "./SongName/SongName.tsx";
 
 export default function Song({ deleteSong = null, preferences = null, setPreferences = null }) {
   const song = useSong();
-  const songName = useSongName();
-  const setSongName = useSetSongName();
   const editMode = useEditMode();
   const [chordsHidden, setChordsHidden] = useState(false);
-  const handleSongName = (value: string) => {
-    setSongName(value);
-  };
   const setTransposition = (transposition) => {
     setPreferences((preferences) => {
       return {...preferences, transposition};
@@ -33,20 +28,10 @@ export default function Song({ deleteSong = null, preferences = null, setPrefere
         chordsHidden: chordsHidden,
       })}
     >
-      <ReactSwitch
-        checked={chordsHidden}
-        onChange={setChordsHidden}
-        width={72}
-        onClick={() => null}
-      />
-      <MagicInput
-        className="text-3xl font-bold"
-        value={songName}
-        setValue={handleSongName}
-      />
+      <SongName />
       <div className="flex flex-col gap-2">
         <KeySelector />
-        <CapoSelector value={preferences?.transposition || 0} setValue={setTransposition} basicKey={song.key} />
+        <CapoSelector value={preferences?.transposition || 0} setValue={setTransposition} />
         <BpmSelector />
         <div className="flex gap-2">
           <button

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./views/TextToSong/HighlightedOutput/Block/block.css";
 import "./components/Song/MagicInput/MagicInput.css";
-import "./components/LyricsPlayground/LyricsPlayground.css";
+import "./components/Song/LyricsPlayground/LyricsPlayground.css";
 
 import "react-datepicker/dist/react-datepicker.css";
 

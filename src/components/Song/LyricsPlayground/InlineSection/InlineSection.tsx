@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import {isChordsLine, isChordsLine2} from "../../../utils/keyUtils.ts";
+import {isChordsLine, isChordsLine2} from "../../../../utils/keyUtils.ts";
 import ChordLine from "../ChordLine/ChordLine.tsx";
-import {isSongStructureLine} from "../../../utils/structureCaptionDetector.ts";
+import {isSongStructureLine} from "../../../../utils/structureCaptionDetector.ts";
 import {transpose} from "chord-transposer";
-import { useEditMode } from '../../../hooks/song';
+import { useEditMode } from '../../../../hooks/song';
 
 export default function InlineSection({ section, transposition = 0 }) {
   const editMode = useEditMode();

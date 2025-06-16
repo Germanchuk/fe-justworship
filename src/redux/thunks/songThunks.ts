@@ -6,6 +6,8 @@ export const fetchSongThunk = (songId: string | number) => async (dispatch: Disp
   const data = await fetchAPI(`/currentBandSongs/${songId}`, {
     populate: ['sections'],
   });
+
+  console.log("fetchSongThunk ", data);
   dispatch(setSong(data.data));
   return data.data;
 };

@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import { isChordsLine, isChordsLine2 } from "../../../utils/keyUtils";
 import ChordLine from "./ChordLine/ChordLine";
-import {transpose} from "chord-transposer";
-import {isSongStructureLine} from "../../../utils/structureCaptionDetector.ts";
+import { transpose } from "chord-transposer";
+import { isSongStructureLine } from "../../../utils/structureCaptionDetector.ts";
 import { useEditMode } from '../../../hooks/song';
 
 function NormalText({ children }) {
@@ -73,7 +73,7 @@ const modifiers = [
     internalName: "chordsLine",
     detector: (line) => isChordsLine(line) && isChordsLine2(line),
     Component: (line, index, transposition) => (
-      <ChordLine key={index} chordsTooltipEnabled={true}>
+      <ChordLine key={index}>
         {transposition ? transpose(line).down(transposition).toString() : line}
       </ChordLine>
     ),

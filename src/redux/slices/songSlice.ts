@@ -3,39 +3,42 @@ import { Song } from '../../models';
 
 interface SongState extends Partial<Song> {
   editMode: boolean;
+  song: Partial<Song>;
   initialSong: Partial<Song>;
   preferences: any;
 }
 
 const initialState: SongState = {
-  editMode: false,
+  editMode: true,
+  song: {},
   initialSong: {},
   preferences: {},
 };
 
-const songSlice: Slice<SongState, any> = createSlice({
+const songSlice = createSlice({
   name: 'song',
   initialState,
   reducers: {
-    setSong: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
-    resetSong: () => initialState,
+    setSong: (state, action) => {
+      state.song = action.payload;
+    },
+    resetSong: (state) => {
+      state.song = {};
+    },
     setSongName: (state, action) => {
-      state.name = action.payload;
+      state.song.name = action.payload;
     },
     setBpm: (state, action) => {
-      state.bpm = action.payload;
+      state.song.bpm = action.payload;
     },
     setKey: (state, action) => {
-      state.key = action.payload;
+      state.song.key = action.payload;
     },
     setEditMode: (state, action) => {
       state.editMode = action.payload;
     },
     setSections: (state, action) => {
-      state.sections = action.payload;
+      state.song.sections = action.payload;
     },
     setInitialSong: (state, action) => {
       state.initialSong = action.payload;

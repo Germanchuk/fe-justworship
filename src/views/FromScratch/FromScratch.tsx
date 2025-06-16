@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
 import { resetSong } from "../../redux/slices/songSlice";
 import { useSetEditMode, useSong } from "../../hooks/song";
+import {songApi} from "../../api";
 
 export default function FromScratch() {
   // add intermediate auto saving into localStorage
@@ -22,16 +23,7 @@ export default function FromScratch() {
 
   const createEntry = async () => {
     try {
-      const data = await fetchAPI(
-        "/currentBandSongs",
-        {},
-        {
-          method: "POST",
-          body: JSON.stringify({
-            data: song,
-          }),
-        }
-      );
+      const data = await songApi.createSong(song);
 
       if (data) {
         navigate(`${Routes.PublicSongs}/${data.data.id}`);

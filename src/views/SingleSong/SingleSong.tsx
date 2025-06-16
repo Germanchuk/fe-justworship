@@ -1,18 +1,8 @@
 import React, { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  fetchPreferences,
-  createPreference,
-  updatePreference,
-  saveSong as saveSongRequest,
-  removeSong,
-  copySong as copySongRequest,
-} from "../../services";
 import Song from "../../components/Song/Song";
 import {
-  ArrowLeftIcon,
   DocumentDuplicateIcon,
-  PencilIcon,
 } from "@heroicons/react/24/outline";
 import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
@@ -29,6 +19,8 @@ import {
 } from "../../hooks/song";
 import { fetchSongThunk } from "../../redux/thunks/songThunks";
 import { Routes } from "../../constants/routes";
+import ReactSwitch from "react-switch";
+import {songApi, sPreferencesApi} from "../../api";
 
 export default function SingleSong() {
   const { songId } = useParams();
@@ -36,9 +28,7 @@ export default function SingleSong() {
   const setInitialSong = useSetInitialSong();
   const preferences = usePreferences();
   const setPreferences = useSetPreferences();
-  const editMode = useEditMode();
   const setEditMode = useSetEditMode();
-  const [ error, setError ] = React.useState();
   const dispatch = useDispatch();
   const song = useSong();
   const setSong = useSetSong();
@@ -49,12 +39,16 @@ export default function SingleSong() {
 
   React.useEffect(() => {
     setEditMode(false);
+
+    return () => {
+      dispatch(setSong({})); // reset song
+    }
   }, []);
 
 
   React.useEffect(() => {
     if (!songId) return;
-    fetchPreferences(songId).then((response) => {
+    sPreferencesApi.getPreferences(songId).then((response) => {
       setPreferences(response.data);
     });
   }, [songId]);
@@ -65,21 +59,15 @@ export default function SingleSong() {
       return;
     }
       if (!preferences?.id) {
-        createPreference(songId as string, preferences);
+        sPreferencesApi.createPreferences(songId as string, preferences);
       } else {
-        updatePreference(preferences?.id, preferences);
+        sPreferencesApi.updatePreferences(preferences?.id, preferences);
       }
   }, [preferences, songId]);
 
   React.useEffect(() => {
     if (!songId) return;
     dispatch(fetchSongThunk(songId))
-      .then((data: any) => {
-        setInitialSong(JSON.parse(JSON.stringify(data)));
-      })
-      .catch((error) => {
-        setError(error);
-      });
   }, [songId, dispatch]);
 
   React.useEffect(() => {
@@ -102,7 +90,7 @@ export default function SingleSong() {
   }, [song]);
 
   const saveSong = async () => {
-    await saveSongRequest(songId as string, song)
+    await songApi.updateSong(songId as string, song)
       .then((data) => {
         dispatch(
           addNotificationWithTimeout({
@@ -126,7 +114,7 @@ export default function SingleSong() {
   };
 
   const deleteSong = async () => {
-    await removeSong(songId as string, song).then(() => {
+    songApi.deleteSong(songId, song).then(() => {
       navigate(Routes.BandSongs);
     })
       .catch(() => {
@@ -138,7 +126,7 @@ export default function SingleSong() {
   }
 
   const copySong = () => {
-    copySongRequest(songId as string).then((data) => {
+    songApi.copySong(songId as string).then((data) => {
       navigate(`${Routes.PublicSongs}/${data.data.id}`);
     })
       .catch(() => {
@@ -158,27 +146,20 @@ export default function SingleSong() {
       />
       {isReadonly ?
         <CopyButton copySong={copySong} />
-        : <ToggleModeButton
-        toggleMode={() => setEditMode(!editMode)}
-        editMode={editMode}
-      />}
+        : <ToggleModeButton />}
     </>
   );
 }
 
-function ToggleModeButton({ toggleMode, editMode }) {
+function ToggleModeButton() {
+  const setEditMode = useSetEditMode();
+  const editMode = useEditMode();
   return ReactDOM.createPortal(
-    <div className="fixed bottom-4 right-4">
-      <button
-        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
-        onClick={toggleMode}
-      >
-        {editMode ? (
-          <ArrowLeftIcon className="w-6 h-6" />
-        ) : (
-          <PencilIcon className="w-6 h-6" />
-        )}
-      </button>
+    <div className="fixed bottom-4 right-4 p-2 bg-base-300 rounded-3xl flex items-center">
+      <ReactSwitch
+        checked={!editMode}
+        onChange={(checked) => setEditMode(!checked)}
+      />
     </div>, document.body
   );
 }
