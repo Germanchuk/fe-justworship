@@ -139,11 +139,7 @@ export default function SingleSong() {
 
   return (
     <>
-      <Song
-        deleteSong={deleteSong}
-        preferences={preferences}
-        setPreferences={setPreferences}
-      />
+      <Song deleteSong={deleteSong} />
       {isReadonly ?
         <CopyButton copySong={copySong} />
         : <ToggleModeButton />}
