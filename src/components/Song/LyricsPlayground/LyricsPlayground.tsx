@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import InlineSection from "./InlineSection/InlineSection.tsx";
 import diffSections from "../../../utils/diffSections.ts";
 import parseSections from "../../../utils/parseSections.ts";
-import { useSections, useSetSections, useEditMode} from "../../../hooks/song";
+import {useSections, useSetSections, useEditMode, useSongAsText} from "../../../hooks/song";
 
 export default function LyricsPlayground({
   transposition = 0,
@@ -12,7 +12,7 @@ export default function LyricsPlayground({
   const editMode = useEditMode();
   const sections = useSections();
   const setSections = useSetSections();
-  const [textareaValue, setTextareaValue] = useState("");
+  const textareaValue = useSongAsText();
   const textareaRef = useRef(null);
 
   useEffect(() => {

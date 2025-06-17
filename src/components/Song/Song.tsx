@@ -8,9 +8,9 @@ import {DocumentArrowDownIcon, EyeIcon, EyeSlashIcon} from "@heroicons/react/24/
 import classNames from "classnames";
 import DeleteSong from "./DeleteSong/DeleteSong.tsx";
 import CapoSelector from "./CapoSelector/CapoSelector.tsx";
-import {createDocument} from "../../services";
+import { createDocument } from "../../services";
 import { useSong, useEditMode, usePreferences } from "../../hooks/song";
-import {SongName} from "./SongName/SongName.tsx";
+import { SongName } from "./SongName/SongName.tsx";
 
 export default function Song({ deleteSong = null }) {
   const song = useSong();

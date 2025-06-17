@@ -4,6 +4,7 @@ import { Song } from '../../models';
 interface SongState extends Partial<Song> {
   editMode: boolean;
   song: Partial<Song>;
+  songAsText: string;
   initialSong: Partial<Song>;
   preferences: any;
 }
@@ -11,6 +12,7 @@ interface SongState extends Partial<Song> {
 const initialState: SongState = {
   editMode: true,
   song: {},
+  songAsText: null,
   initialSong: {},
   preferences: {},
 };
@@ -46,6 +48,9 @@ const songSlice = createSlice({
     setPreferences: (state, action) => {
       state.preferences = action.payload;
     },
+    setSongAsText: (state, action) => {
+      state.songAsText = action.payload;
+    }
   },
 });
 
@@ -59,6 +64,7 @@ export const {
   setSections,
   setInitialSong,
   setPreferences,
+  setSongAsText,
 } = songSlice.actions;
 
 export default songSlice.reducer;

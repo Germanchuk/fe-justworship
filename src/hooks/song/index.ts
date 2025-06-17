@@ -10,6 +10,7 @@ import {
 import { remapChords } from '../../utils/keyUtils';
 
 export const useSong = () => useSelector((state: any) => state.song.song);
+export const useSongAsText = () => useSelector((state: any) => state.song.songAsText);
 export const useBpm = () => useSelector((state: any) => state.song.song.bpm);
 export const useKey = () => useSelector((state: any) => state.song.song.key);
 export const useSongName = () => useSelector((state: any) => state.song.song.name);

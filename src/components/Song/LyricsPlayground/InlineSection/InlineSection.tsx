@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {isChordsLine, isChordsLine2} from "../../../../utils/keyUtils.ts";
-import ChordLine from "../ChordLine/ChordLine.tsx";
+import ChordLine from "./ChordLine/ChordLine.tsx";
 import {isSongStructureLine} from "../../../../utils/structureCaptionDetector.ts";
 import {transpose} from "chord-transposer";
 import { useEditMode } from '../../../../hooks/song';
