@@ -9,18 +9,14 @@ import classNames from "classnames";
 import DeleteSong from "./DeleteSong/DeleteSong.tsx";
 import CapoSelector from "./CapoSelector/CapoSelector.tsx";
 import {createDocument} from "../../services";
-import { useSong, useEditMode } from "../../hooks/song";
+import { useSong, useEditMode, usePreferences } from "../../hooks/song";
 import {SongName} from "./SongName/SongName.tsx";
 
-export default function Song({ deleteSong = null, preferences = null, setPreferences = null }) {
+export default function Song({ deleteSong = null }) {
   const song = useSong();
   const editMode = useEditMode();
+  const preferences = usePreferences();
   const [chordsHidden, setChordsHidden] = useState(false);
-  const setTransposition = (transposition) => {
-    setPreferences((preferences) => {
-      return {...preferences, transposition};
-    });
-  };
 
   return (
     <div
@@ -31,7 +27,7 @@ export default function Song({ deleteSong = null, preferences = null, setPrefere
       <SongName />
       <div className="flex flex-col gap-2">
         <KeySelector />
-        <CapoSelector value={preferences?.transposition || 0} setValue={setTransposition} />
+        <CapoSelector />
         <BpmSelector />
         <div className="flex gap-2">
           <button
