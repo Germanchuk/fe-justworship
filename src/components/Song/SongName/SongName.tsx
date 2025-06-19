@@ -1,5 +1,5 @@
-import MagicInput from "../MagicInput/MagicInput.tsx";
-import { useSongName } from "../../../hooks/song";
+import MagicInput from "../../MagicInput/MagicInput.tsx";
+import { useSongName } from "../../../hooks/song/selectors.ts";
 import { handleSongName } from "./actions.ts";
 
 export const SongName = () => {

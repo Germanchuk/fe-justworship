@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { keys } from "../../../utils/keyUtils";
+import { keys } from "../../../../utils/keyUtils.ts";
 import classNames from "classnames";
-import Modal from "../../Modal/Modal.tsx";
-import { useKey } from "../../../hooks/song";
+import Modal from "../../../Modal/Modal.tsx";
+import { useKey } from "../../../../hooks/song/selectors.ts";
 import { handleChangeKey, handleTransposeSong } from "./actions.ts";
 
 export default function KeySelector() {

@@ -1,11 +1,21 @@
 .LyricsPlayground {
+  --line-horisontal-padding: 4px;
   position: relative;
-  margin-left: -8px;
-  margin-right: -8px;
+  line-height: 1.4;
+
+  .Line {
+    padding-left: var(--line-horisontal-padding);
+    padding-right: var(--line-horisontal-padding);
+  }
+
+  &.LyricsPlayground--editMode .Line:nth-child(odd) {
+    background-color: #f6f6f6;
+  }
 }
 
+
 .LyricsPlayground__textarea {
-position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -14,14 +24,19 @@ position: absolute;
   height: 100%;
   resize: none;
   overflow: hidden;
-  /*color: transparent;*/
+  color: transparent;
   display: block;
   background: transparent;
   caret-color: grey;
+  outline: none;
+  padding-left: var(--line-horisontal-padding);
+  padding-right: var(--line-horisontal-padding);
 }
 
 .LyricsPlayground__textarea:focus {
-  outline-style: solid;
-  outline-width: 1px;
-  outline-color: orange;
+  /*outline-style: solid;*/
+  /*outline-width: 1px;*/
+  /*outline-color: orange;*/
+  /*outline: none;*/
+  /*box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.75);*/
 }

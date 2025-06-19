@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import { isChordsLine, isChordsLine2 } from "../../../utils/keyUtils";
-import ChordLine from "./ChordLine/ChordLine";
+import { isChordsLine, isChordsLine2 } from "../../utils/keyUtils.ts";
+import ChordLine from "./ChordLine/ChordLine.tsx";
 import { transpose } from "chord-transposer";
-import { isSongStructureLine } from "../../../utils/structureCaptionDetector.ts";
-import { useEditMode } from '../../../hooks/song';
+import { isSongStructureLine } from "../../utils/structureCaptionDetector.ts";
+import { useEditMode } from '../../hooks/song/selectors.ts';
 
 function NormalText({ children }) {
   return <div style={{ whiteSpace: "pre-wrap" }}>{children}</div>;

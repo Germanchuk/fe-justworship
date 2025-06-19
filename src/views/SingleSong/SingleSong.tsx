@@ -10,17 +10,18 @@ import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.
 import {
   useSong,
   useSetSong,
-  useEditMode,
   useSetEditMode,
   useInitialSong,
   useSetInitialSong,
   usePreferences,
   useSetPreferences,
-} from "../../hooks/song";
+} from "../../hooks/song/selectors.ts";
 import { fetchSongThunk } from "../../redux/thunks/songThunks";
 import { Routes } from "../../constants/routes";
-import ReactSwitch from "react-switch";
 import {songApi, sPreferencesApi} from "../../api";
+import {SwitchEdit} from "../../components/Song/Widgets/SwitchEdit/SwitchEdit.tsx";
+import {CopyButton} from "../../components/Song/Widgets/CopyButton/CopyButton.tsx";
+import {BackButton} from "../../components/BackButton/BackButton.tsx";
 
 export default function SingleSong() {
   const { songId } = useParams();
@@ -33,7 +34,7 @@ export default function SingleSong() {
   const song = useSong();
   const setSong = useSetSong();
   const navigate = useNavigate();
-  const isReadonly = Boolean(initialSong?.readonly);
+  const isReadonly = Boolean(song?.readonly);
   const renderTime = useRef(0);
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -113,63 +114,13 @@ export default function SingleSong() {
       })
   };
 
-  const deleteSong = async () => {
-    songApi.deleteSong(songId, song).then(() => {
-      navigate(Routes.BandSongs);
-    })
-      .catch(() => {
-        dispatch(addNotificationWithTimeout({
-          type: "error",
-          message: "Помилка серверу, не вдалось видалити пісню",
-        }));
-      });
-  }
-
-  const copySong = () => {
-    songApi.copySong(songId as string).then((data) => {
-      navigate(`${Routes.PublicSongs}/${data.data.id}`);
-    })
-      .catch(() => {
-        dispatch(addNotificationWithTimeout({
-          type: "error",
-          message: "Помилка серверу, не вдалось скопіювати пісню",
-        }));
-      });
-  }
-
   return (
     <>
-      <Song deleteSong={deleteSong} />
+      <BackButton />
+      <Song />
       {isReadonly ?
-        <CopyButton copySong={copySong} />
-        : <ToggleModeButton />}
+        <CopyButton songId={songId} />
+        : <SwitchEdit />}
     </>
-  );
-}
-
-function ToggleModeButton() {
-  const setEditMode = useSetEditMode();
-  const editMode = useEditMode();
-  return ReactDOM.createPortal(
-    <div className="fixed bottom-4 right-4 p-2 bg-base-300 rounded-3xl flex items-center">
-      <ReactSwitch
-        checked={!editMode}
-        onChange={(checked) => setEditMode(!checked)}
-      />
-    </div>, document.body
-  );
-}
-
-
-function CopyButton({ copySong }) {
-  return ReactDOM.createPortal(
-    <div className="fixed bottom-4 right-4">
-      <button
-        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
-        onClick={copySong}
-      >
-        <DocumentDuplicateIcon className="w-6 h-6" />
-      </button>
-    </div>, document.body
   );
 }

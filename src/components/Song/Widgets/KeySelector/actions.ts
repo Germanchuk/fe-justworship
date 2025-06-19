@@ -1,6 +1,6 @@
-import store from "../../../redux/store.ts";
-import { setKey, setSections } from "../../../redux/slices/songSlice.ts";
-import { remapChords } from "../../../utils/keyUtils";
+import store from "../../../../redux/store.ts";
+import { setKey, setSections } from "../../../../redux/slices/songSlice.ts";
+import { remapChords } from "../../../../utils/keyUtils.ts";
 
 export const handleChangeKey = (key: string) => {
   store.dispatch(setKey(key));

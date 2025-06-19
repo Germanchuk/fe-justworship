@@ -7,7 +7,7 @@ import { Routes } from "../../constants/routes";
 import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
 import { resetSong } from "../../redux/slices/songSlice";
-import { useSetEditMode, useSong } from "../../hooks/song";
+import { useSetEditMode, useSong } from "../../hooks/song/selectors.ts";
 import {songApi} from "../../api";
 
 export default function FromScratch() {

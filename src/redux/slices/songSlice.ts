@@ -1,18 +1,21 @@
-import { createSlice, Slice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { Song } from '../../models';
 
-interface SongState extends Partial<Song> {
+export interface SongState extends Partial<Song> {
   editMode: boolean;
   song: Partial<Song>;
   initialSong: Partial<Song>;
-  preferences: any;
+  preferences: { transposition: number; chordsHidden: boolean; };
 }
 
 const initialState: SongState = {
   editMode: true,
   song: {},
   initialSong: {},
-  preferences: {},
+  preferences: {
+    transposition: 0,
+    chordsHidden: false
+  },
 };
 
 const songSlice = createSlice({
@@ -44,8 +47,14 @@ const songSlice = createSlice({
       state.initialSong = action.payload;
     },
     setPreferences: (state, action) => {
-      state.preferences = action.payload;
+      state.preferences = {
+        ...state.preferences,
+        ...action.payload
+      };
     },
+    toggleChordsVisibility: (state) => {
+      state.preferences.chordsHidden = !state.preferences.chordsHidden;
+    }
   },
 });
 
@@ -59,6 +68,7 @@ export const {
   setSections,
   setInitialSong,
   setPreferences,
+  toggleChordsVisibility
 } = songSlice.actions;
 
 export default songSlice.reducer;

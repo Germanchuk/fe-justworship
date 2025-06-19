@@ -1,6 +1,6 @@
 import React from "react";
 import { transpose } from "chord-transposer";
-import { useEditMode, useKey, usePreferences } from '../../../hooks/song';
+import { useEditMode, useKey, usePreferences } from '../../../../hooks/song/selectors.ts';
 import { handleTranspositionChange } from "./actions.ts";
 
 const transpositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];

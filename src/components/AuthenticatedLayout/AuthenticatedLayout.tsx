@@ -6,11 +6,15 @@ import { setUser } from "../../redux/slices/userSlice";
 import {ErrorBoundary} from "react-error-boundary";
 import ErrorBoundaryFallback from "../ErrorBoundaryFallback/ErrorBoundaryFallback.tsx";
 import { useLocation } from "react-router-dom";
+import { Routes } from "../../constants/routes.ts"
+import {BackButton} from "../BackButton/BackButton.tsx";
 
 export default function AuthenticatedLayout({ children }) {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user);
   const location = useLocation();
+
+  const isSingleSongScreen = location.pathname.startsWith(Routes.PublicSongs);
 
   useEffect(() => {
     fetchAPI("/users/me", {
@@ -27,7 +31,7 @@ export default function AuthenticatedLayout({ children }) {
 
   return (
     <>
-      <QuickNavbar />
+      {isSingleSongScreen ? <><BackButton /><div className="h-12 w-full"/></> : <QuickNavbar />}
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback} resetKeys={[location.pathname]}>
         {children}
       </ErrorBoundary>

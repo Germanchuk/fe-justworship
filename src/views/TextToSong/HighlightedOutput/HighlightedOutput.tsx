@@ -4,8 +4,8 @@ import { fetchAPI } from "../../../utils/fetch-api";
 import Block from "./Block/Block";
 import EditIcon from "../../../icons/EditIcon";
 import ArrowLeftIcon from "../../../icons/ArrowLeftIcon";
-import MagicInput from "../../../components/Song/MagicInput/MagicInput";
-import { useEditMode, useSetEditMode } from "../../../hooks/song";
+import MagicInput from "../../../components/MagicInput/MagicInput";
+import { useEditMode, useSetEditMode } from "../../../hooks/song/selectors.ts";
 import { ContentBlock, SongObject } from "../../../utils/compiler/compiler";
 import ReactDOM from "react-dom";
 

@@ -1,13 +1,10 @@
 import classNames from "classnames";
 import { useRef } from "react";
 import InlineSection from "./InlineSection/InlineSection.tsx";
-import { useSections, useEditMode } from "../../../hooks/song";
+import { useSections, useEditMode } from "../../../hooks/song/selectors.ts";
 import { handleSongTextChange } from "./actions";
 
-export default function LyricsPlayground({
-  transposition = 0,
-  className,
-}: any) {
+export default function LyricsPlayground() {
   const editMode = useEditMode();
   const sections = useSections();
   const textareaRef = useRef(null);
@@ -21,34 +18,35 @@ export default function LyricsPlayground({
       .join("") ?? "";
 
   return (
-    <div className={classNames("LyricsPlayground", "min-h-96", className)}>
-      <div className={classNames("LyricsPlayground__output p-2")}>
-        {sections?.map((section, index) => {
-          return (
-            <>
-              <InlineSection
-                key={section.id ?? index}
-                section={section}
-                transposition={transposition}
-              />
-              {index < sections.length - 1 &&
-                Array.from({ length: (section.spacing ?? 2) - 1 }).map((_, i) => (
-                  <br key={`br-${index}-${i}`} />
-                ))}
-            </>
-          );
-        })}
+    <div className={classNames("py-2", {["shadow-2xl"]: editMode})}>
+      <div className={classNames("LyricsPlayground", "min-h-96", {["LyricsPlayground--editMode"]: editMode})}>
+        <div className={classNames("LyricsPlayground__output")}>
+          {sections?.map((section, index) => {
+            return (
+              <>
+                <InlineSection
+                  key={section.id ?? index}
+                  section={section}
+                />
+                {index < sections.length - 1 &&
+                  Array.from({ length: (section.spacing ?? 2) - 1 }).map((_, i) => (
+                    <div className={classNames("Line")}><br key={`br-${index}-${i}`} /></div>
+                  ))}
+              </>
+            );
+          })}
+        </div>
+        {editMode && (<textarea
+          ref={textareaRef}
+          className={classNames(
+            "LyricsPlayground__textarea",
+          )}
+          value={textareaValue}
+          onChange={handleSongTextChange}
+          autoComplete="off"
+          autoCorrect="off"
+        />)}
       </div>
-      {!editMode && (<textarea
-        ref={textareaRef}
-        className={classNames(
-          "LyricsPlayground__textarea border border-solid border-base-300 p-2",
-        )}
-        value={textareaValue}
-        onChange={handleSongTextChange}
-        autoComplete="off"
-        autoCorrect="off"
-      />)}
     </div>
   );
 }

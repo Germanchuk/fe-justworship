@@ -3,15 +3,16 @@ import {isChordsLine, isChordsLine2} from "../../../../utils/keyUtils.ts";
 import ChordLine from "./ChordLine/ChordLine.tsx";
 import {isSongStructureLine} from "../../../../utils/structureCaptionDetector.ts";
 import {transpose} from "chord-transposer";
-import { useEditMode } from '../../../../hooks/song';
+import {useEditMode, useTransposition} from '../../../../hooks/song/selectors.ts';
 
-export default function InlineSection({ section, transposition = 0 }) {
+export default function InlineSection({ section }) {
   const editMode = useEditMode();
+  const transposition = useTransposition();
   const actualTransposition = editMode ? 0 : transposition;
   return section?.content?.split("\n").map((line, index) => {
     const modifier = modifiers.find((m) => m.detector(line, index));
     return (
-      <div>
+      <div className={"Line"}>
         {modifier
           ? modifier.Component(line, index, actualTransposition)
           : <NormalText key={index}>{line}</NormalText>}

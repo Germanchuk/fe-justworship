@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import MagicInput from "../../../../components/Song/MagicInput/MagicInput";
-import { useEditMode } from "../../../../hooks/song";
+import MagicInput from "../../../../components/MagicInput/MagicInput";
+import { useEditMode } from "../../../../hooks/song/selectors.ts";
 
 export default function Block({ data }) {
   const editMode = useEditMode();

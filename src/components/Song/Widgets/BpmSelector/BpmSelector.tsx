@@ -1,5 +1,5 @@
-import MagicInput from '../MagicInput/MagicInput';
-import { useBpm } from '../../../hooks/song';
+import MagicInput from '../../../MagicInput/MagicInput.tsx';
+import { useBpm } from '../../../../hooks/song/selectors.ts';
 import { handleBpmChange } from "./actions.ts";
 
 export default function BpmSelector() {

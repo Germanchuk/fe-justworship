@@ -1,22 +1,17 @@
-import MagicInput from "./MagicInput/MagicInput";
 import LyricsPlayground from "./LyricsPlayground/LyricsPlayground";
 import "./Song.css";
-import KeySelector from "./KeySelector/KeySelector";
-import BpmSelector from "./BpmSelector/BpmSelector";
-import { useState } from "react";
-import {DocumentArrowDownIcon, EyeIcon, EyeSlashIcon} from "@heroicons/react/24/outline";
+import KeySelector from "./Widgets/KeySelector/KeySelector";
+import BpmSelector from "./Widgets/BpmSelector/BpmSelector";
 import classNames from "classnames";
 import DeleteSong from "./DeleteSong/DeleteSong.tsx";
-import CapoSelector from "./CapoSelector/CapoSelector.tsx";
-import { createDocument } from "../../services";
-import { useSong, useEditMode, usePreferences } from "../../hooks/song";
+import CapoSelector from "./Widgets/CapoSelector/CapoSelector.tsx";
+import { useChordsVisibility } from "../../hooks/song/selectors.ts";
 import { SongName } from "./SongName/SongName.tsx";
+import {ExportDoc} from "./Widgets/ExportDoc/ExportDoc.tsx";
+import {HideChords} from "./Widgets/HideChords/HideChords.tsx";
 
-export default function Song({ deleteSong = null }) {
-  const song = useSong();
-  const editMode = useEditMode();
-  const preferences = usePreferences();
-  const [chordsHidden, setChordsHidden] = useState(false);
+export default function Song() {
+  const chordsHidden = useChordsVisibility();
 
   return (
     <div
@@ -25,32 +20,19 @@ export default function Song({ deleteSong = null }) {
       })}
     >
       <SongName />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
+        {/* column-like widget-zone */}
         <KeySelector />
         <CapoSelector />
         <BpmSelector />
         <div className="flex gap-2">
-          <button
-            className="btn btn-sm"
-            onClick={() => setChordsHidden(!chordsHidden)}
-          >
-            {chordsHidden ? <EyeIcon className="w-4"/>
-              : <EyeSlashIcon className="w-4"/>}
-            {chordsHidden ? "Показати" : "Сховати"} акорди
-          </button>
-          <button
-            className="btn btn-sm"
-            onClick={() => createDocument(song)}
-          >
-            <DocumentArrowDownIcon className="w-5"/>
-            .docx
-          </button>
+          {/* row-like widget zone */}
+          <HideChords />
+          <ExportDoc />
         </div>
       </div>
-      <LyricsPlayground
-        transposition={preferences?.transposition || 0}
-      />
-      {editMode && deleteSong && <DeleteSong deleteSong={deleteSong}/>}
+      <LyricsPlayground />
+      <DeleteSong />
     </div>
   );
 }

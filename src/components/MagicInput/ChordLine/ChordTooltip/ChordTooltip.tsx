@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import "./ChordTooltip.css";
-import getChordImg from "../../../../../utils/getChordImg";
+import getChordImg from "../../../../utils/getChordImg.ts";
 
 const ChordTooltip = ({ children }) => {
   const [visible, setVisible] = useState(false);
