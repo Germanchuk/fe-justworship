@@ -5,6 +5,7 @@ import Block from "./Block/Block";
 import EditIcon from "../../../icons/EditIcon";
 import ArrowLeftIcon from "../../../icons/ArrowLeftIcon";
 import MagicInput from "../../../components/Song/MagicInput/MagicInput";
+import { useEditMode, useSetEditMode } from "../../../hooks/song";
 import { ContentBlock, SongObject } from "../../../utils/compiler/compiler";
 import ReactDOM from "react-dom";
 
@@ -16,7 +17,12 @@ export default function SingleSong({
   hideSongName?: boolean;
 }) {
   // const { songId } = useParams();
-  const [editMode, setEditMode] = React.useState(false);
+  const editMode = useEditMode();
+  const setEditMode = useSetEditMode();
+
+  useEffect(() => {
+    setEditMode(false);
+  }, [setEditMode]);
   // const [song, setSong] = React.useState<SongObject>(songObject);
   // useEffect(() => {
   //   fetchAPI(`/songs/${songId}`).then((data) => {
@@ -32,12 +38,12 @@ export default function SingleSong({
     <div className="p-4">
       {!hideSongName && (
         <div className="mb-4">
-          <SongTitle editMode={editMode}>{songObject?.name}</SongTitle>
+          <SongTitle>{songObject?.name}</SongTitle>
         </div>
       )}
       <div className="grid grid-cols-1 gap-7 text-lg">
         {songObject.blocks.map((block: ContentBlock, index) => {
-          return <Block data={block} key={index} editMode={editMode} />;
+          return <Block data={block} key={index} />;
         })}
       </div>
       <ToggleModeButton setEditMode={setEditMode} editMode={editMode} />
@@ -45,7 +51,8 @@ export default function SingleSong({
   );
 }
 
-function SongTitle({ children, editMode }) {
+function SongTitle({ children }) {
+  const editMode = useEditMode();
   if (editMode) {
     return (
       <MagicInput className="text-3xl font-bold tracking-tight focus:outline-neutral">

@@ -2,11 +2,10 @@ import React, { useEffect } from "react";
 import {
   KeyIcon,
   AtSymbolIcon,
-  ArrowRightIcon,
   EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import { registerUser } from "../../utils/fetch-api";
+import { registerUser } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";

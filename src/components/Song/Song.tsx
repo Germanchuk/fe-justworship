@@ -1,49 +1,22 @@
 import MagicInput from "./MagicInput/MagicInput";
-import SongSections from "./SongSections/SongSections";
+import LyricsPlayground from "./LyricsPlayground/LyricsPlayground";
 import "./Song.css";
 import KeySelector from "./KeySelector/KeySelector";
-import {useState} from "react";
+import BpmSelector from "./BpmSelector/BpmSelector";
+import { useState } from "react";
 import {DocumentArrowDownIcon, EyeIcon, EyeSlashIcon} from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import {remapChords} from "../../utils/keyUtils";
 import DeleteSong from "./DeleteSong/DeleteSong.tsx";
 import CapoSelector from "./CapoSelector/CapoSelector.tsx";
-import {createDocument} from "../../services";
+import { createDocument } from "../../services";
+import { useSong, useEditMode, usePreferences } from "../../hooks/song";
+import { SongName } from "./SongName/SongName.tsx";
 
-export default function Song({song, setSong, deleteSong = null, editMode, preferences = null, setPreferences = null}) {
+export default function Song({ deleteSong = null }) {
+  const song = useSong();
+  const editMode = useEditMode();
+  const preferences = usePreferences();
   const [chordsHidden, setChordsHidden] = useState(false);
-  const handleSongName = (value) => {
-    setSong((song) => {
-      return {...song, name: value};
-    });
-  };
-
-  const setBpm = (value) => {
-    setSong((song) => {
-      return {...song, bpm: value.replace(/\D+/g, "")};
-    });
-  };
-
-  const setBasicKey = (newKey, {shouldRemapSections = false} = {}) => {
-    setSong((song) => {
-      if (shouldRemapSections) {
-        song.sections = remapChords(
-          song.sections,
-          song.key,
-          newKey
-        )
-      }
-      return {
-        ...song,
-        key: newKey
-      };
-    });
-  };
-  const setTransposition = (transposition) => {
-    setPreferences((preferences) => {
-      return {...preferences, transposition};
-    });
-  };
 
   return (
     <div
@@ -51,28 +24,11 @@ export default function Song({song, setSong, deleteSong = null, editMode, prefer
         chordsHidden: chordsHidden,
       })}
     >
-      <MagicInput
-        className="text-3xl font-bold"
-        value={song.name}
-        setValue={handleSongName}
-        editMode={editMode}
-      />
+      <SongName />
       <div className="flex flex-col gap-2">
-        <KeySelector
-          basicKey={song.key}
-          setBasicKey={setBasicKey}
-        />
-        <CapoSelector value={preferences?.transposition || 0} setValue={setTransposition} basicKey={song.key}
-                      editMode={editMode}/>
-        <div className="flex gap-2 items-center">
-          <div className="text font-semibold">Темп:</div>
-          <MagicInput
-            className="px-2 text-xl rounded w-20"
-            value={String(song.bpm)}
-            setValue={setBpm}
-            editMode={editMode}
-          />
-        </div>
+        <KeySelector />
+        <CapoSelector />
+        <BpmSelector />
         <div className="flex gap-2">
           <button
             className="btn btn-sm"
@@ -91,7 +47,9 @@ export default function Song({song, setSong, deleteSong = null, editMode, prefer
           </button>
         </div>
       </div>
-      <SongSections song={song} setSong={setSong} editMode={editMode} transposition={preferences?.transposition || 0}/>
+      <LyricsPlayground
+        transposition={preferences?.transposition || 0}
+      />
       {editMode && deleteSong && <DeleteSong deleteSong={deleteSong}/>}
     </div>
   );

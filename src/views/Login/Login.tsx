@@ -4,7 +4,7 @@ import {
   AtSymbolIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import { loginUser } from "../../utils/fetch-api";
+import { loginUser } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";

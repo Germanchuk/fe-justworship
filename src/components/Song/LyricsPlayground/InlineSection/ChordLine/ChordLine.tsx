@@ -1,5 +1,5 @@
 import React from "react";
-import ChordTooltip from "./ChordTooltip/ChordTooltip";
+import ChordTooltip from "./ChordTooltip/ChordTooltip.tsx";
 
 export default function ChordLine({ children }) {
   const parts = children.split(/(\s+)/);
