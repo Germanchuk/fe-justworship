@@ -5,12 +5,7 @@ import parseSections from "../../../utils/parseSections.ts";
 import diffSections from "../../../utils/diffSections.ts";
 import { Section } from "../../../models";
 
-interface HistorySnapshot {
-  text: string;
-  sections: Section[];
-}
-
-const history: HistorySnapshot[] = [];
+const history: any = [];
 let historyIndex = -1;
 
 export const handleSongTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
