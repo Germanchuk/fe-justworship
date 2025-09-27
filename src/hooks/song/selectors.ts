@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   setSong,
   setEditMode,
-  setInitialSong,
   setPreferences,
 } from '../../redux/slices/songSlice';
 
@@ -11,8 +10,8 @@ export const useBpm = () => useSelector((state: any) => state.song.song.bpm);
 export const useKey = () => useSelector((state: any) => state.song.song.key);
 export const useSongName = () => useSelector((state: any) => state.song.song.name);
 export const useEditMode = () => useSelector((state: any) => state.song.editMode);
+export const useStatus = () => useSelector((state: any) => state.song.status);
 export const useSections = () => useSelector((state: any) => state.song.song.sections);
-export const useInitialSong = () => useSelector((state: any) => state.song.initialSong);
 
 export const usePreferences = () => useSelector((state: any) => state.song.preferences);
 export const useChordsVisibility = () => useSelector((state: any) => state.song.preferences.chordsHidden);
@@ -26,11 +25,6 @@ export const useSetSong = () => {
 export const useSetEditMode = () => {
   const dispatch = useDispatch();
   return (mode: boolean) => dispatch(setEditMode(mode));
-};
-
-export const useSetInitialSong = () => {
-  const dispatch = useDispatch();
-  return (song: any) => dispatch(setInitialSong(song));
 };
 
 export const useSetPreferences = () => {

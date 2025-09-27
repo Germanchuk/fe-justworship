@@ -22,14 +22,12 @@ export function CopyButton({ songId}) {
         }));
       });
   }
-  return ReactDOM.createPortal(
-    <div className="fixed bottom-4 right-4">
-      <button
-        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
-        onClick={copySong}
-      >
-        <DocumentDuplicateIcon className="w-6 h-6" />
-      </button>
-    </div>, document.body
+  return (
+    <button
+      className="btn btn-circle btn-dash"
+      onClick={copySong}
+    >
+      <DocumentDuplicateIcon className="w-6 h-6" />
+    </button>
   );
 }

@@ -10,7 +10,7 @@ export interface ParsedSection {
  * newlines encountered is stored in the `spacing` field so blank lines can be
  * preserved when reconstructing the text later.
  */
-export default function parseSections(rawText: string): ParsedSection[] {
+export default function parseValueToSections(rawText: string): ParsedSection[] {
   const result: ParsedSection[] = [];
   let buffer = "";
 

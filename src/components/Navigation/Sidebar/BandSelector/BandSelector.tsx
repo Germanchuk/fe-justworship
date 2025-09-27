@@ -71,7 +71,7 @@ export default function BandSelector({ bands, currentBand }) {
               {bands?.map((band) => (
                 <li key={band.id} onClick={handleBandChange(band?.id)}>
                   <span
-                    className={classNames("bg-base-200 opacity-30", { // out of MVP
+                    className={classNames("bg-base-200", { // out of MVP
                       "bg-base-300": band?.id === currentBand?.id,
                     })}
                   >

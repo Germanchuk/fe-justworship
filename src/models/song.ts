@@ -12,3 +12,5 @@ export interface Section {
   content: string;
   spacing: number;
 }
+
+export type Status = "error" | "saved" | "saving" | "pending";

@@ -1,8 +1,21 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {useState, useRef, useEffect, CSSProperties} from "react";
 
-const Dropdown = ({ trigger, children }) => {
+const Dropdown = ({
+  trigger,
+  children,
+  position = "bottom",
+  className = "w-60",
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const style: CSSProperties = {
+    position: "absolute",
+    right: 0,
+    zIndex: 1
+  };
+
+  style.top = position === "bottom" ? "100%" : "-8px";
+  style.transform = position === "bootom" ? "" : "translateY(-100%)"
 
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
@@ -28,8 +41,8 @@ const Dropdown = ({ trigger, children }) => {
       <div onClick={handleToggle}>{trigger(isOpen)}</div>
       {isOpen && (
         <div
-          className="w-60"
-          style={{ position: "absolute", top: "100%", right: 0, zIndex: 1 }}
+          className={className}
+          style={style}
         >
           {children}
         </div>

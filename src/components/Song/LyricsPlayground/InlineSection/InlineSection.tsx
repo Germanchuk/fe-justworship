@@ -10,7 +10,7 @@ export default function InlineSection({ section }) {
   const transposition = useTransposition();
   const actualTransposition = editMode ? 0 : transposition;
   return section?.content?.split("\n").map((line, index) => {
-    const modifier = modifiers.find((m) => m.detector(line, index));
+    const modifier = modifiers.find((m) => m.detector(line, false));
     return (
       <div className={"Line"}>
         {modifier
@@ -21,16 +21,16 @@ export default function InlineSection({ section }) {
   });
 }
 
-function NormalText({children}) {
-  return <div style={{whiteSpace: "pre-wrap"}}>{children}</div>;
+export function NormalText({children}) {
+  return <div className={"pr-4 pl-1"} style={{whiteSpace: "pre-wrap"}}>{children}</div>;
 }
 
-const modifiers = [
+export const modifiers = [
   {
     internalName: "emptyLine",
     detector: (line) => !line,
     Component: (_, index, caretPos = false) => (
-      <div className={classNames({"bg-base-200": index !== caretPos})}
+      <div className={classNames({"pr-4 pl-1": index !== caretPos})}
            key={index}>
         <br/>
       </div>
@@ -47,10 +47,10 @@ const modifiers = [
   },
   {
     internalName: "blockTitle",
-    detector: (line, index) => index === 0 && isSongStructureLine(line),
+    detector: (line, firstSectionLine) => firstSectionLine && isSongStructureLine(line),
     Component: (line, index) => (
       <div
-        className="LyricsPlayground__blockTitle inline-block bg-accent rounded whitespace-pre"
+        className="LyricsPlayground__blockTitle bg-base-200 whitespace-pre pr-4 pl-1"
         key={index}
       >
         {line}

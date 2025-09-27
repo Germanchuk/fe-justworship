@@ -19,7 +19,7 @@ export const songApi = {
   updateSong: (songId, song) => fetchAPI(`/currentBandSongs/${songId}`, {}, {
     method: "PUT",
     body: JSON.stringify({data: song}),
-  }),
+  }, true),
   deleteSong: (songId, song) => fetchAPI(`/currentBandSongs/${songId}`, {}, {
     method: "DELETE",
     body: song, // do we need this body ?

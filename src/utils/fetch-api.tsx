@@ -9,10 +9,11 @@ export function getStrapiURL(path = "") {
 export async function fetchAPI(
   path: string,
   urlParamsObject: any = {},
-  options = {}
+  options = {},
+  avoidGlobalLoader = false
 ) {
   const token = localStorage.getItem("authToken");
-  store.dispatch(enableGlobalLoader());
+  if (!avoidGlobalLoader) store.dispatch(enableGlobalLoader());
   try {
     // Merge default and user options
     const mergedOptions = {

@@ -8,7 +8,7 @@
     padding-right: var(--line-horisontal-padding);
   }
 
-  &.LyricsPlayground--editMode .Line:nth-child(odd) {
+  &.LyricsPlayground--editMode .InlineSection .Line:nth-child(odd) {
     background-color: #f6f6f6;
   }
 }
@@ -25,12 +25,13 @@
   resize: none;
   overflow: hidden;
   color: transparent;
+  /*color: violet;*/
   display: block;
   background: transparent;
   caret-color: grey;
   outline: none;
-  padding-left: var(--line-horisontal-padding);
-  padding-right: var(--line-horisontal-padding);
+  /*padding-left: var(--line-horisontal-padding);*/
+  /*padding-right: var(--line-horisontal-padding);*/
 }
 
 .LyricsPlayground__textarea:focus {
