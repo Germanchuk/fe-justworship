@@ -4,6 +4,7 @@ import {Chunk} from "./Chunk.tsx";
 import {syncValueWithSections} from "./actions.ts";
 import ChunkedTextarea from "./ChunkedTextarea.tsx";
 import {useCallback} from "react";
+import {sectionsToLinesStream} from "../utils/songUtils.ts";
 
 export default function LyricsPlayground({ sections }) {
   // common format is Array<string> named linesStream;
@@ -17,14 +18,7 @@ export default function LyricsPlayground({ sections }) {
 
   const isLessThanSM = !useBreakpoint(Breakpoints.SM);
 
-  const songString =  sections?.
-  map((s) => {
-    const sep = "\n".repeat(s.spacing ?? 2);
-    return s.content + sep;
-  })
-    .join("") ?? "";
-
-  const linesStream = songString.split("\n");
+  const linesStream = sectionsToLinesStream(sections);
 
   function handleSingleChunk(e) {
     syncValueWithSections(e.target.value);

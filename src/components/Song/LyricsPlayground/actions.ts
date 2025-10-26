@@ -1,4 +1,3 @@
-import type React from "react";
 import store from "../../../redux/store.ts";
 import { setSections } from "../../../redux/slices/songSlice.ts";
 import parseValueToSections from "../../../utils/parseValueToSections.ts";

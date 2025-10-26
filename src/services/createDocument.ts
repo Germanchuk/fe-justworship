@@ -1,6 +1,6 @@
 import {Document, Packer, Paragraph, TextRun} from "docx";
 import { saveAs } from "file-saver";
-import {isChordsLine, isChordsLine2} from "../utils/keyUtils.ts";
+import {isChordsLine} from "../utils/keyUtils.ts";
 import {isSongStructureLine} from "../utils/structureCaptionDetector.ts";
 import store from "../redux/store.ts";
 
@@ -142,7 +142,7 @@ function handleLines(sectionsContent) {
 }
 
 function getStyle(line, index) {
-  if (isChordsLine(line) && isChordsLine2(line)) {
+  if (isChordsLine(line)) {
     return {
       color: "#ff5733",
       bold: true

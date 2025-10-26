@@ -1,8 +1,10 @@
 import {CopyButton} from "./CopyButton/CopyButton.tsx";
 import {SwitchEdit} from "./SwitchEdit/SwitchEdit.tsx";
-import {CheckCircleIcon, ClockIcon, ExclamationCircleIcon} from "@heroicons/react/24/outline";
+import {CheckCircleIcon, ClockIcon, ExclamationCircleIcon, LockClosedIcon, PlayIcon} from "@heroicons/react/24/outline";
 import {useStatus} from "../../../hooks/song/selectors.ts";
 import {MoreOptions} from "./MoreOptions/MoreOptions.tsx";
+import React from "react";
+import {playSound} from "../../../services";
 
 export const SongControls = ({
   isReadonly,
@@ -18,6 +20,12 @@ export const SongControls = ({
       </div>
       <div className="flex gap-1">
         {/* any options zone */}
+        <button
+          className="btn btn-circle btn-dash"
+          onClick={playSound}
+        >
+          <PlayIcon className="w-6 h-6" />
+        </button>
         {
           isReadonly
             ? <CopyButton songId={songId} />

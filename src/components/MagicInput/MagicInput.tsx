@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { isChordsLine, isChordsLine2 } from "../../utils/keyUtils.ts";
+import { isChordsLine } from "../../utils/keyUtils.ts";
 import ChordLine from "./ChordLine/ChordLine.tsx";
 import { transpose } from "chord-transposer";
 import { isSongStructureLine } from "../../utils/structureCaptionDetector.ts";
@@ -71,7 +71,7 @@ const modifiers = [
   },
   {
     internalName: "chordsLine",
-    detector: (line) => isChordsLine(line) && isChordsLine2(line),
+    detector: (line) => isChordsLine(line),
     Component: (line, index, transposition) => (
       <ChordLine key={index}>
         {transposition ? transpose(line).down(transposition).toString() : line}
