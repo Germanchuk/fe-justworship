@@ -6,7 +6,8 @@ import getChordImg from "../../../../../../utils/getChordImg.ts";
 const ChordTooltip = ({ children }) => {
   const [visible, setVisible] = useState(false);
   const triggerRef = useRef();
-
+  // here is where my chord live
+  // you should come up with some approach to highlight currently playing chord
   return (
     <span
       ref={triggerRef}

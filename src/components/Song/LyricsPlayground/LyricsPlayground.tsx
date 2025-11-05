@@ -4,7 +4,7 @@ import {Chunk} from "./Chunk.tsx";
 import {syncValueWithSections} from "./actions.ts";
 import ChunkedTextarea from "./ChunkedTextarea.tsx";
 import {useCallback} from "react";
-import {sectionsToLinesStream} from "../utils/songUtils.ts";
+import {sectionsToLinesStream} from "../services/sectionsToLinesStream.ts";
 
 export default function LyricsPlayground({ sections }) {
   // common format is Array<string> named linesStream;

@@ -4,13 +4,14 @@ import {CheckCircleIcon, ClockIcon, ExclamationCircleIcon, LockClosedIcon, PlayI
 import {useStatus} from "../../../hooks/song/selectors.ts";
 import {MoreOptions} from "./MoreOptions/MoreOptions.tsx";
 import React from "react";
-import {playSound} from "../../../services";
+import ChordsProgressionPlayer from "../services/ChordsProgressionPlayer/ChordsProgressionPlayer.ts";
 
 export const SongControls = ({
   isReadonly,
   songId
 }) => {
   const status = useStatus();
+  const playSound = ChordsProgressionPlayer.getInstance().play;
   return (
     <div className="w-full flex justify-between">
       <div>
@@ -24,6 +25,7 @@ export const SongControls = ({
           className="btn btn-circle btn-dash"
           onClick={playSound}
         >
+          {/* here you should add pause button and stop button*/}
           <PlayIcon className="w-6 h-6" />
         </button>
         {
