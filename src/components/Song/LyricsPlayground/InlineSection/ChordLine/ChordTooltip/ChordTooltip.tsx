@@ -4,6 +4,7 @@ import classNames from "classnames";
 import "./ChordTooltip.css";
 import getChordImg from "../../../../../../utils/getChordImg.ts";
 import ChordsProgressionPlayer from "../../../services/ChordsProgressionPlayer/ChordsProgressionPlayer.ts";
+import {useChordSequenceId} from "../../../ChordSequenceContext.tsx";
 
 const normalizeChord = (value: string) => value.trim().toLowerCase();
 
@@ -17,6 +18,7 @@ const ChordTooltip = ({ children }: ChordTooltipProps) => {
   const [isActive, setIsActive] = useState(false);
   const chordLabel = useMemo(() => String(children ?? "").trim(), [children]);
   const normalizedChord = useMemo(() => normalizeChord(chordLabel), [chordLabel]);
+  const chordId = useChordSequenceId();
 
   useEffect(() => {
     if (!normalizedChord) {
@@ -30,9 +32,13 @@ const ChordTooltip = ({ children }: ChordTooltipProps) => {
         setIsActive(false);
         return;
       }
+      if (chordId != null) {
+        setIsActive(event.id === chordId);
+        return;
+      }
       setIsActive(normalizeChord(event.chord) === normalizedChord);
     });
-  }, [normalizedChord]);
+  }, [chordId, normalizedChord]);
 
   return (
     <span

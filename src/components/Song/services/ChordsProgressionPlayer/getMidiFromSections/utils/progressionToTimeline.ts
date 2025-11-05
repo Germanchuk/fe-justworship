@@ -1,6 +1,7 @@
 import type {ChordEvent} from "./createMidiFromProgression.ts";
 
 export interface ChordTimelineEvent {
+  id: number;
   chord: string | null;
   start: number; // seconds from the beginning of the transport
   duration: number; // seconds
@@ -24,9 +25,10 @@ export function progressionToTimeline(
   let accumulatedBeats = 0;
 
   return progression
-    .map((event) => {
+    .map((event, index) => {
       const beats = Math.max(0, event.duration ?? 0);
       const timelineEvent: ChordTimelineEvent = {
+        id: event.id ?? index,
         chord: event.chord,
         start: accumulatedBeats * beatDuration,
         duration: beats * beatDuration,

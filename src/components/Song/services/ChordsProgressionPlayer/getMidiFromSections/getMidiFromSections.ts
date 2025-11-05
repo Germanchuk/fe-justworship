@@ -19,7 +19,11 @@ export const getMidiFromSections = (): PreparedMidiData => {
 
   const progression = sectionsToLinesStream(sections)
     .filter((line) => (isChordsLine(line)))
-    .flatMap((line) => chordLineToProgressionMap(line)) as ChordEvent[];
+    .flatMap((line) => chordLineToProgressionMap(line))
+    .map((event, index) => ({
+      ...(event as ChordEvent),
+      id: index,
+    })) as ChordEvent[];
 
   const midi = createMidiFromProgression(progression, bpm);
   const timeline = progressionToTimeline(progression, bpm);

@@ -4,6 +4,7 @@ import * as Note from "@tonaljs/note";
 import { toMidi } from "@tonaljs/midi";
 
 export interface ChordEvent {
+  id?: number;
   chord: string | null; // null/REST/N.C. = пауза
   duration: number;     // у долях (beats)
 }
