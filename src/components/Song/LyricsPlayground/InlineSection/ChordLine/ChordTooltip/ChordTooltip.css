@@ -2,6 +2,13 @@
   position: relative;
   display: inline-block;
   cursor: pointer;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.ChordTooltip__wrapper--active {
+  color: hsl(var(--s, var(--bc)));
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.35);
+  font-weight: 700;
 }
 
 .ChordTooltip {

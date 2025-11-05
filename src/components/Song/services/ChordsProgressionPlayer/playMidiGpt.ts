@@ -1,8 +1,5 @@
 import * as Tone from "tone";
 import { Midi } from "@tonejs/midi";
-import padSample from "./pad-c4.mp3";
-import pianoSample from "./c4-piano.wav";
-import lotusPond from "./lotus-pond.m4a";
 import {createPad} from "./createPad/createPad.ts";
 import {createPiano} from "./createPiano/createPiano.ts";
 
@@ -15,18 +12,29 @@ interface MidiEvent {
   velocity: number;
 }
 
-interface PlayOptions {
+export interface PlayOptions {
   bpm?: number;
   metronome?: boolean;     // default: true
   metronomePan?: number;   // -1..1; 1 — правий
   padVolume?: number;      // дБ
   pianoVolume?: number;    // дБ
+  onEnded?: () => void;
 }
 
 interface MetronomeCtrl {
   start(at?: BBSTime | number): void;
   stop(): void;
   dispose(): void;
+}
+
+export type MidiPlayerState = "idle" | "loading" | "playing" | "paused";
+
+export interface MidiPlaybackControls {
+  stop(options?: { hard?: boolean; fadeOut?: number }): void;
+  pause(): void;
+  resume(): void;
+  dispose(): void;
+  getState(): MidiPlayerState;
 }
 
 function toBBS(sec: number): BBSTime {
@@ -40,13 +48,13 @@ function extractSignatureAndTempo(midi: Midi, fallbackBpm = 70) {
 }
 
 function setupTransport(num: number, den: number, bpm: number) {
-  const T = Tone.getTransport();
-  T.cancel();
-  T.stop();
-  T.position = 0;
-  T.timeSignature = [num, den];
-  T.bpm.value = bpm;
-  return T;
+  const Transport = Tone.Transport;
+  Transport.cancel();
+  Transport.stop();
+  Transport.position = 0;
+  Transport.timeSignature = [num, den];
+  Transport.bpm.value = bpm;
+  return Transport;
 }
 
 function midiToBBSEvents(midi: Midi): MidiEvent[] {
@@ -99,6 +107,12 @@ function computeEndBBS(midi: Midi): BBSTime {
   return toBBS(maxEndSec);
 }
 
+function setDestinationVolumeImmediately(volume: number) {
+  const destination = Tone.Destination;
+  destination.volume.cancelAndHoldAtTime(destination.context.currentTime);
+  destination.volume.value = volume;
+}
+
 // =================== КЛАС ===================
 
 export class MidiPlayer {
@@ -106,14 +120,41 @@ export class MidiPlayer {
   private metro: MetronomeCtrl | null = null;
   private pad: Tone.Sampler | null = null;
   private piano: Tone.Sampler | null = null;
-  private isPlaying = false;
+  private state: MidiPlayerState = "idle";
+  private endEventId: number | null = null;
+  private fadeTimerId: number | null = null;
 
   constructor(private defaults: PlayOptions = {}) {}
 
-  async play(midi: Midi, opts: PlayOptions = {}) {
+  getState(): MidiPlayerState {
+    return this.state;
+  }
+
+  private setState(next: MidiPlayerState) {
+    this.state = next;
+  }
+
+  private clearFadeTimer() {
+    if (this.fadeTimerId != null) {
+      Tone.getContext().clearTimeout(this.fadeTimerId);
+      this.fadeTimerId = null;
+    }
+  }
+
+  private cancelEndEvent() {
+    if (this.endEventId != null) {
+      Tone.Transport.clear(this.endEventId);
+      this.endEventId = null;
+    }
+  }
+
+  async play(midi: Midi, opts: PlayOptions = {}): Promise<MidiPlaybackControls> {
+    this.setState("loading");
     await Tone.start();
 
-    if (this.isPlaying) this.stop({ hard: true });
+    if (this.state === "playing" || this.state === "paused") {
+      this.stop({ hard: true });
+    }
     this.dispose(); // чистий старт
 
     const { num, den, bpm } = extractSignatureAndTempo(midi, opts.bpm ?? this.defaults.bpm ?? 70);
@@ -121,6 +162,13 @@ export class MidiPlayer {
 
     this.pad = createPad();
     this.piano = createPiano();
+    if (typeof opts.padVolume === "number") {
+      this.pad.volume.value = opts.padVolume;
+    }
+    if (typeof opts.pianoVolume === "number") {
+      this.piano.volume.value = opts.pianoVolume;
+    }
+
     await Tone.loaded();
 
     const events = midiToBBSEvents(midi);
@@ -132,17 +180,56 @@ export class MidiPlayer {
     if ((opts.metronome ?? this.defaults.metronome) !== false) {
       this.metro = createMetronome({ num, den, pan: opts.metronomePan ?? this.defaults.metronomePan ?? 1 });
       this.metro.start(0);
-      Transport.scheduleOnce(() => this.metro?.stop(), endBBS);
     }
 
+    this.cancelEndEvent();
+    this.endEventId = Transport.scheduleOnce(() => {
+      this.endEventId = null;
+      this.stop({ hard: true });
+      opts.onEnded?.();
+    }, endBBS);
+
+    this.clearFadeTimer();
+    setDestinationVolumeImmediately(0);
+
     Transport.start();
-    this.isPlaying = true;
+    this.setState("playing");
+
+    return {
+      stop: (options) => this.stop(options),
+      pause: () => this.pause(),
+      resume: () => this.resume(),
+      dispose: () => this.dispose(),
+      getState: () => this.getState(),
+    };
+  }
+
+  pause() {
+    if (this.state !== "playing") return;
+    Tone.Transport.pause();
+    this.setState("paused");
+  }
+
+  resume() {
+    if (this.state !== "paused") {
+      return;
+    }
+    Tone.Transport.start();
+    this.setState("playing");
   }
 
   stop({ hard = false, fadeOut = 0 }: { hard?: boolean; fadeOut?: number } = {}) {
-    const Transport = Tone.getTransport();
+    const Transport = Tone.Transport;
 
-    if (fadeOut > 0) Tone.Destination.volume.rampTo(-Infinity, fadeOut);
+    this.cancelEndEvent();
+    this.clearFadeTimer();
+
+    if (fadeOut > 0) {
+      Tone.Destination.volume.rampTo(-Infinity, fadeOut);
+      this.fadeTimerId = Tone.getContext().setTimeout(() => {
+        setDestinationVolumeImmediately(0);
+      }, fadeOut);
+    }
 
     this.metro?.stop();
     this.part?.stop();
@@ -153,10 +240,12 @@ export class MidiPlayer {
       Transport.position = 0;
     }
 
-    this.isPlaying = false;
+    this.setState("idle");
   }
 
   dispose() {
+    this.cancelEndEvent();
+    this.clearFadeTimer();
     try { this.metro?.dispose(); } catch {}
     try { this.part?.dispose(); } catch {}
     try { this.pad?.dispose(); } catch {}
@@ -165,10 +254,8 @@ export class MidiPlayer {
     this.part = null;
     this.pad = null;
     this.piano = null;
+    this.setState("idle");
   }
-
-  // опціонально: подати зовнішній Transport (для узгодженої роботи з іншими класами)
-  // attachTransport(existing: typeof Tone.getTransport()) { ... }
 }
 
 // ========== Тонка обгортка під старе API (окремі функції) ==========
@@ -177,9 +264,23 @@ const defaultPlayer = new MidiPlayer();
 export async function playMidiProgressionGpt(midi: Midi, opts?: PlayOptions) {
   return defaultPlayer.play(midi, opts);
 }
+
 export function stopMidiProgression(options?: { hard?: boolean; fadeOut?: number }) {
   defaultPlayer.stop(options);
 }
+
+export function pauseMidiProgression() {
+  defaultPlayer.pause();
+}
+
+export function resumeMidiProgression() {
+  defaultPlayer.resume();
+}
+
 export function disposeMidiProgression() {
   defaultPlayer.dispose();
+}
+
+export function getMidiPlayerState(): MidiPlayerState {
+  return defaultPlayer.getState();
 }
