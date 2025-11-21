@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import classNames from "classnames";
 import "./ChordTooltip.css";
 import getChordImg from "../../../../../../utils/getChordImg.ts";
-import ChordsProgressionPlayer from "../../../services/ChordsProgressionPlayer/ChordsProgressionPlayer.ts";
+import ChordsProgressionPlayer from "../../../../services/ChordsProgressionPlayer/ChordsProgressionPlayer.ts";
 import {useChordSequenceId} from "../../../ChordSequenceContext.tsx";
 
 const normalizeChord = (value: string) => value.trim().toLowerCase();

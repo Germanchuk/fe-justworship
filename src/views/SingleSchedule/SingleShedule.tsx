@@ -8,7 +8,6 @@ import { fetchAPI } from "../../utils/fetch-api";
 import { format } from "date-fns";
 import { Routes } from "../../constants/routes";
 import { formatDate } from "../../utils/utils";
-import ReactDOM from "react-dom";
 import DeleteSchedule from "./DeleteSchedule/DeleteSchedule.tsx";
 import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.ts";
 import {useDispatch} from "react-redux";
