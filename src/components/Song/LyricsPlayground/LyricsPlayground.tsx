@@ -5,6 +5,7 @@ import {syncValueWithSections} from "./actions.ts";
 import ChunkedTextarea from "./ChunkedTextarea.tsx";
 import {useCallback} from "react";
 import {sectionsToLinesStream} from "../services/sectionsToLinesStream.ts";
+import {ChordSequenceProvider} from "./ChordSequenceContext.tsx";
 
 export default function LyricsPlayground({ sections }) {
   // common format is Array<string> named linesStream;
@@ -30,22 +31,24 @@ export default function LyricsPlayground({ sections }) {
   }, [linesStream]);
 
   return (
-    <div>
-      {isLessThanSM
-        ? (
-          <Chunk
-            chunk={linesStream}
-            size={linesStream.length + 1}
-            onChange={handleSingleChunk}
-            className={"w-full"}
-          />
-        )
-      : (
-          <ChunkedTextarea
-            linesStream={linesStream}
-            setLines={handleMultiChunk}
-          />
-        )}
-    </div>
-  )
+    <ChordSequenceProvider sections={sections}>
+      <div>
+        {isLessThanSM
+          ? (
+            <Chunk
+              chunk={linesStream}
+              size={linesStream.length + 1}
+              onChange={handleSingleChunk}
+              className={"w-full"}
+            />
+          )
+        : (
+            <ChunkedTextarea
+              linesStream={linesStream}
+              setLines={handleMultiChunk}
+            />
+          )}
+      </div>
+    </ChordSequenceProvider>
+  );
 };
