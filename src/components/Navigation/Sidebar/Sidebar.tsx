@@ -43,7 +43,7 @@ export default function Sidebar() {
           </div>
         </div>
         <div className="divider m-0" />
-        <div className="flex flex-col grow justify-between">
+        <div className="flex flex-col grow justify-between pb-16">
           <div>
             <ul className="menu p-0">
               <li>

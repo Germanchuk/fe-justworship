@@ -1,11 +1,11 @@
-import {Document, HeadingLevel, Packer, Paragraph, TextRun} from "docx";
+import {Document, Packer, Paragraph, TextRun} from "docx";
 import { saveAs } from "file-saver";
-import {renderAsync} from "docx-preview";
-import {isChordsLine, isChordsLine2} from "../utils/keyUtils.ts";
+import {isChordsLine} from "../utils/keyUtils.ts";
 import {isSongStructureLine} from "../utils/structureCaptionDetector.ts";
+import store from "../redux/store.ts";
 
-export function createDocument(song) {
-  console.log(song);
+export function createDocument() {
+  const song = store.getState().song.song;
 
 // Створення документа
   const doc = new Document({
@@ -142,7 +142,7 @@ function handleLines(sectionsContent) {
 }
 
 function getStyle(line, index) {
-  if (isChordsLine(line) && isChordsLine2(line)) {
+  if (isChordsLine(line)) {
     return {
       color: "#ff5733",
       bold: true

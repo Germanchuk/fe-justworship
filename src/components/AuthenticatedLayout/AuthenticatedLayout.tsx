@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import QuickNavbar from "../Header/Header";
 import { fetchAPI } from "../../utils/fetch-api";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";
 import {ErrorBoundary} from "react-error-boundary";
 import ErrorBoundaryFallback from "../ErrorBoundaryFallback/ErrorBoundaryFallback.tsx";
 import { useLocation } from "react-router-dom";
+import BottomBar from "../BottomBar/BottomBar.tsx";
 
 export default function AuthenticatedLayout({ children }) {
   const dispatch = useDispatch();
@@ -27,10 +27,10 @@ export default function AuthenticatedLayout({ children }) {
 
   return (
     <>
-      <QuickNavbar />
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback} resetKeys={[location.pathname]}>
         {children}
       </ErrorBoundary>
+      <BottomBar />
     </>
   );
 }

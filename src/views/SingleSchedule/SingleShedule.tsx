@@ -8,10 +8,10 @@ import { fetchAPI } from "../../utils/fetch-api";
 import { format } from "date-fns";
 import { Routes } from "../../constants/routes";
 import { formatDate } from "../../utils/utils";
-import ReactDOM from "react-dom";
 import DeleteSchedule from "./DeleteSchedule/DeleteSchedule.tsx";
 import {addNotificationWithTimeout} from "../../redux/slices/notificationsSlice.ts";
 import {useDispatch} from "react-redux";
+import {useControls} from "../../context/controls.tsx";
 
 const EMPTY_SHEDULE = {
   date: "",
@@ -43,9 +43,18 @@ export default function SingleShedule() {
   const isCreateMode = sheduleId === "create";
   const [initialShedule, setInitialShedule] = useState(null);
   const [shedule, setShedule] = useState(null);
+  const { setControls } = useControls();
 
   const sheduleChanged =
     JSON.stringify(shedule) !== JSON.stringify(initialShedule);
+
+  useEffect(() => {
+    if (sheduleChanged) {
+      setControls(<SavingButton saveShedule={saveSchedule} />);
+
+      return () => setControls(null);
+    }
+  }, [sheduleChanged]);
 
   useEffect(() => {
     if (isCreateMode) {
@@ -157,20 +166,17 @@ export default function SingleShedule() {
         </div>
       </div>
       {!isCreateMode && <DeleteSchedule deleteSchedule={deleteSchedule} />}
-      {sheduleChanged && <SavingButton saveShedule={saveSchedule} />}
     </>
   );
 }
 
 function SavingButton({ saveShedule }) {
-  return ReactDOM.createPortal(
-    <div className="fixed bottom-4 left-4">
+  return (
       <button
-        className="btn btn-square bg-base-300 ring-neutral ring-1 rounded-3xl"
+        className="btn btn-circle"
         onClick={saveShedule}
       >
         <CheckIcon className="w-6 h-6" />
       </button>
-    </div>, document.body
   );
 }

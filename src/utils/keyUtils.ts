@@ -78,17 +78,19 @@ export function transposeLine(line, oldKey, newKey) {
 export function isChordsLine(line) {
   const str = line.replace(/[|.]/g, " ");
   // Regular expression for matching chord patterns
-  const chordRegex =
-    /\b(?:G,C,D|A,B,C|E,C,D)|(?:[ABCDEFG](?:#|b)?)(?:\/[ABCDEFG]b)?(?:(?:(?:maj|min|sus|add|aug|dim)(?:\d{0,2}(?:#\d{1,2}|sus\d)?)?)|(?:m\d{0,2}(?:(?:maj|add|#)\d{0,2})?)|(?:-?\d{0,2}(?:\([^)]*\)|#\d{1,2})?))?/;
+  // I'm trying to decommission it (to be removed if everything is fine)
+  // const chordRegex =
+  //   /\b(?:G,C,D|A,B,C|E,C,D)|(?:[ABCDEFG](?:#|b)?)(?:\/[ABCDEFG]b)?(?:(?:(?:maj|min|sus|add|aug|dim)(?:\d{0,2}(?:#\d{1,2}|sus\d)?)?)|(?:m\d{0,2}(?:(?:maj|add|#)\d{0,2})?)|(?:-?\d{0,2}(?:\([^)]*\)|#\d{1,2})?))?/;
 
   // Split the string by spaces and check if each part matches the chord pattern
   const chords = str.trim().split(/\s+/);
 
   // Test each chord in the string against the chord regex
-  return chords.every((chord) => chordRegex.test(chord));
+  return chords.every(isChord);
 }
 
 export function isChordsLine2(line) {
+  // decommission process ongoing
   return line.split(/(\s+|-|]|\[)/g)?.reduce((result, currentValue) => {
     if (isChord(currentValue)) {
       return true;
